@@ -15,7 +15,7 @@ export default function Login() {
   // Auto-login check
   React.useEffect(() => {
     if (!isLoading && user) {
-      router.replace('/(tabs)/home');
+      router.replace('/welcome');
     }
   }, [user, isLoading]);
 

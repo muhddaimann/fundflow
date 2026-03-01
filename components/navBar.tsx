@@ -12,11 +12,8 @@ export function NavBar() {
   const tokens = useDesign();
   const pathname = usePathname();
   const { signOut } = useAuth();
-
-  // Handle both tab group paths and direct paths
   const isHome = pathname === "/home" || pathname === "/(tabs)/home";
   const isSettings = pathname === "/settings" || pathname === "/(tabs)/settings";
-
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
 
@@ -67,7 +64,7 @@ export function NavBar() {
         position: "absolute",
         bottom:
           (insets.bottom > 0 ? insets.bottom : tokens.spacing.md) +
-          tokens.spacing.md,
+          tokens.spacing.xl,
         left: tokens.spacing.lg,
         right: tokens.spacing.lg,
         flexDirection: "row",
@@ -124,7 +121,7 @@ export function NavBar() {
               <Text
                 variant="labelSmall"
                 style={{
-                  marginTop: -2,
+                  marginTop: -6,
                   color: item.active
                     ? theme.colors.primary
                     : theme.colors.onSurfaceVariant,
