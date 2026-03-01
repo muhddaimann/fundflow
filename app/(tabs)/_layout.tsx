@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router';
 import { NavBar } from '../../components/navBar';
 import { View, StyleSheet } from 'react-native';
+import { PaperTheme } from '../../constants/theme';
 
 export default function TabLayout() {
   return (
@@ -8,11 +9,11 @@ export default function TabLayout() {
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarStyle: { display: 'none' }, // Hide the default bar entirely
+          tabBarStyle: { display: 'none' },
         }}
       >
         <Tabs.Screen
-          name="index"
+          name="home"
           options={{
             title: 'Home',
           }}
@@ -32,5 +33,6 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: PaperTheme.colors.background,
   },
 });

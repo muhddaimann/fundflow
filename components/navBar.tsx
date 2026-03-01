@@ -4,15 +4,18 @@ import { Surface, Text, IconButton, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { usePathname, router } from "expo-router";
 import { useDesign } from "../contexts/designContext";
+import { useAuth } from "../contexts/authContext";
 
 export function NavBar() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const tokens = useDesign();
   const pathname = usePathname();
+  const { signOut } = useAuth();
 
-  const isHome = pathname === "/";
-  const isSettings = pathname === "/settings";
+  // Handle both tab group paths and direct paths
+  const isHome = pathname === "/home" || pathname === "/(tabs)/home";
+  const isSettings = pathname === "/settings" || pathname === "/(tabs)/settings";
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
@@ -36,7 +39,8 @@ export function NavBar() {
     if (isHome) {
       console.log("Plus pressed");
     } else {
-      console.log("Logout pressed");
+      signOut();
+      router.replace("/goodbye");
     }
   };
 
@@ -46,7 +50,7 @@ export function NavBar() {
       label: "Home",
       icon: "home-variant",
       active: isHome,
-      onPress: () => router.replace("/"),
+      onPress: () => router.replace("/home"),
     },
     {
       key: "settings",
@@ -83,6 +87,7 @@ export function NavBar() {
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
+          paddingHorizontal: tokens.spacing.md,
           paddingBottom: tokens.spacing.sm,
           borderWidth: 1,
           borderColor: theme.colors.outlineVariant,
@@ -139,8 +144,8 @@ export function NavBar() {
             height: 64,
             width: 64,
             borderRadius: 999,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
             backgroundColor: isHome ? theme.colors.primary : theme.colors.error,
             borderWidth: 1,
             borderColor: isHome ? theme.colors.primary : theme.colors.error,
