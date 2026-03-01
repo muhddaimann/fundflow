@@ -1,11 +1,24 @@
 import { Stack } from 'expo-router';
+import { PaperProvider, MD3LightTheme } from 'react-native-paper';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
 
 export default function RootLayout() {
   return (
-    <Stack>
-      {/* (tabs) is a route group, it will be mapped to the / URL but can have its own layout */}
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Settings Modal' }} />
-    </Stack>
+    <SafeAreaProvider>
+      <PaperProvider theme={MD3LightTheme}>
+        <SafeAreaView style={styles.container} edges={['top']}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+        </SafeAreaView>
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
