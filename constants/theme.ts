@@ -49,23 +49,23 @@ export const PaperTheme = {
     ...MD3LightTheme.fonts,
     default: {
       fontFamily: DesignTokens.fonts.regular,
-      fontWeight: '400',
+      fontWeight: '400' as const,
     },
     displaySmall: {
       fontFamily: DesignTokens.fonts.bold,
-      fontWeight: '700',
+      fontWeight: '700' as const,
     },
     headlineMedium: {
       fontFamily: DesignTokens.fonts.bold,
-      fontWeight: '700',
+      fontWeight: '700' as const,
     },
     bodyLarge: {
       fontFamily: DesignTokens.fonts.regular,
-      fontWeight: '400',
+      fontWeight: '400' as const,
     },
     labelSmall: {
       fontFamily: DesignTokens.fonts.medium,
-      fontWeight: '500',
+      fontWeight: '500' as const,
     },
   },
 };

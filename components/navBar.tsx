@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import { TouchableOpacity, Animated } from 'react-native';
-import { Surface, Text, IconButton, useTheme } from 'react-native-paper';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { usePathname, router } from 'expo-router';
-import { useDesign } from '../contexts/designContext';
+import React, { useEffect, useRef } from "react";
+import { TouchableOpacity, Animated, View } from "react-native";
+import { Surface, Text, IconButton, useTheme } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { usePathname, router } from "expo-router";
+import { useDesign } from "../contexts/designContext";
 
 export function NavBar() {
   const theme = useTheme();
@@ -11,8 +11,8 @@ export function NavBar() {
   const tokens = useDesign();
   const pathname = usePathname();
 
-  const isHome = pathname === '/';
-  const isSettings = pathname === '/settings';
+  const isHome = pathname === "/";
+  const isSettings = pathname === "/settings";
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
@@ -34,40 +34,40 @@ export function NavBar() {
 
   const handleActionButton = () => {
     if (isHome) {
-      console.log('Plus pressed');
+      console.log("Plus pressed");
     } else {
-      console.log('Logout pressed');
+      console.log("Logout pressed");
     }
   };
 
   const navItems = [
     {
-      key: 'home',
-      label: 'Home',
-      icon: 'home-variant',
+      key: "home",
+      label: "Home",
+      icon: "home-variant",
       active: isHome,
-      onPress: () => router.replace('/'),
+      onPress: () => router.replace("/"),
     },
     {
-      key: 'settings',
-      label: 'Settings',
-      icon: 'cog-outline',
+      key: "settings",
+      label: "Settings",
+      icon: "cog-outline",
       active: isSettings,
-      onPress: () => router.replace('/settings'),
+      onPress: () => router.replace("/settings"),
     },
   ];
 
   return (
     <Animated.View
       style={{
-        position: 'absolute',
+        position: "absolute",
         bottom:
           (insets.bottom > 0 ? insets.bottom : tokens.spacing.md) +
           tokens.spacing.md,
         left: tokens.spacing.lg,
         right: tokens.spacing.lg,
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         gap: tokens.spacing.md,
         opacity: fadeAnim,
         transform: [{ translateY: slideAnim }],
@@ -76,13 +76,14 @@ export function NavBar() {
       <Surface
         elevation={4}
         style={{
-          flexDirection: 'row',
+          flexDirection: "row",
           backgroundColor: theme.colors.surface,
           borderRadius: 999,
           height: 64,
           flex: 1,
-          alignItems: 'center',
-          paddingHorizontal: tokens.spacing.xs,
+          alignItems: "center",
+          justifyContent: "center",
+          paddingBottom: tokens.spacing.sm,
           borderWidth: 1,
           borderColor: theme.colors.outlineVariant,
         }}
@@ -94,32 +95,39 @@ export function NavBar() {
             activeOpacity={0.8}
             style={{
               flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <IconButton
-              icon={item.icon}
-              size={item.active ? 26 : 22}
-              iconColor={
-                item.active
-                  ? theme.colors.primary
-                  : theme.colors.onSurfaceVariant
-              }
-              style={{ margin: 0 }}
-            />
-            <Text
-              variant="labelSmall"
+            <View
               style={{
-                marginTop: -4,
-                color: item.active
-                  ? theme.colors.primary
-                  : theme.colors.onSurfaceVariant,
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {item.label}
-            </Text>
+              <IconButton
+                icon={item.icon}
+                size={item.active ? 26 : 22}
+                iconColor={
+                  item.active
+                    ? theme.colors.primary
+                    : theme.colors.onSurfaceVariant
+                }
+                style={{ margin: 0 }}
+              />
+              <Text
+                variant="labelSmall"
+                style={{
+                  marginTop: -2,
+                  color: item.active
+                    ? theme.colors.primary
+                    : theme.colors.onSurfaceVariant,
+                }}
+              >
+                {item.label}
+              </Text>
+            </View>
           </TouchableOpacity>
         ))}
       </Surface>
@@ -131,25 +139,17 @@ export function NavBar() {
             height: 64,
             width: 64,
             borderRadius: 999,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: isHome
-              ? theme.colors.primary
-              : theme.colors.error,
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: isHome ? theme.colors.primary : theme.colors.error,
             borderWidth: 1,
-            borderColor: isHome
-              ? theme.colors.primary
-              : theme.colors.error,
+            borderColor: isHome ? theme.colors.primary : theme.colors.error,
           }}
         >
           <IconButton
-            icon={isHome ? 'plus' : 'logout'}
+            icon={isHome ? "plus" : "logout"}
             size={28}
-            iconColor={
-              isHome
-                ? theme.colors.onPrimary
-                : theme.colors.onError
-            }
+            iconColor={isHome ? theme.colors.onPrimary : theme.colors.onError}
             style={{ margin: 0 }}
           />
         </Surface>

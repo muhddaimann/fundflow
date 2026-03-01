@@ -14,7 +14,6 @@ import {
 } from '@expo-google-fonts/plus-jakarta-sans';
 import { useEffect } from 'react';
 
-// Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
