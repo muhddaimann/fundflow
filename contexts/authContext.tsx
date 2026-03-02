@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { getToken, saveToken, deleteToken } = useToken();
 
-  // Load session from token store on mount
   useEffect(() => {
     const loadSession = async () => {
       try {
