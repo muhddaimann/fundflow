@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { TouchableOpacity, Animated, View } from "react-native";
-import { Surface, Text, IconButton, useTheme } from "react-native-paper";
+import { Animated, View, Pressable, Easing } from "react-native";
+import { Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { usePathname, router } from "expo-router";
 import { useDesign } from "../contexts/designContext";
 import { useAuth } from "../contexts/authContext";
-import { useLoader } from "../contexts/loaderContext";
+import { useTab } from "../contexts/tabContext";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export function NavBar() {
   const theme = useTheme();
@@ -13,26 +14,24 @@ export function NavBar() {
   const tokens = useDesign();
   const pathname = usePathname();
   const { signOut } = useAuth();
-  const { showLoader, hideLoader } = useLoader();
-  const isHome = pathname.startsWith("/home") || pathname.startsWith("/(tabs)/home");
-  const isSettings = pathname.startsWith("/settings") || pathname.startsWith("/(tabs)/settings");
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(20)).current;
+  const { isNavbarVisible, scrollToTop } = useTab();
+
+  const isHome =
+    pathname.startsWith("/home") || pathname.startsWith("/(tabs)/home");
+  const isSettings =
+    pathname.startsWith("/settings") || pathname.startsWith("/(tabs)/settings");
+
+  const translateY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, []);
+    Animated.spring(translateY, {
+      toValue: isNavbarVisible ? 0 : 100,
+      damping: 18,
+      stiffness: 160,
+      mass: 0.8,
+      useNativeDriver: true,
+    }).start();
+  }, [isNavbarVisible]);
 
   const handleActionButton = async () => {
     if (isHome) {
@@ -49,115 +48,106 @@ export function NavBar() {
       label: "Home",
       icon: "home-variant",
       active: isHome,
-      onPress: () => router.replace("/home"),
+      onPress: () => (isHome ? scrollToTop() : router.replace("/home")),
     },
     {
       key: "settings",
       label: "Settings",
       icon: "cog-outline",
       active: isSettings,
-      onPress: () => router.replace("/settings"),
+      onPress: () => (isSettings ? scrollToTop() : router.replace("/settings")),
     },
   ];
 
   return (
     <Animated.View
+      renderToHardwareTextureAndroid
       style={{
         position: "absolute",
         bottom:
           (insets.bottom > 0 ? insets.bottom : tokens.spacing.md) +
-          tokens.spacing.xl,
-        left: tokens.spacing.lg,
-        right: tokens.spacing.lg,
+          tokens.spacing.lg,
+        left: tokens.spacing["2xl"],
+        right: tokens.spacing["2xl"],
         flexDirection: "row",
         alignItems: "center",
-        gap: tokens.spacing.md,
-        opacity: fadeAnim,
-        transform: [{ translateY: slideAnim }],
+        gap: tokens.spacing.lg,
+        transform: [{ translateY }],
       }}
     >
-      <Surface
-        elevation={4}
+      <View
         style={{
+          flex: 1,
+          height: 60,
+          borderRadius: 30,
           flexDirection: "row",
           backgroundColor: theme.colors.surface,
-          borderRadius: 999,
-          height: 64,
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-          paddingHorizontal: tokens.spacing.md,
-          paddingBottom: tokens.spacing.xs,
           borderWidth: 1,
           borderColor: theme.colors.outlineVariant,
+          shadowColor: theme.colors.shadow,
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.25,
+          shadowRadius: 10,
         }}
       >
         {navItems.map((item) => (
-          <TouchableOpacity
+          <Pressable
             key={item.key}
             onPress={item.onPress}
-            activeOpacity={0.8}
-            style={{
+            style={({ pressed }) => ({
               flex: 1,
-              height: "100%",
               alignItems: "center",
               justifyContent: "center",
-            }}
+              transform: [{ scale: pressed ? 0.96 : 1 }],
+            })}
           >
-            <View
+            <MaterialCommunityIcons
+              name={item.icon as any}
+              size={item.active ? 26 : 22}
+              color={
+                item.active
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant
+              }
+            />
+            <Text
+              variant="labelSmall"
               style={{
-                alignItems: "center",
-                justifyContent: "center",
+                marginTop: 2,
+                fontWeight: item.active ? "600" : "400",
+                color: item.active
+                  ? theme.colors.primary
+                  : theme.colors.onSurfaceVariant,
               }}
             >
-              <IconButton
-                icon={item.icon}
-                size={item.active ? 26 : 22}
-                iconColor={
-                  item.active
-                    ? theme.colors.primary
-                    : theme.colors.onSurfaceVariant
-                }
-                style={{ margin: 0 }}
-              />
-              <Text
-                variant="labelSmall"
-                style={{
-                  marginTop: -6,
-                  color: item.active
-                    ? theme.colors.primary
-                    : theme.colors.onSurfaceVariant,
-                }}
-              >
-                {item.label}
-              </Text>
-            </View>
-          </TouchableOpacity>
+              {item.label}
+            </Text>
+          </Pressable>
         ))}
-      </Surface>
+      </View>
 
-      <TouchableOpacity onPress={handleActionButton} activeOpacity={0.85}>
-        <Surface
-          elevation={4}
-          style={{
-            height: 64,
-            width: 64,
-            borderRadius: 999,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: isHome ? theme.colors.primary : theme.colors.error,
-            borderWidth: 1,
-            borderColor: isHome ? theme.colors.primary : theme.colors.error,
-          }}
-        >
-          <IconButton
-            icon={isHome ? "plus" : "logout"}
-            size={28}
-            iconColor={isHome ? theme.colors.onPrimary : theme.colors.onError}
-            style={{ margin: 0 }}
-          />
-        </Surface>
-      </TouchableOpacity>
+      <Pressable
+        onPress={handleActionButton}
+        style={({ pressed }) => ({
+          height: 60,
+          width: 60,
+          borderRadius: 30,
+          backgroundColor: isHome ? theme.colors.primary : theme.colors.error,
+          alignItems: "center",
+          justifyContent: "center",
+          transform: [{ scale: pressed ? 0.95 : 1 }],
+          shadowColor: theme.colors.shadow,
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.25,
+          shadowRadius: 10,
+        })}
+      >
+        <MaterialCommunityIcons
+          name={isHome ? "plus" : "logout"}
+          size={26}
+          color={isHome ? theme.colors.onPrimary : theme.colors.onError}
+        />
+      </Pressable>
     </Animated.View>
   );
 }

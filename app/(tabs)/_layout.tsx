@@ -1,34 +1,39 @@
 import { Tabs } from 'expo-router';
 import { NavBar } from '../../components/navBar';
+import { ScrollTop } from '../../components/scrollTop';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { TabProvider } from '../../contexts/tabContext';
 
 export default function TabLayout() {
   const theme = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <Tabs
-        screenOptions={{
-          headerShown: false,
-          tabBarStyle: { display: 'none' },
-        }}
-      >
-        <Tabs.Screen
-          name="home"
-          options={{
-            title: 'Home',
+    <TabProvider>
+      <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <Tabs
+          screenOptions={{
+            headerShown: false,
+            tabBarStyle: { display: 'none' },
           }}
-        />
-        <Tabs.Screen
-          name="settings"
-          options={{
-            title: 'Settings',
-          }}
-        />
-      </Tabs>
-      <NavBar />
-    </View>
+        >
+          <Tabs.Screen
+            name="home"
+            options={{
+              title: 'Home',
+            }}
+          />
+          <Tabs.Screen
+            name="settings"
+            options={{
+              title: 'Settings',
+            }}
+          />
+        </Tabs>
+        <NavBar />
+        <ScrollTop />
+      </View>
+    </TabProvider>
   );
 }
 
