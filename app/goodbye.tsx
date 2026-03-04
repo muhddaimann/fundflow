@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import { Text, Card, useTheme } from 'react-native-paper';
-import { router } from 'expo-router';
-import { useDesign } from '../contexts/designContext';
+import React, { useEffect } from "react";
+import { View } from "react-native";
+import { Text, useTheme, ActivityIndicator } from "react-native-paper";
+import { router } from "expo-router";
+import { useDesign } from "../contexts/designContext";
 
 export default function Goodbye() {
   const theme = useTheme();
@@ -10,19 +10,40 @@ export default function Goodbye() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace('/');
+      router.replace("/");
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background, justifyContent: 'center', padding: tokens.spacing.lg }}>
-      <Card style={{ padding: tokens.spacing.lg, borderRadius: tokens.radii.xl }}>
-        <Text variant="headlineLarge" style={{ fontWeight: 'bold', textAlign: 'center' }}>Goodbye!</Text>
-        <Text variant="bodyLarge" style={{ textAlign: 'center', marginVertical: tokens.spacing.md, opacity: 0.7 }}>
-          You have successfully logged out.
-        </Text>
-      </Card>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: tokens.spacing.xl,
+        gap: tokens.spacing.lg,
+      }}
+    >
+      <Text
+        variant="headlineMedium"
+        style={{ fontWeight: "700", textAlign: "center" }}
+      >
+        Goodbye
+      </Text>
+
+      <Text
+        variant="bodyMedium"
+        style={{
+          textAlign: "center",
+          color: theme.colors.onSurfaceVariant,
+        }}
+      >
+        You have successfully logged out.
+      </Text>
+
+      <ActivityIndicator size="small" color={theme.colors.primary} />
     </View>
   );
 }

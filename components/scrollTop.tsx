@@ -1,84 +1,65 @@
 import React, { useEffect, useRef } from "react";
-import { Animated, Pressable, View } from "react-native";
-import { useTheme } from "react-native-paper";
+import { Pressable, Animated } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useTab } from "../contexts/tabContext";
+import { useTheme } from "react-native-paper";
 import { useDesign } from "../contexts/designContext";
 
-export function ScrollTop() {
+export default function ScrollTop({
+  visible,
+  onPress,
+}: {
+  visible: boolean;
+  onPress: () => void;
+}) {
   const theme = useTheme();
   const tokens = useDesign();
-  const { isNavbarVisible, scrollToTop } = useTab();
-
-  const translateY = useRef(new Animated.Value(-80)).current;
-  const scale = useRef(new Animated.Value(0.8)).current;
   const opacity = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(-10)).current;
 
   useEffect(() => {
-    const visible = !isNavbarVisible;
-
     Animated.parallel([
-      Animated.spring(translateY, {
-        toValue: visible ? 0 : -80,
-        damping: 18,
-        stiffness: 180,
-        mass: 0.7,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scale, {
-        toValue: visible ? 1 : 0.8,
-        damping: 15,
-        stiffness: 200,
-        useNativeDriver: true,
-      }),
       Animated.timing(opacity, {
         toValue: visible ? 1 : 0,
         duration: 180,
         useNativeDriver: true,
       }),
+      Animated.timing(translateY, {
+        toValue: visible ? 0 : -10,
+        duration: 180,
+        useNativeDriver: true,
+      }),
     ]).start();
-  }, [isNavbarVisible]);
+  }, [visible]);
 
   return (
     <Animated.View
-      renderToHardwareTextureAndroid
-      pointerEvents={!isNavbarVisible ? "auto" : "none"}
+      pointerEvents={visible ? "auto" : "none"}
       style={{
         position: "absolute",
-        top: tokens.spacing.xl,
-        alignSelf: "center",
-        zIndex: 100,
+        top: tokens.spacing.lg,
+        left: "50%",
+        transform: [{ translateX: -22 }, { translateY }],
         opacity,
-        transform: [{ translateY }, { scale }],
       }}
     >
       <Pressable
-        onPress={scrollToTop}
+        onPress={onPress}
         style={({ pressed }) => ({
+          width: 44,
+          height: 44,
+          borderRadius: tokens.radii.full,
+          backgroundColor: theme.colors.primary,
+          alignItems: "center",
+          justifyContent: "center",
+          elevation: 12,
           transform: [{ scale: pressed ? 0.95 : 1 }],
         })}
       >
-        <View
-          style={{
-            height: 52,
-            width: 52,
-            borderRadius: 26,
-            backgroundColor: theme.colors.primary,
-            alignItems: "center",
-            justifyContent: "center",
-            elevation: 8,
-            shadowColor: theme.colors.shadow,
-            shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: 0.25,
-            shadowRadius: 10,
-          }}
-        >
-          <MaterialCommunityIcons
-            name="chevron-up"
-            size={24}
-            color={theme.colors.onPrimary}
-          />
-        </View>
+        <MaterialCommunityIcons
+          name="chevron-up"
+          size={22}
+          color={theme.colors.onPrimary}
+        />
       </Pressable>
     </Animated.View>
   );

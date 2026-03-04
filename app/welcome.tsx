@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import { Text, Card, useTheme } from 'react-native-paper';
-import { router } from 'expo-router';
-import { useDesign } from '../contexts/designContext';
-import { useAuth } from '../contexts/authContext';
+import React, { useEffect } from "react";
+import { View } from "react-native";
+import { Text, useTheme, ActivityIndicator } from "react-native-paper";
+import { router } from "expo-router";
+import { useDesign } from "../contexts/designContext";
+import { useAuth } from "../contexts/authContext";
 
 export default function Welcome() {
   const theme = useTheme();
@@ -12,19 +12,40 @@ export default function Welcome() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace('/(tabs)/home');
+      router.replace("/(tabs)/home");
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background, justifyContent: 'center', padding: tokens.spacing.lg }}>
-      <Card style={{ padding: tokens.spacing.lg, borderRadius: tokens.radii.xl }}>
-        <Text variant="headlineLarge" style={{ fontWeight: 'bold', textAlign: 'center' }}>Welcome Back!</Text>
-        <Text variant="bodyLarge" style={{ textAlign: 'center', marginVertical: tokens.spacing.md, opacity: 0.7 }}>
-          Preparing your dashboard, {user}...
-        </Text>
-      </Card>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.colors.background,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: tokens.spacing.xl,
+        gap: tokens.spacing.lg,
+      }}
+    >
+      <Text
+        variant="headlineMedium"
+        style={{ fontWeight: "700", textAlign: "center" }}
+      >
+        Welcome Back
+      </Text>
+
+      <Text
+        variant="bodyMedium"
+        style={{
+          textAlign: "center",
+          color: theme.colors.onSurfaceVariant,
+        }}
+      >
+        Preparing your dashboard{user ? `, ${user}` : ""}...
+      </Text>
+
+      <ActivityIndicator size="small" color={theme.colors.primary} />
     </View>
   );
 }

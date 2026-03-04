@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { usePathname, router } from "expo-router";
 import { useDesign } from "../contexts/designContext";
 import { useAuth } from "../contexts/authContext";
-import { useTab } from "../contexts/tabContext";
+import { useTabs } from "../contexts/tabContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export function NavBar() {
@@ -14,24 +14,24 @@ export function NavBar() {
   const tokens = useDesign();
   const pathname = usePathname();
   const { signOut } = useAuth();
-  const { isNavbarVisible, scrollToTop } = useTab();
+  const { hideTabBar } = useTabs();
 
   const isHome =
     pathname.startsWith("/home") || pathname.startsWith("/(tabs)/home");
+
   const isSettings =
     pathname.startsWith("/settings") || pathname.startsWith("/(tabs)/settings");
 
   const translateY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    Animated.spring(translateY, {
-      toValue: isNavbarVisible ? 0 : 100,
-      damping: 18,
-      stiffness: 160,
-      mass: 0.8,
+    Animated.timing(translateY, {
+      toValue: hideTabBar ? 120 : 0,
+      duration: 300,
+      easing: Easing.bezier(0.25, 0.1, 0.25, 1),
       useNativeDriver: true,
     }).start();
-  }, [isNavbarVisible]);
+  }, [hideTabBar]);
 
   const handleActionButton = async () => {
     if (isHome) {
@@ -42,20 +42,25 @@ export function NavBar() {
     }
   };
 
+  const navigateTo = (route: string) => {
+    if (pathname === route || pathname === `/(tabs)${route}`) return;
+    router.navigate(route as any);
+  };
+
   const navItems = [
     {
       key: "home",
       label: "Home",
       icon: "home-variant",
       active: isHome,
-      onPress: () => (isHome ? scrollToTop() : router.replace("/home")),
+      onPress: () => navigateTo("/home"),
     },
     {
       key: "settings",
       label: "Settings",
       icon: "cog-outline",
       active: isSettings,
-      onPress: () => (isSettings ? scrollToTop() : router.replace("/settings")),
+      onPress: () => navigateTo("/settings"),
     },
   ];
 

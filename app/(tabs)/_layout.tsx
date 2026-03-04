@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router';
 import { NavBar } from '../../components/navBar';
-import { ScrollTop } from '../../components/scrollTop';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { TabProvider } from '../../contexts/tabContext';
@@ -31,7 +30,6 @@ export default function TabLayout() {
           />
         </Tabs>
         <NavBar />
-        <ScrollTop />
       </View>
     </TabProvider>
   );
