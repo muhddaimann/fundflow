@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "v1",
-    "slug": "v1",
+    "name": "FundFlow",
+    "slug": "fundflow",
     "version": "1.0.0",
-    "scheme": "v1-scheme",
+    "scheme": "fundflow-scheme",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
