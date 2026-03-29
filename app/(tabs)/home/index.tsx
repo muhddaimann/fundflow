@@ -8,6 +8,7 @@ import { useTheme } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import ScrollTop from "../../../components/scrollTop";
 import { useTabs } from "../../../contexts/tabContext";
+import Header from "../../../components/a/header";
 
 export default function Home() {
   const theme = useTheme();
@@ -34,13 +35,13 @@ export default function Home() {
         scrollEventThrottle={16}
         style={{ flex: 1, backgroundColor: theme.colors.background }}
         contentContainerStyle={{
-          padding: tokens.spacing.lg,
-          gap: tokens.spacing.md,
+          paddingTop: tokens.spacing.sm,
           paddingBottom: tokens.spacing["3xl"],
+          gap: tokens.spacing.md,
         }}
         showsVerticalScrollIndicator={false}
       >
-
+        <Header />
       </ScrollView>
 
       <ScrollTop visible={showScrollTop} onPress={scrollToTop} />

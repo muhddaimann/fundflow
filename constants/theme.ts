@@ -50,20 +50,20 @@ export const lightTheme: MD3Theme = {
   colors: {
     ...MD3LightTheme.colors,
 
-    primary: "#10B981",
+    primary: "#0EA5E9",
     onPrimary: "#FFFFFF",
-    primaryContainer: "#D1FAE5",
-    onPrimaryContainer: "#064E3B",
+    primaryContainer: "#E0F2FE",
+    onPrimaryContainer: "#0C4A6E",
 
-    secondary: "#0F172A",
+    secondary: "#A855F7",
     onSecondary: "#FFFFFF",
-    secondaryContainer: "#E2E8F0",
-    onSecondaryContainer: "#020617",
+    secondaryContainer: "#F3E8FF",
+    onSecondaryContainer: "#581C87",
 
-    tertiary: "#38BDF8",
-    onTertiary: "#082F49",
-    tertiaryContainer: "#E0F2FE",
-    onTertiaryContainer: "#082F49",
+    tertiary: "#22C55E",
+    onTertiary: "#052E16",
+    tertiaryContainer: "#DCFCE7",
+    onTertiaryContainer: "#052E16",
 
     error: "#DC2626",
     onError: "#FFFFFF",
@@ -75,7 +75,7 @@ export const lightTheme: MD3Theme = {
     surfaceVariant: "#F1F5F9",
     onSurfaceVariant: "#475569",
 
-    background: "#F0FDF4",
+    background: "#F0F9FF",
     onBackground: "#020617",
 
     outline: "#CBD5E1",
@@ -90,11 +90,11 @@ export const lightTheme: MD3Theme = {
 
     elevation: {
       level0: "transparent",
-      level1: "#F0FDF4",
-      level2: "#DCFCE7",
-      level3: "#BBF7D0",
-      level4: "#86EFAC",
-      level5: "#4ADE80",
+      level1: "#F0F9FF",
+      level2: "#E0F2FE",
+      level3: "#BAE6FD",
+      level4: "#7DD3FC",
+      level5: "#38BDF8",
     },
   },
 };
@@ -106,20 +106,20 @@ export const darkTheme: MD3Theme = {
   colors: {
     ...MD3DarkTheme.colors,
 
-    primary: "#34D399",
-    onPrimary: "#064E3B",
-    primaryContainer: "#065F46",
-    onPrimaryContainer: "#D1FAE5",
+    primary: "#38BDF8",
+    onPrimary: "#0C4A6E",
+    primaryContainer: "#0369A1",
+    onPrimaryContainer: "#E0F2FE",
 
-    secondary: "#94A3B8",
-    onSecondary: "#020617",
-    secondaryContainer: "#1E293B",
-    onSecondaryContainer: "#E2E8F0",
+    secondary: "#C084FC",
+    onSecondary: "#581C87",
+    secondaryContainer: "#7E22CE",
+    onSecondaryContainer: "#F3E8FF",
 
-    tertiary: "#38BDF8",
-    onTertiary: "#082F49",
-    tertiaryContainer: "#075985",
-    onTertiaryContainer: "#E0F2FE",
+    tertiary: "#4ADE80",
+    onTertiary: "#052E16",
+    tertiaryContainer: "#166534",
+    onTertiaryContainer: "#DCFCE7",
 
     error: "#F87171",
     onError: "#7F1D1D",
@@ -147,10 +147,10 @@ export const darkTheme: MD3Theme = {
     elevation: {
       level0: "transparent",
       level1: "#020617",
-      level2: "#022C22",
-      level3: "#064E3B",
-      level4: "#065F46",
-      level5: "#047857",
+      level2: "#082F49",
+      level3: "#0C4A6E",
+      level4: "#0369A1",
+      level5: "#0284C7",
     },
   },
 };
