@@ -25,84 +25,49 @@ export default function QuickAction() {
   const { colors } = useTheme();
   const tokens = useDesign();
 
+  const renderRow = (items: ActionItem[]) => (
+    <View style={{ flexDirection: "row", gap: tokens.spacing.sm }}>
+      {items.map((item, idx) => (
+        <Pressable
+          key={idx}
+          onPress={item.onPress}
+          style={({ pressed }) => ({
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            gap: tokens.spacing.xs,
+            paddingVertical: tokens.spacing.sm,
+            borderRadius: tokens.radii.lg,
+            borderWidth: 1,
+            borderColor: colors.outlineVariant,
+            backgroundColor: pressed ? colors.surfaceVariant : "transparent",
+            transform: [{ scale: pressed ? 0.96 : 1 }],
+          })}
+        >
+          <MaterialCommunityIcons
+            name={item.icon}
+            size={tokens.sizes.icon.md}
+            color={colors.onSurfaceVariant}
+          />
+          <Text
+            style={{
+              fontSize: tokens.typography.sizes.xs,
+              color: colors.onSurfaceVariant,
+            }}
+          >
+            {item.label}
+          </Text>
+        </Pressable>
+      ))}
+    </View>
+  );
+
   return (
     <View
-      style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.sm }}
+      style={{ paddingHorizontal: tokens.spacing.md, gap: tokens.spacing.sm }}
     >
-      <View
-        style={{
-          flexDirection: "row",
-          gap: tokens.spacing.sm,
-        }}
-      >
-        {actions.slice(0, 4).map((item, idx) => (
-          <Pressable
-            key={idx}
-            onPress={item.onPress}
-            style={({ pressed }) => ({
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              gap: tokens.spacing.xs,
-              borderRadius: tokens.radii.lg,
-              backgroundColor: colors.surfaceVariant,
-              transform: [{ scale: pressed ? 0.96 : 1 }],
-            })}
-          >
-            <MaterialCommunityIcons
-              name={item.icon}
-              size={tokens.sizes.icon.md}
-              color={colors.onSurfaceVariant}
-            />
-            <Text
-              style={{
-                fontSize: tokens.typography.sizes.xs,
-                color: colors.onSurfaceVariant,
-              }}
-            >
-              {item.label}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          gap: tokens.spacing.sm,
-        }}
-      >
-        {actions.slice(4, 8).map((item, idx) => (
-          <Pressable
-            key={idx}
-            onPress={item.onPress}
-            style={({ pressed }) => ({
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              gap: tokens.spacing.xs,
-              paddingVertical: tokens.spacing.sm,
-              borderRadius: tokens.radii.lg,
-              backgroundColor: colors.surfaceVariant,
-              transform: [{ scale: pressed ? 0.96 : 1 }],
-            })}
-          >
-            <MaterialCommunityIcons
-              name={item.icon}
-              size={tokens.sizes.icon.md}
-              color={colors.onSurfaceVariant}
-            />
-            <Text
-              style={{
-                fontSize: tokens.typography.sizes.xs,
-                color: colors.onSurfaceVariant,
-              }}
-            >
-              {item.label}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+      {renderRow(actions.slice(0, 4))}
+      {renderRow(actions.slice(4, 8))}
     </View>
   );
 }

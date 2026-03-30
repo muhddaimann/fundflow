@@ -47,7 +47,7 @@ export default function Home() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <Header name="Maiman" />
+        <Header name="Balqis" />
 
         <MainRow
           left={{
