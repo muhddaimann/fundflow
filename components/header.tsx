@@ -10,7 +10,7 @@ type HeaderProps = {
   subtitle?: string;
   rightSlot?: React.ReactNode;
   showBack?: boolean;
-};
+};  
 
 export default function Header({
   title,

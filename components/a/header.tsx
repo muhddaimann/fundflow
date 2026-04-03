@@ -60,9 +60,10 @@ export default function Header({ name = "User" }: HeaderProps) {
           }}
         >
           <Pressable
+            onPress={() => {}}
             style={({ pressed }) => ({
-              width: tokens.sizes.icon.xl,
-              height: tokens.sizes.icon.xl,
+              width: 44,
+              height: 44,
               borderRadius: tokens.radii.full,
               backgroundColor: colors.surfaceVariant,
               alignItems: "center",
@@ -72,30 +73,33 @@ export default function Header({ name = "User" }: HeaderProps) {
           >
             <MaterialCommunityIcons
               name="bell-outline"
-              size={tokens.sizes.icon.md}
+              size={tokens.sizes.icon.xl}
               color={colors.onSurfaceVariant}
             />
           </Pressable>
 
-          <View
-            style={{
-              width: tokens.sizes.icon.xl,
-              height: tokens.sizes.icon.xl,
+          <Pressable
+            onPress={() => {}}
+            style={({ pressed }) => ({
+              width: 44,
+              height: 44,
               borderRadius: tokens.radii.full,
               backgroundColor: colors.primary,
               alignItems: "center",
               justifyContent: "center",
-            }}
+              transform: [{ scale: pressed ? 0.96 : 1 }],
+            })}
           >
             <Text
               style={{
                 color: colors.onPrimary,
-                fontWeight: tokens.typography.weights.semibold,
+                fontSize: tokens.typography.sizes.lg,
+                fontWeight: tokens.typography.weights.bold,
               }}
             >
               {initials}
             </Text>
-          </View>
+          </Pressable>
         </View>
 
         <Text

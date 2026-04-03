@@ -1,0 +1,28 @@
+{
+  "actions": [
+    {
+      "type": "ENTER_TEXT",
+      "selector": {
+        "contentDescription": "username_input"
+      },
+      "text": "011007100447"
+    },
+    {
+      "type": "ENTER_TEXT",
+      "selector": {
+        "contentDescription": "password_input"
+      },
+      "text": "LUpaPASSword@_01"
+    },
+    {
+      "type": "CLICK",
+      "selector": {
+        "contentDescription": "login_button"
+      }
+    },
+    {
+      "type": "WAIT",
+      "time": 3000
+    }
+  ]
+}

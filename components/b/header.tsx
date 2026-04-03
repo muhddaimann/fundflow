@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Pressable } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import useGlobal from "../../hooks/useGlobal";
@@ -43,25 +43,28 @@ export default function Header({ name = "User" }: HeaderProps) {
         </Text>
       </View>
 
-      <View
-        style={{
-          width: tokens.sizes.icon.xl,
-          height: tokens.sizes.icon.xl,
+      <Pressable
+        onPress={() => {}}
+        style={({ pressed }) => ({
+          width: 44,
+          height: 44,
           borderRadius: tokens.radii.full,
           backgroundColor: colors.primary,
           alignItems: "center",
           justifyContent: "center",
-        }}
+          transform: [{ scale: pressed ? 0.96 : 1 }],
+        })}
       >
         <Text
           style={{
             color: colors.onPrimary,
-            fontWeight: tokens.typography.weights.semibold,
+            fontSize: tokens.typography.sizes.lg,
+            fontWeight: tokens.typography.weights.bold,
           }}
         >
           {initials}
         </Text>
-      </View>
+      </Pressable>
     </View>
   );
 }

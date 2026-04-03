@@ -29,22 +29,16 @@ export default function MainRow({ left, topRight, bottomRight }: MainRowProps) {
         flex,
         backgroundColor: item.bgColor ?? colors.surfaceVariant,
         borderRadius: tokens.radii.xl,
-        padding: tokens.spacing.md,
+        padding: tokens.spacing.sm,
         justifyContent: "space-between",
       }}
     >
-      <View
-        style={{
-          alignSelf: "flex-end",
-        }}
-      >
-        {item.icon}
-      </View>
+      <View style={{ alignSelf: "flex-end" }}>{item.icon}</View>
 
       <View style={{ gap: tokens.spacing.xxs }}>
         <Text
           style={{
-            fontSize: tokens.typography.sizes.lg,
+            fontSize: tokens.typography.sizes.md,
             fontWeight: tokens.typography.weights.bold,
             color: item.textColor ?? colors.onSurface,
           }}
@@ -54,7 +48,7 @@ export default function MainRow({ left, topRight, bottomRight }: MainRowProps) {
 
         <Text
           style={{
-            fontSize: tokens.typography.sizes.sm,
+            fontSize: tokens.typography.sizes.xs,
             color: item.labelColor ?? colors.onSurfaceVariant,
           }}
         >
@@ -69,12 +63,12 @@ export default function MainRow({ left, topRight, bottomRight }: MainRowProps) {
       style={{
         paddingHorizontal: tokens.spacing.lg,
         flexDirection: "row",
-        gap: tokens.spacing.md,
+        gap: tokens.spacing.sm,
       }}
     >
       {Card(left, "left", 1)}
 
-      <View style={{ flex: 1, gap: tokens.spacing.md }}>
+      <View style={{ flex: 1, gap: tokens.spacing.sm }}>
         {Card(topRight, "top")}
         {Card(bottomRight, "bottom")}
       </View>
