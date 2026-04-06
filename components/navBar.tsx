@@ -16,22 +16,23 @@ export function NavBar() {
   const { signOut } = useAuth();
   const { hideTabBar } = useTabs();
 
-  const isHome =
-    pathname.startsWith("/home") || pathname.startsWith("/(tabs)/home");
-
-  const isSettings =
-    pathname.startsWith("/settings") || pathname.startsWith("/(tabs)/settings");
+  const isHome = pathname === "/home" || pathname === "/(tabs)/home";
+  const isSettings = pathname === "/settings" || pathname === "/(tabs)/settings";
+  const isTabRoot = isHome || isSettings;
 
   const translateY = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    // Hide if manually toggled OR if we are not on a main tab root
+    const shouldHide = hideTabBar || !isTabRoot;
+
     Animated.timing(translateY, {
-      toValue: hideTabBar ? 120 : 0,
+      toValue: shouldHide ? 120 : 0,
       duration: 300,
       easing: Easing.bezier(0.25, 0.1, 0.25, 1),
       useNativeDriver: true,
     }).start();
-  }, [hideTabBar]);
+  }, [hideTabBar, isTabRoot]);
 
   const handleActionButton = async () => {
     if (isHome) {

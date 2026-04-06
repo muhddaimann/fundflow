@@ -1,16 +1,18 @@
 import React, { useRef, useState } from "react";
 import { ScrollView, NativeSyntheticEvent, NativeScrollEvent, View } from "react-native";
-import { useTheme, Card, Text, ProgressBar } from "react-native-paper";
+import { useTheme, Text, List, Card, IconButton } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
-import useBudget from "../../../hooks/useBudget";
+import useSpend from "../../../hooks/useSpend";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-export default function Budget() {
+export default function Category() {
   const { colors } = useTheme();
   const tokens = useDesign();
-  const { budgets, formatCurrency } = useBudget();
+  const { spendData, formatCurrency } = useSpend();
+  
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -34,26 +36,35 @@ export default function Budget() {
           gap: tokens.spacing.lg,
         }}
       >
-        <Header title="Budget" subtitle="Manage your budgets" />
+        <Header 
+          title="Categories" 
+          subtitle="Manage your expense categories" 
+          rightSlot={
+            <IconButton icon="plus" mode="contained" containerColor={colors.primary} iconColor={colors.onPrimary} onPress={() => {}} />
+          }
+        />
+
         <View style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.md }}>
-          {budgets.map((budget, i) => (
-            <Card key={i} style={{ backgroundColor: colors.surface }} mode="contained">
-              <Card.Content style={{ gap: tokens.spacing.xs }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                  <Text variant="titleSmall">{budget.category}</Text>
-                  <Text variant="bodySmall">
-                    {formatCurrency(budget.spent)} / {formatCurrency(budget.limit)}
-                  </Text>
-                </View>
-                <ProgressBar
-                  progress={budget.percentage / 100}
-                  color={budget.percentage > 90 ? colors.error : colors.primary}
-                  style={{ height: 8, borderRadius: 4 }}
-                />
-              </Card.Content>
+          {spendData.categories.map((cat, i) => (
+            <Card key={i} style={{ backgroundColor: colors.surface }} mode="outlined">
+              <Card.Title
+                title={cat.name}
+                subtitle={`${formatCurrency(cat.amount)} spent`}
+                left={(props) => (
+                  <View style={{ 
+                    padding: tokens.spacing.sm, 
+                    borderRadius: tokens.radii.md, 
+                    backgroundColor: cat.color + '20' 
+                  }}>
+                    <MaterialCommunityIcons name={cat.icon as any} size={24} color={cat.color} />
+                  </View>
+                )}
+                right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
+              />
             </Card>
           ))}
         </View>
+
         <EndScreen />
       </ScrollView>
       <ScrollTop visible={showScrollTop} onPress={scrollToTop} />

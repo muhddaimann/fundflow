@@ -1,8 +1,7 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { ScrollView, NativeSyntheticEvent, NativeScrollEvent, View } from "react-native";
 import { useTheme, List, Text } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
-import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
@@ -11,15 +10,9 @@ import useClaim from "../../../hooks/useClaim";
 export default function Claim() {
   const { colors } = useTheme();
   const tokens = useDesign();
-  const { setHideTabBar } = useTabs();
   const { claimData, formatCurrency } = useClaim();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
-
-  useEffect(() => {
-    setHideTabBar(true);
-    return () => setHideTabBar(false);
-  }, []);
 
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     setShowScrollTop(e.nativeEvent.contentOffset.y > 300);

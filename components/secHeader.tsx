@@ -24,7 +24,6 @@ export default function SectionHeader({
       style={{
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between",
         paddingHorizontal: tokens.spacing.lg,
         gap: tokens.spacing.md,
       }}
@@ -39,7 +38,7 @@ export default function SectionHeader({
       >
         {icon}
 
-        <View style={{ flex: 1 }}>
+        <View style={{ flexShrink: 1 }}>
           <Text variant="titleMedium" style={{ fontWeight: "700" }}>
             {head}
           </Text>
@@ -54,7 +53,9 @@ export default function SectionHeader({
         </View>
       </View>
 
-      {rightSlot && <View>{rightSlot}</View>}
+      {rightSlot && (
+        <View style={{ paddingRight: tokens.spacing.sm }}>{rightSlot}</View>
+      )}
     </View>
   );
 }

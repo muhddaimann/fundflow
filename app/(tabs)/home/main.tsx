@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import {
   ScrollView,
   NativeSyntheticEvent,
@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import { useTheme, Text, Card, ProgressBar, List } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
-import { useTabs } from "../../../contexts/tabContext";
 import SectionHeader from "../../../components/secHeader";
 import useHome from "../../../hooks/useHome";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -18,7 +17,6 @@ import Header from "../../../components/header";
 export default function Main() {
   const { colors } = useTheme();
   const tokens = useDesign();
-  const { setHideTabBar } = useTabs();
   const {
     totals,
     budgets,
@@ -32,11 +30,6 @@ export default function Main() {
 
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
-
-  useEffect(() => {
-    setHideTabBar(true);
-    return () => setHideTabBar(false);
-  }, []);
 
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offset = e.nativeEvent.contentOffset.y;

@@ -14,6 +14,8 @@ export default function HomeLayout() {
       <Stack.Screen name="bills" options={{ title: 'Bills' }} />
       <Stack.Screen name="goals" options={{ title: 'Goals' }} />
       <Stack.Screen name="split" options={{ title: 'Split' }} />
+      <Stack.Screen name="transaction" options={{ title: 'Transactions' }} />
+      <Stack.Screen name="category" options={{ title: 'Categories' }} />
     </Stack>
   );
 }
