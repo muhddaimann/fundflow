@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   ScrollView,
   NativeSyntheticEvent,
@@ -8,7 +8,6 @@ import {
 import { useTheme, Text, Card, ProgressBar, List } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import { useTabs } from "../../../contexts/tabContext";
-import MainRow from "../../../components/a/mainRow";
 import SectionHeader from "../../../components/secHeader";
 import useHome from "../../../hooks/useHome";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -19,7 +18,7 @@ import Header from "../../../components/header";
 export default function Main() {
   const { colors } = useTheme();
   const tokens = useDesign();
-  const { onScroll } = useTabs();
+  const { setHideTabBar } = useTabs();
   const {
     totals,
     budgets,
@@ -34,10 +33,14 @@ export default function Main() {
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
+  useEffect(() => {
+    setHideTabBar(true);
+    return () => setHideTabBar(false);
+  }, []);
+
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offset = e.nativeEvent.contentOffset.y;
     setShowScrollTop(offset > 300);
-    onScroll(offset);
   };
 
   const scrollToTop = () => {
@@ -58,44 +61,6 @@ export default function Main() {
         showsVerticalScrollIndicator={false}
       >
         <Header title="Main" subtitle="Main Page" />
-        <MainRow
-          left={{
-            amount: totals.spent.formatted,
-            label: "Total Spent",
-            icon: (
-              <MaterialCommunityIcons
-                name="wallet-outline"
-                size={tokens.sizes.icon.md}
-                color={colors.onPrimary}
-              />
-            ),
-            bgColor: colors.primary,
-            textColor: colors.onPrimary,
-            labelColor: colors.onPrimary,
-          }}
-          topRight={{
-            amount: totals.toPay.formatted,
-            label: "To Pay",
-            icon: (
-              <MaterialCommunityIcons
-                name="arrow-up-right"
-                size={tokens.sizes.icon.md}
-                color={colors.error}
-              />
-            ),
-          }}
-          bottomRight={{
-            amount: totals.toClaim.formatted,
-            label: "To Claim",
-            icon: (
-              <MaterialCommunityIcons
-                name="arrow-down-left"
-                size={tokens.sizes.icon.md}
-                color={colors.primary}
-              />
-            ),
-          }}
-        />
         <View style={{ gap: tokens.spacing.md }}>
           <SectionHeader
             icon={

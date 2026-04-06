@@ -1,62 +1,77 @@
 import React from "react";
-import { View } from "react-native";
+import { View, Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
+import { useRouter } from "expo-router";
 
 type CardItem = {
   amount: string | number;
-  label: string;
   icon: React.ReactNode;
   bgColor?: string;
   textColor?: string;
   labelColor?: string;
+  route?: string;
+  params?: Record<string, any>;
 };
 
 type MainRowProps = {
-  left: CardItem;
-  topRight: CardItem;
-  bottomRight: CardItem;
+  totalSpend: CardItem;
+  toPay: CardItem;
+  toClaim: CardItem;
 };
 
-export default function MainRow({ left, topRight, bottomRight }: MainRowProps) {
+export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
   const { colors } = useTheme();
   const tokens = useDesign();
+  const router = useRouter();
 
-  const Card = (item: CardItem, key: string, flex = 1) => (
-    <View
-      key={key}
-      style={{
-        flex,
-        backgroundColor: item.bgColor ?? colors.surfaceVariant,
-        borderRadius: tokens.radii.xl,
-        padding: tokens.spacing.sm,
-        justifyContent: "space-between",
-      }}
-    >
-      <View style={{ alignSelf: "flex-end" }}>{item.icon}</View>
+  const Card = (item: CardItem, label: string, key: string, flex = 1) => {
+    const Wrapper = item.route ? Pressable : View;
 
-      <View style={{ gap: tokens.spacing.xxs }}>
-        <Text
-          style={{
-            fontSize: tokens.typography.sizes.md,
-            fontWeight: tokens.typography.weights.bold,
-            color: item.textColor ?? colors.onSurface,
-          }}
-        >
-          {item.amount}
-        </Text>
+    return (
+      <Wrapper
+        key={key}
+        {...(item.route && {
+          onPress: () =>
+            router.push({
+              pathname: item.route!,
+              params: item.params,
+            }),
+        })}
+        style={({ pressed }: any) => ({
+          flex,
+          backgroundColor: item.bgColor ?? colors.surfaceVariant,
+          borderRadius: tokens.radii.xl,
+          padding: tokens.spacing.sm,
+          justifyContent: "space-between",
+          transform: [{ scale: pressed ? 0.97 : 1 }],
+        })}
+      >
+        <View style={{ alignSelf: "flex-end" }}>{item.icon}</View>
 
-        <Text
-          style={{
-            fontSize: tokens.typography.sizes.xs,
-            color: item.labelColor ?? colors.onSurfaceVariant,
-          }}
-        >
-          {item.label}
-        </Text>
-      </View>
-    </View>
-  );
+        <View style={{ gap: tokens.spacing.xxs }}>
+          <Text
+            style={{
+              fontSize: tokens.typography.sizes.md,
+              fontWeight: tokens.typography.weights.bold,
+              color: item.textColor ?? colors.onSurface,
+            }}
+          >
+            {item.amount}
+          </Text>
+
+          <Text
+            style={{
+              fontSize: tokens.typography.sizes.xs,
+              color: item.labelColor ?? colors.onSurfaceVariant,
+            }}
+          >
+            {label}
+          </Text>
+        </View>
+      </Wrapper>
+    );
+  };
 
   return (
     <View
@@ -66,11 +81,11 @@ export default function MainRow({ left, topRight, bottomRight }: MainRowProps) {
         gap: tokens.spacing.sm,
       }}
     >
-      {Card(left, "left", 1)}
+      {Card(totalSpend, "Total Spend", "left", 1)}
 
       <View style={{ flex: 1, gap: tokens.spacing.sm }}>
-        {Card(topRight, "top")}
-        {Card(bottomRight, "bottom")}
+        {Card(toPay, "To Pay", "top")}
+        {Card(toClaim, "To Claim", "bottom")}
       </View>
     </View>
   );

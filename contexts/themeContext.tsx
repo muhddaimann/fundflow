@@ -24,7 +24,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       <PaperProvider theme={theme}>
         <StatusBar
           style={isDark ? "light" : "dark"}
-          backgroundColor={theme.colors.background}
         />
         <View style={{ flex: 1, backgroundColor: theme.colors.background, paddingTop: insets.top }}>
           {children}

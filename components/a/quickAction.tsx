@@ -3,27 +3,28 @@ import { View, Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 type ActionItem = {
   label: string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  onPress?: () => void;
+  onPress: () => void;
 };
-
-const actions: ActionItem[] = [
-  { label: "Claim", icon: "ticket-percent-outline" },
-  { label: "Budget", icon: "chart-donut" },
-  { label: "Subs", icon: "repeat" },
-  { label: "Wishlist", icon: "heart-outline" },
-  { label: "Bills", icon: "file-document-outline" },
-  { label: "Goals", icon: "flag-outline" },
-  { label: "Split", icon: "account-multiple-outline" },
-  { label: "More", icon: "dots-horizontal" },
-];
 
 export default function QuickAction() {
   const { colors } = useTheme();
   const tokens = useDesign();
+
+  const actions: ActionItem[] = [
+    { label: "Claim", icon: "ticket-percent-outline", onPress: () => router.push("/home/claim") },
+    { label: "Budget", icon: "chart-donut", onPress: () => router.push("/home/budget") },
+    { label: "Subs", icon: "repeat", onPress: () => router.push("/home/subscription") },
+    { label: "Wishlist", icon: "heart-outline", onPress: () => router.push("/home/wishlist") },
+    { label: "Bills", icon: "file-document-outline", onPress: () => router.push("/home/bills") },
+    { label: "Goals", icon: "flag-outline", onPress: () => router.push("/home/goals") },
+    { label: "Split", icon: "account-multiple-outline", onPress: () => router.push("/home/split") },
+    { label: "More", icon: "dots-horizontal", onPress: () => router.push("/home/main") },
+  ];
 
   const renderRow = (items: ActionItem[]) => (
     <View style={{ flexDirection: "row", gap: tokens.spacing.sm }}>

@@ -4,7 +4,16 @@ export default function HomeLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" options={{ title: 'Home' }} />
-      <Stack.Screen name="main" options={{ title: 'Main Form' }} />
+      <Stack.Screen name="main" options={{ title: 'Main' }} />
+      <Stack.Screen name="spend" options={{ title: 'Spend' }} />
+      <Stack.Screen name="pay" options={{ title: 'Pay' }} />
+      <Stack.Screen name="claim" options={{ title: 'Claim' }} />
+      <Stack.Screen name="budget" options={{ title: 'Budget' }} />
+      <Stack.Screen name="subscription" options={{ title: 'Subscription' }} />
+      <Stack.Screen name="wishlist" options={{ title: 'Wishlist' }} />
+      <Stack.Screen name="bills" options={{ title: 'Bills' }} />
+      <Stack.Screen name="goals" options={{ title: 'Goals' }} />
+      <Stack.Screen name="split" options={{ title: 'Split' }} />
     </Stack>
   );
 }

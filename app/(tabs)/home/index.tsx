@@ -50,41 +50,50 @@ export default function Home() {
         <Header name="Balqis" />
 
         <MainRow
-          left={{
+          totalSpend={{
             amount: "RM 2,450",
-            label: "Balance",
             icon: (
               <MaterialCommunityIcons
-                name="wallet-outline"
-                size={tokens.sizes.icon.md}
+                name="credit-card-outline"
+                size={20}
                 color={colors.onPrimary}
               />
             ),
             bgColor: colors.primary,
             textColor: colors.onPrimary,
             labelColor: colors.onPrimary,
+            route: "home/spend",
+            params: { type: "totalSpend" },
           }}
-          topRight={{
+          toPay={{
             amount: "RM 320",
-            label: "Income",
             icon: (
               <MaterialCommunityIcons
-                name="arrow-down-left"
-                size={tokens.sizes.icon.md}
-                color={colors.onSurfaceVariant}
+                name="arrow-up-bold"
+                size={20}
+                color={colors.onError}
               />
             ),
+            bgColor: colors.errorContainer,
+            textColor: colors.onErrorContainer,
+            labelColor: colors.onErrorContainer,
+            route: "home/pay",
+            params: { type: "toPay" },
           }}
-          bottomRight={{
+          toClaim={{
             amount: "RM 180",
-            label: "Expense",
             icon: (
               <MaterialCommunityIcons
-                name="arrow-up-right"
-                size={tokens.sizes.icon.md}
-                color={colors.onSurfaceVariant}
+                name="arrow-down-bold"
+                size={20}
+                color={colors.onTertiary}
               />
             ),
+            bgColor: colors.tertiaryContainer,
+            textColor: colors.onTertiaryContainer,
+            labelColor: colors.onTertiaryContainer,
+                      route: "home/claim",
+            params: { type: "toClaim" },
           }}
         />
         <QuickAction />
