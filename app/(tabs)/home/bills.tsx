@@ -6,13 +6,13 @@ import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
-import useHome from "../../../hooks/useHome";
+import useBills from "../../../hooks/useBills";
 
 export default function Bills() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { setHideTabBar } = useTabs();
-  const { bills, formatCurrency, formatDate, getDaysLeft } = useHome();
+  const { bills, formatCurrency, formatDate, getDaysLeft } = useBills();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 

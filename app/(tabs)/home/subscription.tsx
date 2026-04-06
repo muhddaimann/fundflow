@@ -6,13 +6,13 @@ import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
-import useHome from "../../../hooks/useHome";
+import useSubscription from "../../../hooks/useSubscription";
 
 export default function Subscription() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { setHideTabBar } = useTabs();
-  const { subscriptions, formatCurrency, formatDate, getDaysLeft } = useHome();
+  const { subscriptions, formatCurrency, formatDate, getDaysLeft } = useSubscription();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 

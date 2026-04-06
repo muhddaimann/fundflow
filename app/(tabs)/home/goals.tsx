@@ -1,16 +1,18 @@
 import React, { useRef, useState, useEffect } from "react";
-import { ScrollView, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { useTheme } from "react-native-paper";
+import { ScrollView, NativeSyntheticEvent, NativeScrollEvent, View } from "react-native";
+import { useTheme, List, Text, Card, ProgressBar } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
+import useGoals from "../../../hooks/useGoals";
 
 export default function Goals() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { setHideTabBar } = useTabs();
+  const { goalsData, formatCurrency } = useGoals();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -40,6 +42,25 @@ export default function Goals() {
         }}
       >
         <Header title="Goals" subtitle="Financial milestones" />
+        <View style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.md }}>
+          {goalsData.map((goal, i) => (
+            <Card key={i} style={{ backgroundColor: colors.surface }} mode="contained">
+              <Card.Content style={{ gap: tokens.spacing.xs }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <Text variant="titleSmall">{goal.title}</Text>
+                  <Text variant="bodySmall">
+                    {formatCurrency(goal.current)} / {formatCurrency(goal.target)}
+                  </Text>
+                </View>
+                <ProgressBar
+                  progress={goal.current / goal.target}
+                  color={colors.primary}
+                  style={{ height: 8, borderRadius: 4 }}
+                />
+              </Card.Content>
+            </Card>
+          ))}
+        </View>
         <EndScreen />
       </ScrollView>
       <ScrollTop visible={showScrollTop} onPress={scrollToTop} />

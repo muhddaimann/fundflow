@@ -6,11 +6,13 @@ import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
+import useSpend from "../../../hooks/useSpend";
 
 export default function Spend() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { setHideTabBar } = useTabs();
+  const { spendData, formatCurrency } = useSpend();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -39,7 +41,7 @@ export default function Spend() {
           gap: tokens.spacing.lg,
         }}
       >
-        <Header title="Spend" subtitle="Track your spending" />
+        <Header title="Spend" subtitle={`Total: ${formatCurrency(spendData.totalSpent)}`} />
         <EndScreen />
       </ScrollView>
       <ScrollTop visible={showScrollTop} onPress={scrollToTop} />

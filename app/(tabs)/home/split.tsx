@@ -6,13 +6,13 @@ import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
-import useHome from "../../../hooks/useHome";
+import useSplit from "../../../hooks/useSplit";
 
 export default function Split() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { setHideTabBar } = useTabs();
-  const { splits, formatCurrency } = useHome();
+  const { splits, formatCurrency } = useSplit();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 

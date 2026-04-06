@@ -6,13 +6,13 @@ import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
-import useHome from "../../../hooks/useHome";
+import useBudget from "../../../hooks/useBudget";
 
 export default function Budget() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { setHideTabBar } = useTabs();
-  const { budgets, formatCurrency } = useHome();
+  const { budgets, formatCurrency } = useBudget();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 

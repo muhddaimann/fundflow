@@ -6,11 +6,13 @@ import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
+import usePay from "../../../hooks/usePay";
 
 export default function Pay() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { setHideTabBar } = useTabs();
+  const { payData, formatCurrency } = usePay();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -39,7 +41,7 @@ export default function Pay() {
           gap: tokens.spacing.lg,
         }}
       >
-        <Header title="Pay" subtitle="Make a payment" />
+        <Header title="Pay" subtitle={`To Pay: ${formatCurrency(payData.totalToPay)}`} />
         <EndScreen />
       </ScrollView>
       <ScrollTop visible={showScrollTop} onPress={scrollToTop} />

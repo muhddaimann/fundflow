@@ -6,13 +6,13 @@ import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
-import useHome from "../../../hooks/useHome";
+import useClaim from "../../../hooks/useClaim";
 
 export default function Claim() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { setHideTabBar } = useTabs();
-  const { totals, formatCurrency } = useHome();
+  const { claimData, formatCurrency } = useClaim();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -45,7 +45,7 @@ export default function Claim() {
         <View style={{ paddingHorizontal: tokens.spacing.lg }}>
           <List.Item
             title="Total to Claim"
-            right={() => <Text variant="titleMedium">{totals.toClaim.formatted}</Text>}
+            right={() => <Text variant="titleMedium">{formatCurrency(claimData.totalToClaim)}</Text>}
             left={props => <List.Icon {...props} icon="ticket-percent-outline" color={colors.primary} />}
             style={{ backgroundColor: colors.surface, borderRadius: tokens.radii.md }}
           />
