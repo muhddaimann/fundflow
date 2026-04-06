@@ -10,7 +10,7 @@ type HeaderProps = {
   subtitle?: string;
   rightSlot?: React.ReactNode;
   showBack?: boolean;
-};  
+};
 
 export default function Header({
   title,
@@ -30,6 +30,7 @@ export default function Header({
         alignItems: "center",
         paddingTop: tokens.spacing.md,
         gap: tokens.spacing.md,
+        paddingHorizontal: tokens.spacing.lg,
       }}
     >
       <View style={{ width: 40 }}>

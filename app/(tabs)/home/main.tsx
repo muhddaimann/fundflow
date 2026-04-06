@@ -1,88 +1,283 @@
-import React, { useEffect } from "react";
-import { View } from "react-native";
-import { Text, TextInput, Button, Card, useTheme } from "react-native-paper";
-import { router } from "expo-router";
+import React, { useRef, useState } from "react";
+import {
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  View,
+} from "react-native";
+import { useTheme, Text, Card, ProgressBar, List } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
-import { KeyboardLayout } from "../../../components/keyboardLayout";
 import { useTabs } from "../../../contexts/tabContext";
+import MainRow from "../../../components/a/mainRow";
+import SectionHeader from "../../../components/secHeader";
+import useHome from "../../../hooks/useHome";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import ScrollTop from "../../../components/scrollTop";
+import EndScreen from "../../../components/endScreen";
 import Header from "../../../components/header";
 
 export default function Main() {
-  const theme = useTheme();
+  const { colors } = useTheme();
   const tokens = useDesign();
-  const { setHideTabBar } = useTabs();
+  const { onScroll } = useTabs();
+  const {
+    totals,
+    budgets,
+    bills,
+    subscriptions,
+    wishlist,
+    formatCurrency,
+    formatDate,
+    getDaysLeft,
+  } = useHome();
 
-  useEffect(() => {
-    setHideTabBar(true);
-    return () => setHideTabBar(false);
-  }, []);
+  const scrollRef = useRef<ScrollView | null>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offset = e.nativeEvent.contentOffset.y;
+    setShowScrollTop(offset > 300);
+    onScroll(offset);
+  };
+
+  const scrollToTop = () => {
+    scrollRef.current?.scrollTo({ y: 0, animated: true });
+  };
 
   return (
-    <KeyboardLayout
-      scrollable
-      gap={tokens.spacing.md}
-      scrollViewProps={{
-        scrollEventThrottle: 16,
-        contentContainerStyle: {
-          flexGrow: 1,
-          paddingHorizontal: tokens.spacing.xl,
+    <>
+      <ScrollView
+        ref={scrollRef}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        style={{ flex: 1, backgroundColor: colors.background }}
+        contentContainerStyle={{
           paddingBottom: tokens.spacing["3xl"],
-        },
-      }}
-    >
-      <Header title="Main Content Form" subtitle="Fill Form" showBack />
-
-      <Card
-        mode="elevated"
-        style={{
-          backgroundColor: theme.colors.surface,
-          borderRadius: tokens.radii.xl,
-        }}
-        contentStyle={{
-          padding: tokens.spacing.xl,
           gap: tokens.spacing.lg,
         }}
+        showsVerticalScrollIndicator={false}
       >
-        <Text
-          variant="bodyMedium"
-          style={{ color: theme.colors.onSurfaceVariant }}
-        >
-          Please fill in all the details below. This is a demo of a very long
-          form.
-        </Text>
-
-        <View style={{ gap: tokens.spacing.md }}>
-          {[
-            "First Name",
-            "Last Name",
-            "Email Address",
-            "Phone Number",
-            "Address Line 1",
-            "Address Line 2",
-            "City",
-            "State",
-            "Zip Code",
-            "Country",
-            "Company",
-            "Job Title",
-            "Department",
-          ].map((field, index) => (
-            <TextInput key={index} label={field} mode="outlined" />
-          ))}
-        </View>
-
-        <Button
-          mode="contained"
-          onPress={() => router.back()}
-          style={{
-            borderRadius: tokens.radii.lg,
-            marginTop: tokens.spacing.sm,
+        <Header title="Main" subtitle="Main Page" />
+        <MainRow
+          left={{
+            amount: totals.spent.formatted,
+            label: "Total Spent",
+            icon: (
+              <MaterialCommunityIcons
+                name="wallet-outline"
+                size={tokens.sizes.icon.md}
+                color={colors.onPrimary}
+              />
+            ),
+            bgColor: colors.primary,
+            textColor: colors.onPrimary,
+            labelColor: colors.onPrimary,
           }}
-          contentStyle={{ paddingVertical: tokens.spacing.sm }}
-        >
-          Submit Form
-        </Button>
-      </Card>
-    </KeyboardLayout>
+          topRight={{
+            amount: totals.toPay.formatted,
+            label: "To Pay",
+            icon: (
+              <MaterialCommunityIcons
+                name="arrow-up-right"
+                size={tokens.sizes.icon.md}
+                color={colors.error}
+              />
+            ),
+          }}
+          bottomRight={{
+            amount: totals.toClaim.formatted,
+            label: "To Claim",
+            icon: (
+              <MaterialCommunityIcons
+                name="arrow-down-left"
+                size={tokens.sizes.icon.md}
+                color={colors.primary}
+              />
+            ),
+          }}
+        />
+        <View style={{ gap: tokens.spacing.md }}>
+          <SectionHeader
+            icon={
+              <MaterialCommunityIcons
+                name="chart-donut"
+                size={24}
+                color={colors.primary}
+              />
+            }
+            head="Budgets"
+            subHeader="Monthly spending limits"
+          />
+          <View
+            style={{
+              paddingHorizontal: tokens.spacing.lg,
+              gap: tokens.spacing.sm,
+            }}
+          >
+            {budgets.map((budget, i) => (
+              <Card
+                key={i}
+                style={{ backgroundColor: colors.surface }}
+                mode="contained"
+              >
+                <Card.Content style={{ gap: tokens.spacing.xs }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text variant="titleSmall">{budget.category}</Text>
+                    <Text variant="bodySmall">
+                      {formatCurrency(budget.spent)} /{" "}
+                      {formatCurrency(budget.limit)}
+                    </Text>
+                  </View>
+                  <ProgressBar
+                    progress={budget.percentage / 100}
+                    color={
+                      budget.percentage > 90 ? colors.error : colors.primary
+                    }
+                    style={{ height: 8, borderRadius: 4 }}
+                  />
+                </Card.Content>
+              </Card>
+            ))}
+          </View>
+        </View>
+        <View style={{ gap: tokens.spacing.md }}>
+          <SectionHeader
+            icon={
+              <MaterialCommunityIcons
+                name="receipt"
+                size={24}
+                color={colors.primary}
+              />
+            }
+            head="Upcoming Bills"
+            subHeader="Don't miss these payments"
+          />
+          <View style={{ paddingHorizontal: tokens.spacing.lg }}>
+            {bills.map((bill, i) => (
+              <List.Item
+                key={i}
+                title={bill.name}
+                description={`Due ${formatDate(bill.dueDate)} • ${getDaysLeft(bill.dueDate)}`}
+                right={() => (
+                  <Text
+                    style={{
+                      alignSelf: "center",
+                      fontWeight: "700",
+                      color:
+                        bill.status === "overdue"
+                          ? colors.error
+                          : colors.onSurface,
+                    }}
+                  >
+                    {formatCurrency(bill.amount)}
+                  </Text>
+                )}
+                left={(props) => (
+                  <List.Icon
+                    {...props}
+                    icon={
+                      bill.status === "paid" ? "check-circle" : "clock-outline"
+                    }
+                    color={
+                      bill.status === "paid"
+                        ? colors.primary
+                        : bill.status === "overdue"
+                          ? colors.error
+                          : colors.onSurfaceVariant
+                    }
+                  />
+                )}
+                style={{
+                  backgroundColor: colors.surface,
+                  borderRadius: tokens.radii.md,
+                  marginBottom: tokens.spacing.xs,
+                }}
+              />
+            ))}
+          </View>
+        </View>
+        <View style={{ gap: tokens.spacing.md }}>
+          <SectionHeader
+            icon={
+              <MaterialCommunityIcons
+                name="repeat"
+                size={24}
+                color={colors.primary}
+              />
+            }
+            head="Subscriptions"
+            subHeader="Recurring monthly costs"
+          />
+          <View style={{ paddingHorizontal: tokens.spacing.lg }}>
+            <Card style={{ backgroundColor: colors.surface }} mode="contained">
+              {subscriptions.map((sub, i) => (
+                <List.Item
+                  key={i}
+                  title={sub.name}
+                  description={`Next ${formatDate(sub.nextBilling)} • ${getDaysLeft(sub.nextBilling)}`}
+                  right={() => (
+                    <Text style={{ alignSelf: "center" }}>
+                      {formatCurrency(sub.amount)}
+                    </Text>
+                  )}
+                  left={(props) => <List.Icon {...props} icon="refresh" />}
+                />
+              ))}
+            </Card>
+          </View>
+        </View>
+        <View style={{ gap: tokens.spacing.md }}>
+          <SectionHeader
+            icon={
+              <MaterialCommunityIcons
+                name="heart-outline"
+                size={24}
+                color={colors.primary}
+              />
+            }
+            head="Wishlist"
+            subHeader="Saving goals"
+          />
+          <View
+            style={{
+              paddingHorizontal: tokens.spacing.lg,
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: tokens.spacing.sm,
+            }}
+          >
+            {wishlist.map((item, i) => (
+              <Card
+                key={i}
+                style={{ width: "48%", backgroundColor: colors.surface }}
+                mode="contained"
+              >
+                <Card.Content style={{ gap: tokens.spacing.xs }}>
+                  <Text variant="titleSmall" numberOfLines={1}>
+                    {item.name}
+                  </Text>
+                  <Text variant="bodySmall">
+                    {formatCurrency(item.saved)} / {formatCurrency(item.price)}
+                  </Text>
+                  <ProgressBar
+                    progress={item.saved / item.price}
+                    color={colors.secondary}
+                    style={{ height: 4, borderRadius: 2 }}
+                  />
+                </Card.Content>
+              </Card>
+            ))}
+          </View>
+        </View>
+        <EndScreen />
+      </ScrollView>
+
+      <ScrollTop visible={showScrollTop} onPress={scrollToTop} />
+    </>
   );
 }

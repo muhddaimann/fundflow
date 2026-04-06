@@ -35,3 +35,11 @@ FundFlow — Effortless Money Tracking│
 ├─ lightweight insights
 ├─ export (CSV)
 └─ optional sync
+
+
+NUR ADLINA BINTI MOHD NO - Bilingual Content Specialist \& AI Training Supp
+├─ Professional Summary
+│ └─ ..
+├─ Work Experience
+│ └─ ..
+

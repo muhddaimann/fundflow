@@ -58,6 +58,44 @@ export default function useHome() {
     })}`;
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const checkDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
+    if (checkDate.getTime() === today.getTime()) return "Today";
+    if (checkDate.getTime() === yesterday.getTime()) return "Yesterday";
+    if (checkDate.getTime() === tomorrow.getTime()) return "Tomorrow";
+
+    return date.toLocaleDateString("en-MY", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    });
+  };
+
+  const getDaysLeft = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = date.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays < 0) return `${Math.abs(diffDays)}d ago`;
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "1 day left";
+    return `${diffDays} days left`;
+  };
+
   const totals = useMemo(
     () => ({
       spent: 1250.5,
@@ -102,59 +140,80 @@ export default function useHome() {
     []
   );
 
-  const bills = useMemo<Bill[]>(
-    () => [
+  const bills = useMemo<Bill[]>(() => {
+    const now = new Date();
+    const formatDateString = (d: Date) => d.toISOString().split("T")[0];
+
+    const nextWeek = new Date(now);
+    nextWeek.setDate(now.getDate() + 7);
+
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+
+    const threeDaysAgo = new Date(now);
+    threeDaysAgo.setDate(now.getDate() - 3);
+
+    return [
       {
         id: "1",
         name: "Rent",
         amount: 1200,
-        dueDate: "2024-04-01",
+        dueDate: formatDateString(nextWeek),
         status: "pending",
       },
       {
         id: "2",
         name: "Electricity",
         amount: 85.5,
-        dueDate: "2024-03-25",
+        dueDate: formatDateString(yesterday),
         status: "paid",
       },
       {
         id: "3",
         name: "Water",
         amount: 20.0,
-        dueDate: "2024-03-28",
+        dueDate: formatDateString(threeDaysAgo),
         status: "overdue",
       },
-    ],
-    []
-  );
+    ];
+  }, []);
 
-  const subscriptions = useMemo<Subscription[]>(
-    () => [
+  const subscriptions = useMemo<Subscription[]>(() => {
+    const now = new Date();
+    const formatDateString = (d: Date) => d.toISOString().split("T")[0];
+
+    const nextTwoDays = new Date(now);
+    nextTwoDays.setDate(now.getDate() + 2);
+
+    const nextFiveDays = new Date(now);
+    nextFiveDays.setDate(now.getDate() + 5);
+
+    const today = new Date(now);
+
+    return [
       {
         id: "1",
         name: "Netflix",
         amount: 55.0,
         frequency: "monthly",
-        nextBilling: "2024-04-12",
+        nextBilling: formatDateString(nextTwoDays),
       },
       {
         id: "2",
         name: "Spotify",
         amount: 15.9,
         frequency: "monthly",
-        nextBilling: "2024-04-05",
+        nextBilling: formatDateString(nextFiveDays),
       },
       {
         id: "3",
         name: "iCloud",
         amount: 3.9,
         frequency: "monthly",
-        nextBilling: "2024-04-01",
+        nextBilling: formatDateString(today),
       },
-    ],
-    []
-  );
+    ];
+  }, []);
 
   const wishlist = useMemo<WishlistItem[]>(
     () => [
@@ -177,6 +236,8 @@ export default function useHome() {
   return {
     currency,
     formatCurrency,
+    formatDate,
+    getDaysLeft,
     totals: {
       spent: { raw: totals.spent, formatted: formatCurrency(totals.spent) },
       toPay: { raw: totals.toPay, formatted: formatCurrency(totals.toPay) },
