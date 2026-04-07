@@ -39,13 +39,13 @@ export default function RootLayout() {
         <AuthProvider>
           <DesignProvider>
             <ThemeProvider>
-              <LoaderProvider>
-                <OverlayProvider>
+              <OverlayProvider>
+                <LoaderProvider>
                   <View style={{ flex: 1 }}>
                     <Stack screenOptions={{ headerShown: false }} />
                   </View>
-                </OverlayProvider>
-              </LoaderProvider>
+                </LoaderProvider>
+              </OverlayProvider>
             </ThemeProvider>
           </DesignProvider>
         </AuthProvider>

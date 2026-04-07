@@ -1,17 +1,17 @@
 import React, { useRef, useState } from "react";
-import { ScrollView, NativeSyntheticEvent, NativeScrollEvent, View } from "react-native";
-import { useTheme, Text, List, Card, IconButton } from "react-native-paper";
+import { ScrollView, NativeSyntheticEvent, NativeScrollEvent, View, Pressable } from "react-native";
+import { useTheme, Text, IconButton, Switch, Badge, Card } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
-import useSpend from "../../../hooks/useSpend";
+import useCategory from "../../../hooks/useCategory";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function Category() {
   const { colors } = useTheme();
   const tokens = useDesign();
-  const { spendData, formatCurrency } = useSpend();
+  const { categories, isEmpty, setIsEmpty, openCategoryModal, openAddCategoryModal } = useCategory();
   
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -33,36 +33,106 @@ export default function Category() {
         style={{ flex: 1, backgroundColor: colors.background }}
         contentContainerStyle={{
           paddingBottom: tokens.spacing["3xl"],
-          gap: tokens.spacing.lg,
         }}
       >
         <Header 
           title="Categories" 
-          subtitle="Manage your expense categories" 
+          subtitle="Organize your spending" 
           rightSlot={
-            <IconButton icon="plus" mode="contained" containerColor={colors.primary} iconColor={colors.onPrimary} onPress={() => {}} />
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>Empty</Text>
+              <Switch value={isEmpty} onValueChange={setIsEmpty} />
+            </View>
           }
         />
 
-        <View style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.md }}>
-          {spendData.categories.map((cat, i) => (
-            <Card key={i} style={{ backgroundColor: colors.surface }} mode="outlined">
-              <Card.Title
-                title={cat.name}
-                subtitle={`${formatCurrency(cat.amount)} spent`}
-                left={(props) => (
-                  <View style={{ 
-                    padding: tokens.spacing.sm, 
-                    borderRadius: tokens.radii.md, 
-                    backgroundColor: cat.color + '20' 
+        {/* Categories Grid/List */}
+        <View style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.sm }}>
+          <View style={{ 
+            flexDirection: "row", 
+            flexWrap: "wrap", 
+            gap: tokens.spacing.md,
+            paddingTop: tokens.spacing.md
+          }}>
+            {/* Add Category Pill - Always Visible First */}
+            <Pressable 
+              onPress={() => openAddCategoryModal((data) => console.log('Create', data))}
+              style={({ pressed }) => ({
+                width: '100%',
+                backgroundColor: colors.primaryContainer,
+                borderRadius: tokens.radii.pill,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingVertical: tokens.spacing.md,
+                gap: tokens.spacing.sm,
+                borderWidth: 1.5,
+                borderStyle: 'dashed',
+                borderColor: colors.primary,
+                opacity: pressed ? 0.8 : 1,
+                transform: [{ scale: pressed ? 0.98 : 1 }]
+              })}
+            >
+              <MaterialCommunityIcons name="plus-circle-outline" size={24} color={colors.primary} />
+              <Text variant="titleMedium" style={{ color: colors.primary, fontWeight: "bold" }}>
+                Add New Category
+              </Text>
+            </Pressable>
+
+            {/* Existing Categories */}
+            {categories.map((cat) => (
+              <Pressable 
+                key={cat.id} 
+                onPress={() => openCategoryModal(cat, {
+                  onDelete: (id) => console.log('Delete', id),
+                  onEdit: (c) => console.log('Edit', c)
+                })}
+                style={({ pressed }) => ({
+                  width: '100%',
+                  opacity: pressed ? 0.9 : 1,
+                  transform: [{ scale: pressed ? 0.99 : 1 }]
+                })}
+              >
+                <Card 
+                  style={{ 
+                    backgroundColor: colors.surface, 
+                    borderRadius: tokens.radii.lg,
+                  }} 
+                  mode="outlined"
+                >
+                  <Card.Content style={{ 
+                    flexDirection: "row", 
+                    alignItems: "center", 
+                    paddingVertical: tokens.spacing.sm,
+                    paddingHorizontal: tokens.spacing.md,
+                    gap: tokens.spacing.md
                   }}>
-                    <MaterialCommunityIcons name={cat.icon as any} size={24} color={cat.color} />
-                  </View>
-                )}
-                right={(props) => <IconButton {...props} icon="dots-vertical" onPress={() => {}} />}
-              />
-            </Card>
-          ))}
+                    <View style={{ 
+                      width: 44,
+                      height: 44,
+                      borderRadius: 22, 
+                      backgroundColor: cat.color + '15',
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}>
+                      <MaterialCommunityIcons name={cat.icon as any} size={22} color={cat.color} />
+                    </View>
+
+                    <View style={{ flex: 1 }}>
+                      <Text variant="titleMedium" style={{ fontWeight: "600" }}>{cat.name}</Text>
+                      {cat.isDefault && (
+                        <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant, opacity: 0.7 }}>
+                          System Category
+                        </Text>
+                      )}
+                    </View>
+
+                    <IconButton icon="chevron-right" size={20} onPress={() => {}} />
+                  </Card.Content>
+                </Card>
+              </Pressable>
+            ))}
+          </View>
         </View>
 
         <EndScreen />
