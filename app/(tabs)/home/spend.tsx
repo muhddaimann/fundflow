@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import {
   ScrollView,
   NativeSyntheticEvent,
@@ -38,6 +38,15 @@ export default function Spend() {
   const scrollToTop = () => {
     scrollRef.current?.scrollTo({ y: 0, animated: true });
   };
+
+  const monthlyTransactions = useMemo(() => {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    
+    return spendData.recentTransactions.filter(tx => 
+      new Date(tx.date) >= startOfMonth
+    );
+  }, [spendData.recentTransactions]);
 
   return (
     <>
@@ -206,13 +215,13 @@ export default function Spend() {
             <SectionHeader
               icon={
                 <MaterialCommunityIcons
-                  name="history"
+                  name="calendar-month-outline"
                   size={tokens.sizes.icon.md}
                   color={colors.onSurfaceVariant}
                 />
               }
-              head="Recent Transactions"
-              subHeader="Your latest spending activity"
+              head="Monthly Transactions"
+              subHeader="Overview of this month's spending"
               rightSlot={
                 <Pressable onPress={() => router.push("/home/transaction")}>
                   <Text
@@ -228,7 +237,7 @@ export default function Spend() {
             />
 
             <View style={{ paddingHorizontal: tokens.spacing.lg }}>
-              {spendData.recentTransactions.map((tx) => (
+              {monthlyTransactions.map((tx) => (
                 <List.Item
                   key={tx.id}
                   title={tx.title}

@@ -26,6 +26,8 @@ export default function useSpend() {
   const [isEmpty, setIsEmpty] = useState(false);
   const [transactions, setTransactions] = useState<SpendTransaction[]>([]);
   const { showModal, hideModal, toast } = useOverlay();
+  
+  // Use the master category hook
   const { categories: allCategories } = useCategory();
 
   const formatCurrency = (amount: number) => {
@@ -41,14 +43,16 @@ export default function useSpend() {
         content: (
           <SpendModal
             onSubmit={(data: AddSpendInput) => {
-              const categoryDetails = allCategories.find(c => c.name === data.category) || allCategories[0];
+              // Lookup visual details from master category list
+              const catDetails = allCategories.find(c => c.name === data.category) || allCategories[0];
+              
               const newTx: SpendTransaction = {
                 id: Date.now().toString(),
                 title: data.title,
                 amount: data.amount,
                 date: data.date,
                 category: data.category,
-                icon: categoryDetails?.icon || "cash",
+                icon: catDetails?.icon || "cash",
                 merchant: data.merchant,
               };
 
@@ -114,9 +118,9 @@ export default function useSpend() {
     ];
 
     const allTransactions = [...transactions, ...baseTransactions];
-
     const totalSpent = allTransactions.reduce((sum, t) => sum + t.amount, 0);
 
+    // Group transactions by category and enrichment with master category data
     const categoriesMap: Record<string, { amount: number; icon: string; color: string }> = {};
     
     allTransactions.forEach((t) => {
@@ -131,7 +135,7 @@ export default function useSpend() {
       categoriesMap[t.category].amount += t.amount;
     });
 
-    const categories = Object.entries(categoriesMap).map(
+    const categoriesList = Object.entries(categoriesMap).map(
       ([name, details]) => ({
         name,
         amount: details.amount,
@@ -142,7 +146,7 @@ export default function useSpend() {
 
     return {
       totalSpent,
-      categories,
+      categories: categoriesList,
       recentTransactions: allTransactions.sort(
         (a, b) =>
           new Date(b.date).getTime() - new Date(a.date).getTime()
