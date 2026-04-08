@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { useTheme, Text, Card, List, Switch, Button } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
-import { useTabs } from "../../../contexts/tabContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";
 import EndScreen from "../../../components/endScreen";
@@ -21,7 +20,13 @@ import { useRouter } from "expo-router";
 export default function Spend() {
   const { colors } = useTheme();
   const tokens = useDesign();
-  const { spendData, formatCurrency, isEmpty, setIsEmpty } = useSpend();
+  const {
+    spendData,
+    formatCurrency,
+    isEmpty,
+    setIsEmpty,
+    openAddSpendModal,
+  } = useSpend();
   const router = useRouter();
   const scrollRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -29,7 +34,6 @@ export default function Spend() {
   const handleScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     setShowScrollTop(e.nativeEvent.contentOffset.y > 300);
   };
-
 
   const scrollToTop = () => {
     scrollRef.current?.scrollTo({ y: 0, animated: true });
@@ -44,16 +48,14 @@ export default function Spend() {
         style={{ flex: 1, backgroundColor: colors.background }}
         contentContainerStyle={{
           paddingBottom: tokens.spacing["3xl"],
-          gap: tokens.spacing.md,
+          gap: tokens.spacing.lg,
         }}
       >
         <Header
           title="Spending"
           subtitle="Track your daily expenses"
           rightSlot={
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
-            >
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
               <Text
                 variant="labelSmall"
                 style={{ color: colors.onSurfaceVariant }}
@@ -82,73 +84,76 @@ export default function Spend() {
                   gap: tokens.spacing.xl,
                 }}
               >
-              <View style={{ alignItems: "center", gap: tokens.spacing.xxs }}>
-                <Text
-                  variant="labelMedium"
-                  style={{
-                    color: colors.onPrimary,
-                    opacity: 0.8,
-                    textTransform: "uppercase",
-                    letterSpacing: 1.5,
-                  }}
-                >
-                  Total Spent This Month
-                </Text>
-                <Text
-                  variant="displayMedium"
-                  style={{ color: colors.onPrimary, fontWeight: "bold" }}
-                >
-                  {formatCurrency(spendData.totalSpent)}
-                </Text>
-              </View>
-
-              {!isEmpty && (
-                <View style={{ gap: tokens.spacing.md }}>
-                  <View
+                <View style={{ alignItems: "center", gap: tokens.spacing.xxs }}>
+                  <Text
+                    variant="labelMedium"
                     style={{
-                      height: 1,
-                      backgroundColor: colors.onPrimary,
-                      opacity: 0.2,
+                      color: colors.onPrimary,
+                      opacity: 0.8,
+                      textTransform: "uppercase",
+                      letterSpacing: 1.5,
                     }}
-                  />
-                  <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ gap: tokens.spacing.sm }}
                   >
-                    {spendData.categories.map((cat, i) => (
-                      <View
-                        key={i}
-                        style={{
-                          flexDirection: "row",
-                          alignItems: "center",
-                          backgroundColor: colors.onPrimary + "20",
-                          paddingVertical: tokens.spacing.xs,
-                          paddingHorizontal: tokens.spacing.sm,
-                          borderRadius: tokens.radii.pill,
-                          gap: tokens.spacing.xs,
-                          borderWidth: 1,
-                          borderColor: colors.onPrimary + "30",
-                        }}
-                      >
-                        <MaterialCommunityIcons
-                          name={cat.icon as any}
-                          size={16}
-                          color={colors.onPrimary}
-                        />
-                        <Text
-                          variant="labelMedium"
-                          style={{ color: colors.onPrimary, fontWeight: "600" }}
-                        >
-                          {formatCurrency(cat.amount)}
-                        </Text>
-                      </View>
-                    ))}
-                  </ScrollView>
+                    Total Spent This Month
+                  </Text>
+                  <Text
+                    variant="displayMedium"
+                    style={{ color: colors.onPrimary, fontWeight: "bold" }}
+                  >
+                    {formatCurrency(spendData.totalSpent)}
+                  </Text>
                 </View>
-              )}
-            </Card.Content>
-          </View>
+
+                {!isEmpty && (
+                  <View style={{ gap: tokens.spacing.md }}>
+                    <View
+                      style={{
+                        height: 1,
+                        backgroundColor: colors.onPrimary,
+                        opacity: 0.2,
+                      }}
+                    />
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      contentContainerStyle={{ gap: tokens.spacing.sm }}
+                    >
+                      {spendData.categories.map((cat, i) => (
+                        <View
+                          key={i}
+                          style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            backgroundColor: colors.onPrimary + "20",
+                            paddingVertical: tokens.spacing.xs,
+                            paddingHorizontal: tokens.spacing.sm,
+                            borderRadius: tokens.radii.pill,
+                            gap: tokens.spacing.xs,
+                            borderWidth: 1,
+                            borderColor: colors.onPrimary + "30",
+                          }}
+                        >
+                          <MaterialCommunityIcons
+                            name={cat.icon as any}
+                            size={16}
+                            color={colors.onPrimary}
+                          />
+                          <Text
+                            variant="labelMedium"
+                            style={{
+                              color: colors.onPrimary,
+                              fontWeight: "600",
+                            }}
+                          >
+                            {formatCurrency(cat.amount)}
+                          </Text>
+                        </View>
+                      ))}
+                    </ScrollView>
+                  </View>
+                )}
+              </Card.Content>
+            </View>
           </Card>
         </View>
 
@@ -162,7 +167,9 @@ export default function Spend() {
         >
           <Button
             mode="contained"
-            onPress={() => {}}
+            onPress={() =>
+              openAddSpendModal((data) => console.log("Add", data))
+            }
             style={{ flex: 2, borderRadius: tokens.radii.lg }}
             contentStyle={{ height: 48 }}
             icon="plus"
@@ -230,7 +237,7 @@ export default function Spend() {
                     day: "numeric",
                     month: "short",
                   })}
-                  left={(props) => (
+                  left={() => (
                     <View
                       style={{
                         justifyContent: "center",

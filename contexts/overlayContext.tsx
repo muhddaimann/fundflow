@@ -44,22 +44,15 @@ type OverlayContextType = {
   hideModal: () => void;
 };
 
-const OverlayContext = createContext<OverlayContextType | undefined>(undefined);
+export const OverlayContext = createContext<OverlayContextType | undefined>(undefined);
 
 export function OverlayProvider({ children }: { children: React.ReactNode }) {
-  // Alert State
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertConfig, setAlertConfig] = useState<AlertOptions | null>(null);
-
-  // Confirm State
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [confirmConfig, setConfirmConfig] = useState<ConfirmOptions | null>(null);
-
-  // Toast State
   const [toastVisible, setToastVisible] = useState(false);
   const [toastConfig, setToastConfig] = useState<ToastOptions | null>(null);
-
-  // Modal State
   const [modalVisible, setModalVisible] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalOptions | null>(null);
 
@@ -107,10 +100,40 @@ export function OverlayProvider({ children }: { children: React.ReactNode }) {
     confirmConfig?.onCancel?.();
   };
 
+  const contextValue = { alert, confirm, toast, showModal, hideModal };
+
   return (
-    <OverlayContext.Provider value={{ alert, confirm, toast, showModal, hideModal }}>
+    <OverlayContext.Provider value={contextValue}>
       {children}
-      
+      <OverlayPortalRenderer 
+        contextValue={contextValue}
+        alertVisible={alertVisible}
+        alertConfig={alertConfig}
+        handleAlertClose={handleAlertClose}
+        confirmVisible={confirmVisible}
+        confirmConfig={confirmConfig}
+        handleConfirmAction={handleConfirmAction}
+        handleConfirmCancel={handleConfirmCancel}
+        modalVisible={modalVisible}
+        modalConfig={modalConfig}
+        hideModal={hideModal}
+        toastVisible={toastVisible}
+        toastConfig={toastConfig}
+        setToastVisible={setToastVisible}
+      />
+    </OverlayContext.Provider>
+  );
+}
+
+function OverlayPortalRenderer({ 
+  contextValue,
+  alertVisible, alertConfig, handleAlertClose,
+  confirmVisible, confirmConfig, handleConfirmAction, handleConfirmCancel,
+  modalVisible, modalConfig, hideModal,
+  toastVisible, toastConfig, setToastVisible
+}: any) {
+  return (
+    <>
       <OverlayAlert 
         visible={alertVisible}
         title={alertConfig?.title}
@@ -132,7 +155,12 @@ export function OverlayProvider({ children }: { children: React.ReactNode }) {
 
       <OverlayModal 
         visible={modalVisible}
-        content={modalConfig?.content}
+        // Wrap content in provider again to ensure context flows through portal
+        content={
+          <OverlayContext.Provider value={contextValue}>
+            {modalConfig?.content}
+          </OverlayContext.Provider>
+        }
         onDismiss={hideModal}
         dismissable={modalConfig?.dismissable}
       />
@@ -147,8 +175,7 @@ export function OverlayProvider({ children }: { children: React.ReactNode }) {
         variant={toastConfig?.variant}
         icon={toastConfig?.icon}
       />
-
-    </OverlayContext.Provider>
+    </>
   );
 }
 
