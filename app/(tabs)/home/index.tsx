@@ -47,7 +47,7 @@ export default function Home() {
         }}
         showsVerticalScrollIndicator={false}
       >
-        <Header name="Balqis" />
+        <Header name="User" />
 
         <MainRow
           totalSpend={{
