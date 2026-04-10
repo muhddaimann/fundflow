@@ -4,7 +4,7 @@ export default function HomeLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" options={{ title: 'Home' }} />
-      <Stack.Screen name="main" options={{ title: 'Main' }} />
+      <Stack.Screen name="tools" options={{ title: 'Financial Tools' }} />
       <Stack.Screen name="spend" options={{ title: 'Spend' }} />
       <Stack.Screen name="pay" options={{ title: 'Pay' }} />
       <Stack.Screen name="claim" options={{ title: 'Claim' }} />

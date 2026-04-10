@@ -35,3 +35,6 @@ FundFlow — Effortless Money Tracking│
 ├─ lightweight insights
 ├─ export (CSV)
 └─ optional sync
+
+├─ Finance Tools
+│ ├─ Loan calculator

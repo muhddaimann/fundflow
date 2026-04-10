@@ -57,7 +57,7 @@ export default function Spend() {
         style={{ flex: 1, backgroundColor: colors.background }}
         contentContainerStyle={{
           paddingBottom: tokens.spacing["3xl"],
-          gap: tokens.spacing.lg,
+          gap: tokens.spacing.md,
         }}
       >
         <Header
