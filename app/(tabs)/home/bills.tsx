@@ -61,8 +61,7 @@ export default function Bills() {
         style={{ flex: 1, backgroundColor: colors.background }}
         contentContainerStyle={{
           paddingBottom: tokens.spacing["3xl"],
-          gap: tokens.spacing.lg,
-          paddingTop: tokens.spacing.md
+          gap: tokens.spacing.md,
         }}
       >
         <Header 

@@ -1,5 +1,11 @@
 import React, { useRef } from "react";
-import { ScrollView, NativeSyntheticEvent, NativeScrollEvent, View, Pressable } from "react-native";
+import {
+  ScrollView,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+  View,
+  Pressable,
+} from "react-native";
 import { useTheme, Text, Card, ProgressBar, Switch } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import ScrollTop from "../../../components/scrollTop";
@@ -12,15 +18,15 @@ import NoData from "../../../components/noData";
 export default function Wishlist() {
   const { colors } = useTheme();
   const tokens = useDesign();
-  const { 
-    wishlist, 
-    totalValue, 
-    totalSaved, 
+  const {
+    wishlist,
+    totalValue,
+    totalSaved,
     formatCurrency,
     isEmpty,
     setIsEmpty,
     openAddWishlistModal,
-    openEditWishlistModal
+    openEditWishlistModal,
   } = useWishlist();
 
   const scrollRef = useRef<ScrollView | null>(null);
@@ -45,16 +51,22 @@ export default function Wishlist() {
         style={{ flex: 1, backgroundColor: colors.background }}
         contentContainerStyle={{
           paddingBottom: tokens.spacing["3xl"],
-          gap: tokens.spacing.lg,
-          paddingTop: tokens.spacing.md
+          gap: tokens.spacing.md,
         }}
       >
-        <Header 
-          title="Wishlist" 
-          subtitle="Manage your saving goals" 
+        <Header
+          title="Wishlist"
+          subtitle="Manage your saving goals"
           rightSlot={
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-              <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>Empty</Text>
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
+              <Text
+                variant="labelSmall"
+                style={{ color: colors.onSurfaceVariant }}
+              >
+                Empty
+              </Text>
               <Switch value={isEmpty} onValueChange={setIsEmpty} />
             </View>
           }
@@ -62,40 +74,76 @@ export default function Wishlist() {
 
         {/* Summary Card */}
         <View style={{ paddingHorizontal: tokens.spacing.lg }}>
-          <Card 
-            style={{ 
-              backgroundColor: colors.primary, 
+          <Card
+            style={{
+              backgroundColor: colors.primary,
               borderRadius: tokens.radii["2xl"],
-            }} 
+            }}
             mode="elevated"
           >
-            <View style={{ borderRadius: tokens.radii["2xl"], overflow: "hidden" }}>
-              <Card.Content style={{ paddingVertical: tokens.spacing.xl, gap: tokens.spacing.xl }}>
+            <View
+              style={{ borderRadius: tokens.radii["2xl"], overflow: "hidden" }}
+            >
+              <Card.Content
+                style={{
+                  paddingVertical: tokens.spacing.xl,
+                  gap: tokens.spacing.xl,
+                }}
+              >
                 <View style={{ alignItems: "center", gap: tokens.spacing.xxs }}>
-                  <Text variant="labelMedium" style={{ color: colors.onPrimary, opacity: 0.8, textTransform: "uppercase", letterSpacing: 1.5 }}>
+                  <Text
+                    variant="labelMedium"
+                    style={{
+                      color: colors.onPrimary,
+                      opacity: 0.8,
+                      textTransform: "uppercase",
+                      letterSpacing: 1.5,
+                    }}
+                  >
                     Total Savings Progress
                   </Text>
-                  <Text variant="displayMedium" style={{ color: colors.onPrimary, fontWeight: "bold" }}>
+                  <Text
+                    variant="displayMedium"
+                    style={{ color: colors.onPrimary, fontWeight: "bold" }}
+                  >
                     {formatCurrency(totalSaved)}
                   </Text>
-                  <Text variant="bodySmall" style={{ color: colors.onPrimary, opacity: 0.7 }}>
+                  <Text
+                    variant="bodySmall"
+                    style={{ color: colors.onPrimary, opacity: 0.7 }}
+                  >
                     Target: {formatCurrency(totalValue)}
                   </Text>
                 </View>
 
                 <View style={{ gap: tokens.spacing.xs }}>
-                  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text variant="labelSmall" style={{ color: colors.onPrimary }}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Text
+                      variant="labelSmall"
+                      style={{ color: colors.onPrimary }}
+                    >
                       {Math.round(overallProgress * 100)}% Complete
                     </Text>
-                    <Text variant="labelSmall" style={{ color: colors.onPrimary }}>
+                    <Text
+                      variant="labelSmall"
+                      style={{ color: colors.onPrimary }}
+                    >
                       {formatCurrency(totalValue - totalSaved)} left
                     </Text>
                   </View>
-                  <ProgressBar 
-                    progress={overallProgress} 
-                    color={colors.onPrimary} 
-                    style={{ height: 8, borderRadius: 4, backgroundColor: colors.onPrimary + '20' }} 
+                  <ProgressBar
+                    progress={overallProgress}
+                    color={colors.onPrimary}
+                    style={{
+                      height: 8,
+                      borderRadius: 4,
+                      backgroundColor: colors.onPrimary + "20",
+                    }}
                   />
                 </View>
               </Card.Content>
@@ -105,7 +153,7 @@ export default function Wishlist() {
 
         {/* Actions Row */}
         <View style={{ paddingHorizontal: tokens.spacing.lg }}>
-          <Pressable 
+          <Pressable
             onPress={openAddWishlistModal}
             style={({ pressed }) => ({
               backgroundColor: colors.primaryContainer,
@@ -117,15 +165,19 @@ export default function Wishlist() {
               paddingHorizontal: tokens.spacing.lg,
               gap: tokens.spacing.sm,
               borderWidth: 1.5,
-              borderStyle: 'dashed',
+              borderStyle: "dashed",
               borderColor: colors.primary,
               opacity: pressed ? 0.8 : 1,
-              transform: [{ scale: pressed ? 0.98 : 1 }]
+              transform: [{ scale: pressed ? 0.98 : 1 }],
             })}
           >
-            <MaterialCommunityIcons name="heart-plus-outline" size={24} color={colors.primary} />
-            <Text 
-              variant="titleMedium" 
+            <MaterialCommunityIcons
+              name="heart-plus-outline"
+              size={24}
+              color={colors.primary}
+            />
+            <Text
+              variant="titleMedium"
               style={{ color: colors.primary, fontWeight: "bold" }}
               numberOfLines={1}
               ellipsizeMode="tail"
@@ -136,67 +188,132 @@ export default function Wishlist() {
         </View>
 
         {isEmpty ? (
-          <View style={{ paddingHorizontal: tokens.spacing.lg, marginTop: tokens.spacing.sm }}>
-            <NoData 
-              title="Your wishlist is empty" 
-              message="Add items you want to buy and track your savings progress here." 
+          <View
+            style={{
+              paddingHorizontal: tokens.spacing.lg,
+              marginTop: tokens.spacing.sm,
+            }}
+          >
+            <NoData
+              title="Your wishlist is empty"
+              message="Add items you want to buy and track your savings progress here."
               icon="heart-outline"
             />
           </View>
         ) : (
-          <View style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.md }}>
-            <Text variant="titleMedium" style={{ fontWeight: "800", letterSpacing: 0.5 }}>
+          <View
+            style={{
+              paddingHorizontal: tokens.spacing.lg,
+              gap: tokens.spacing.md,
+            }}
+          >
+            <Text
+              variant="titleMedium"
+              style={{ fontWeight: "800", letterSpacing: 0.5 }}
+            >
               SAVING TARGETS
             </Text>
-            
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: tokens.spacing.md }}>
+
+            <View
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                gap: tokens.spacing.md,
+              }}
+            >
               {wishlist.map((item) => {
                 const progress = item.price > 0 ? item.saved / item.price : 0;
                 const isComplete = progress >= 1;
 
                 return (
-                  <Pressable 
-                    key={item.id} 
+                  <Pressable
+                    key={item.id}
                     onPress={() => openEditWishlistModal(item)}
-                    style={({ pressed }) => ({ 
+                    style={({ pressed }) => ({
                       width: "100%",
                       opacity: pressed ? 0.9 : 1,
-                      transform: [{ scale: pressed ? 0.99 : 1 }]
+                      transform: [{ scale: pressed ? 0.99 : 1 }],
                     })}
                   >
-                    <Card style={{ backgroundColor: colors.surface, borderRadius: tokens.radii.lg }} mode="outlined">
+                    <Card
+                      style={{
+                        backgroundColor: colors.surface,
+                        borderRadius: tokens.radii.lg,
+                      }}
+                      mode="outlined"
+                    >
                       <Card.Content style={{ gap: tokens.spacing.md }}>
-                        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                          }}
+                        >
                           <View style={{ flex: 1, gap: 2 }}>
-                            <Text variant="titleMedium" style={{ fontWeight: "700" }} numberOfLines={1}>
+                            <Text
+                              variant="titleMedium"
+                              style={{ fontWeight: "700" }}
+                              numberOfLines={1}
+                            >
                               {item.name}
                             </Text>
-                            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant }}>
-                              {isComplete ? "Goal Reached!" : `${formatCurrency(item.price - item.saved)} more to go`}
+                            <Text
+                              variant="bodySmall"
+                              style={{ color: colors.onSurfaceVariant }}
+                            >
+                              {isComplete
+                                ? "Goal Reached!"
+                                : `${formatCurrency(item.price - item.saved)} more to go`}
                             </Text>
                           </View>
                           <View style={{ alignItems: "flex-end" }}>
-                            <Text style={{ fontWeight: "bold", fontSize: 16, color: isComplete ? colors.primary : colors.onSurface }}>
+                            <Text
+                              style={{
+                                fontWeight: "bold",
+                                fontSize: 16,
+                                color: isComplete
+                                  ? colors.primary
+                                  : colors.onSurface,
+                              }}
+                            >
                               {formatCurrency(item.saved)}
                             </Text>
-                            <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
+                            <Text
+                              variant="labelSmall"
+                              style={{ color: colors.onSurfaceVariant }}
+                            >
                               of {formatCurrency(item.price)}
                             </Text>
                           </View>
                         </View>
 
                         <View style={{ gap: 4 }}>
-                          <ProgressBar 
-                            progress={progress} 
-                            color={isComplete ? colors.primary : colors.secondary} 
-                            style={{ height: 6, borderRadius: 3 }} 
+                          <ProgressBar
+                            progress={progress}
+                            color={
+                              isComplete ? colors.primary : colors.secondary
+                            }
+                            style={{ height: 6, borderRadius: 3 }}
                           />
-                          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                            <Text variant="labelSmall" style={{ color: colors.onSurfaceVariant }}>
+                          <View
+                            style={{
+                              flexDirection: "row",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Text
+                              variant="labelSmall"
+                              style={{ color: colors.onSurfaceVariant }}
+                            >
                               {Math.round(progress * 100)}%
                             </Text>
                             {isComplete && (
-                              <MaterialCommunityIcons name="check-decagram" size={14} color={colors.primary} />
+                              <MaterialCommunityIcons
+                                name="check-decagram"
+                                size={14}
+                                color={colors.primary}
+                              />
                             )}
                           </View>
                         </View>
