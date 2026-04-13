@@ -36,47 +36,52 @@ export function OverlayToast({
 
   const variantConfig = {
     default: {
-      bg: theme.colors.inverseSurface,
-      text: theme.colors.inverseOnSurface,
-      icon: icon ?? "information-outline",
+      accent: theme.colors.primary,
+      bg: theme.colors.elevation.level2,
+      text: theme.colors.onSurface,
+      icon: icon ?? "information",
     },
     success: {
+      accent: theme.colors.tertiary,
       bg: theme.colors.tertiaryContainer,
       text: theme.colors.onTertiaryContainer,
-      icon: icon ?? "check-circle-outline",
+      icon: icon ?? "check-circle",
     },
     error: {
+      accent: theme.colors.error,
       bg: theme.colors.errorContainer,
       text: theme.colors.onErrorContainer,
-      icon: icon ?? "alert-circle-outline",
+      icon: icon ?? "alert-circle",
     },
     warning: {
+      accent: theme.colors.secondary,
       bg: theme.colors.secondaryContainer,
       text: theme.colors.onSecondaryContainer,
-      icon: icon ?? "alert-outline",
+      icon: icon ?? "alert",
     },
     info: {
+      accent: theme.colors.primary,
       bg: theme.colors.primaryContainer,
       text: theme.colors.onPrimaryContainer,
-      icon: icon ?? "information-outline",
+      icon: icon ?? "information",
     },
   }[variant];
 
   useEffect(() => {
     if (!visible) return;
 
-    Animated.parallel([
-      Animated.timing(translateY, {
-        toValue: insets.top + tokens.spacing.lg,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    Animated.spring(translateY, {
+      toValue: insets.top + tokens.spacing.md,
+      useNativeDriver: true,
+      tension: 40,
+      friction: 8,
+    }).start();
+
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
 
     const timer = setTimeout(hide, duration);
     return () => clearTimeout(timer);
@@ -112,53 +117,96 @@ export function OverlayToast({
             opacity,
             transform: [{ translateY }],
             alignItems: "center",
-            width: '100%',
+            width: "100%",
           }}
         >
           <Surface
-            elevation={4}
+            elevation={2}
             style={[
               styles.content,
               {
                 borderRadius: tokens.radii.lg,
                 backgroundColor: variantConfig.bg,
-                gap: tokens.spacing.sm,
-              }
+                borderWidth: 1,
+                borderColor: theme.colors.outlineVariant,
+              },
             ]}
           >
-            <Icon
-              source={variantConfig.icon}
-              size={20}
-              color={variantConfig.text}
-            />
-
-            <Text
-              variant="bodyMedium"
+            <View
               style={{
                 flex: 1,
-                color: variantConfig.text,
+                borderRadius: tokens.radii.lg,
+                overflow: "hidden",
+                flexDirection: "row",
+                alignItems: "center",
               }}
             >
-              {message}
-            </Text>
+              {/* Bookmark Accent Bar */}
+              <View
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: 6,
+                  backgroundColor: variantConfig.accent,
+                }}
+              />
 
-            {actionLabel && (
-              <TouchableOpacity
-                onPress={() => {
-                  onAction?.();
-                  hide();
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingLeft: 14, // Space for bookmark + gap
+                  paddingRight: 16,
+                  paddingVertical: 12,
+                  gap: tokens.spacing.sm,
+                  width: "100%",
                 }}
               >
+                <Icon
+                  source={variantConfig.icon}
+                  size={22}
+                  color={variantConfig.accent}
+                />
+
                 <Text
-                  variant="labelLarge"
+                  variant="bodyMedium"
                   style={{
+                    flex: 1,
                     color: variantConfig.text,
+                    fontFamily: tokens.typography.families.medium,
+                    fontWeight: "500",
                   }}
                 >
-                  {actionLabel.toUpperCase()}
+                  {message}
                 </Text>
-              </TouchableOpacity>
-            )}
+
+                {actionLabel && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      onAction?.();
+                      hide();
+                    }}
+                    style={{
+                      paddingHorizontal: 8,
+                      paddingVertical: 4,
+                    }}
+                  >
+                    <Text
+                      variant="labelLarge"
+                      style={{
+                        color: variantConfig.accent,
+                        fontFamily: tokens.typography.families.bold,
+                        fontWeight: "700",
+                      }}
+                    >
+                      {actionLabel.toUpperCase()}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
           </Surface>
         </Animated.View>
       </View>
@@ -175,11 +223,9 @@ const styles = StyleSheet.create({
     zIndex: 9999,
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    maxWidth: 640,
+    maxWidth: 600,
     width: "100%",
+    minHeight: 56,
+    justifyContent: "center",
   },
 });
