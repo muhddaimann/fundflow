@@ -4,6 +4,8 @@ import { useTheme, Text } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useGlobal from "../../hooks/useGlobal";
+import useNotification from "../../hooks/useNotification";
+import { useRouter } from "expo-router";
 
 type HeaderProps = {
   name?: string;
@@ -12,7 +14,9 @@ type HeaderProps = {
 export default function Header({ name = "User" }: HeaderProps) {
   const { colors } = useTheme();
   const tokens = useDesign();
+  const router = useRouter();
   const { greeting, today, initials, setIsEmpty, isEmpty } = useGlobal(name);
+  const { unreadCount } = useNotification();
 
   return (
     <View
@@ -60,7 +64,7 @@ export default function Header({ name = "User" }: HeaderProps) {
           }}
         >
           <Pressable
-            onPress={() => {}}
+            onPress={() => router.push("home/notification")}
             style={({ pressed }) => ({
               width: 44,
               height: 44,
@@ -71,11 +75,28 @@ export default function Header({ name = "User" }: HeaderProps) {
               transform: [{ scale: pressed ? 0.96 : 1 }],
             })}
           >
-            <MaterialCommunityIcons
-              name="bell-outline"
-              size={tokens.sizes.icon.xl}
-              color={colors.onSurfaceVariant}
-            />
+            <View>
+              <MaterialCommunityIcons
+                name="bell-outline"
+                size={tokens.sizes.icon.xl}
+                color={colors.onSurfaceVariant}
+              />
+              {unreadCount > 0 && (
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 2,
+                    right: 2,
+                    width: 10,
+                    height: 10,
+                    borderRadius: 5,
+                    backgroundColor: colors.error,
+                    borderWidth: 2,
+                    borderColor: colors.surfaceVariant,
+                  }}
+                />
+              )}
+            </View>
           </Pressable>
 
           <Pressable
