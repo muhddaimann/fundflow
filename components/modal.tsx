@@ -126,6 +126,7 @@ export function OverlayModal({ visible, content, onDismiss, dismissable = true }
             >
               <View style={{ borderRadius: tokens.radii["2xl"], overflow: 'hidden' }}>
                 <ScrollView 
+                  scrollEnabled={false}
                   showsVerticalScrollIndicator={false}
                   contentContainerStyle={{ padding: tokens.spacing.xl }}
                 >

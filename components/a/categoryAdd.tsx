@@ -146,7 +146,8 @@ export function CategoryAddModal({ onSave, onClose }: Props) {
           </Text>
           <View style={{ maxHeight: 180 }}>
             <ScrollView
-              showsVerticalScrollIndicator={true}
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={{
                 flexDirection: "row",
                 flexWrap: "wrap",

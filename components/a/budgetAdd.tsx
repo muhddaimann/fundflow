@@ -53,7 +53,8 @@ export function BudgetAddModal({ onSubmit, onClose, initialData }: Props) {
           </Text>
           <View style={{ maxHeight: 160 }}>
             <ScrollView 
-              showsVerticalScrollIndicator={true}
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
               contentContainerStyle={{ 
                 flexDirection: "row", 
                 flexWrap: "wrap", 
