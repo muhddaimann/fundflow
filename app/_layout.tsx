@@ -6,6 +6,7 @@ import { OverlayProvider } from "../contexts/overlayContext";
 import { LoaderProvider } from "../contexts/loaderContext";
 import { AuthProvider } from "../contexts/authContext";
 import { TokenProvider } from "../contexts/tokenContext";
+import { GlobalProvider } from "../contexts/globalContext";
 import * as SplashScreen from "expo-splash-screen";
 import {
   useFonts,
@@ -35,21 +36,23 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <TokenProvider>
-        <AuthProvider>
-          <DesignProvider>
-            <ThemeProvider>
-              <OverlayProvider>
-                <LoaderProvider>
-                  <View style={{ flex: 1 }}>
-                    <Stack screenOptions={{ headerShown: false }} />
-                  </View>
-                </LoaderProvider>
-              </OverlayProvider>
-            </ThemeProvider>
-          </DesignProvider>
-        </AuthProvider>
-      </TokenProvider>
+      <GlobalProvider>
+        <TokenProvider>
+          <AuthProvider>
+            <DesignProvider>
+              <ThemeProvider>
+                <OverlayProvider>
+                  <LoaderProvider>
+                    <View style={{ flex: 1 }}>
+                      <Stack screenOptions={{ headerShown: false }} />
+                    </View>
+                  </LoaderProvider>
+                </OverlayProvider>
+              </ThemeProvider>
+            </DesignProvider>
+          </AuthProvider>
+        </TokenProvider>
+      </GlobalProvider>
     </SafeAreaProvider>
   );
 }

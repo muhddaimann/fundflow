@@ -3,8 +3,9 @@ import {
   ScrollView,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  View,
 } from "react-native";
-import { useTheme, Text } from "react-native-paper";
+import { useTheme, Text, Switch } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import ScrollTop from "../../../components/scrollTop";
 import { useTabs } from "../../../contexts/tabContext";
@@ -15,11 +16,20 @@ import SectionHeader from "../../../components/secHeader";
 import RecentCard from "../../../components/a/recentCard";
 import QuickAction from "../../../components/a/quickAction";
 import EndScreen from "../../../components/endScreen";
+import useGlobal from "../../../hooks/useGlobal";
 
 export default function Home() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { onScroll } = useTabs();
+  const { 
+    isEmpty, 
+    setIsEmpty, 
+    totals, 
+    recentTransactions, 
+    formatCurrency 
+  } = useGlobal("User");
+  
   const scrollViewRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -51,7 +61,7 @@ export default function Home() {
 
         <MainRow
           totalSpend={{
-            amount: "RM 2,450",
+            amount: formatCurrency(totals.spend),
             icon: (
               <MaterialCommunityIcons
                 name="credit-card-outline"
@@ -66,7 +76,7 @@ export default function Home() {
             params: { type: "totalSpend" },
           }}
           toPay={{
-            amount: "RM 320",
+            amount: formatCurrency(totals.pay),
             icon: (
               <MaterialCommunityIcons
                 name="arrow-up-bold"
@@ -81,7 +91,7 @@ export default function Home() {
             params: { type: "toPay" },
           }}
           toClaim={{
-            amount: "RM 180",
+            amount: formatCurrency(totals.claim),
             icon: (
               <MaterialCommunityIcons
                 name="arrow-down-bold"
@@ -92,7 +102,7 @@ export default function Home() {
             bgColor: colors.tertiaryContainer,
             textColor: colors.onTertiaryContainer,
             labelColor: colors.onTertiaryContainer,
-                      route: "home/claim",
+            route: "home/claim",
             params: { type: "toClaim" },
           }}
         />
@@ -119,7 +129,7 @@ export default function Home() {
             </Text>
           }
         />
-        <RecentCard />
+        <RecentCard data={recentTransactions} />
         <EndScreen />
       </ScrollView>
 
