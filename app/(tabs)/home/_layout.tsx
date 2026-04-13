@@ -18,6 +18,7 @@ export default function HomeLayout() {
       <Stack.Screen name="category" options={{ title: "Categories" }} />
       <Stack.Screen name="team/[id]" options={{ title: "Team Detail" }} />
       <Stack.Screen name="notification" options={{ title: "Notification" }} />
+      <Stack.Screen name="others" options={{ title: "Others" }} />
     </Stack>
   );
 }

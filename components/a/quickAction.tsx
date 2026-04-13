@@ -16,14 +16,46 @@ export default function QuickAction() {
   const tokens = useDesign();
 
   const actions: ActionItem[] = [
-    { label: "Claim", icon: "ticket-percent-outline", onPress: () => router.push("/home/claim") },
-    { label: "Budget", icon: "chart-donut", onPress: () => router.push("/home/budget") },
-    { label: "Subs", icon: "repeat", onPress: () => router.push("/home/subscription") },
-    { label: "Wishlist", icon: "heart-outline", onPress: () => router.push("/home/wishlist") },
-    { label: "Bills", icon: "file-document-outline", onPress: () => router.push("/home/bills") },
-    { label: "Goals", icon: "flag-outline", onPress: () => router.push("/home/goals") },
-    { label: "Split", icon: "account-multiple-outline", onPress: () => router.push("/home/split") },
-    { label: "Tools", icon: "calculator-variant-outline", onPress: () => router.push("/home/tools") },
+    {
+      label: "Budget",
+      icon: "chart-donut",
+      onPress: () => router.push("/home/budget"),
+    },
+    {
+      label: "Subs",
+      icon: "repeat",
+      onPress: () => router.push("/home/subscription"),
+    },
+    {
+      label: "Wishlist",
+      icon: "heart-outline",
+      onPress: () => router.push("/home/wishlist"),
+    },
+    {
+      label: "Bills",
+      icon: "file-document-outline",
+      onPress: () => router.push("/home/bills"),
+    },
+    {
+      label: "Goals",
+      icon: "flag-outline",
+      onPress: () => router.push("/home/goals"),
+    },
+    {
+      label: "Split",
+      icon: "account-multiple-outline",
+      onPress: () => router.push("/home/split"),
+    },
+    {
+      label: "Tools",
+      icon: "calculator-variant-outline",
+      onPress: () => router.push("/home/tools"),
+    },
+    {
+      label: "Others",
+      icon: "dots-horizontal",
+      onPress: () => router.push("/home/others"),
+    },
   ];
 
   const renderRow = (items: ActionItem[]) => (

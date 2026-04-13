@@ -26,18 +26,18 @@ export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
   const router = useRouter();
 
   const Card = (item: CardItem, label: string, key: string, flex = 1) => {
-    const Wrapper = item.route ? Pressable : View;
+    const Wrapper = (item.route ? Pressable : View) as any;
 
     return (
       <Wrapper
         key={key}
-        {...(item.route && {
-          onPress: () =>
-            router.push({
-              pathname: item.route!,
-              params: item.params,
-            }),
-        })}
+        onPress={() =>
+          item.route &&
+          router.push({
+            pathname: item.route!,
+            params: item.params,
+          })
+        }
         style={({ pressed }: any) => ({
           flex,
           backgroundColor: item.bgColor ?? colors.surfaceVariant,
