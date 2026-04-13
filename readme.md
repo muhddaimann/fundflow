@@ -38,3 +38,108 @@ FundFlow — Effortless Money Tracking│
 
 ├─ Finance Tools
 │ ├─ Loan calculator
+
+fundflow/
+├─ .expo/
+│  ├─ devices.json
+│  └─ README.md
+├─ app/
+│  ├─ (tabs)/
+│  │  ├─ home/
+│  │  │  ├─ team/
+│  │  │  │  └─ [id].tsx
+│  │  │  ├─ _layout.tsx
+│  │  │  ├─ bills.tsx
+│  │  │  ├─ budget.tsx
+│  │  │  ├─ category.tsx
+│  │  │  ├─ claim.tsx
+│  │  │  ├─ goals.tsx
+│  │  │  ├─ index.tsx
+│  │  │  ├─ notification.tsx
+│  │  │  ├─ pay.tsx
+│  │  │  ├─ spend.tsx
+│  │  │  ├─ split.tsx
+│  │  │  ├─ subscription.tsx
+│  │  │  ├─ tools.tsx
+│  │  │  ├─ transaction.tsx
+│  │  │  └─ wishlist.tsx
+│  │  ├─ _layout.tsx
+│  │  └─ settings.tsx
+│  ├─ _layout.tsx
+│  ├─ goodbye.tsx
+│  ├─ index.tsx
+│  └─ welcome.tsx
+├─ assets/
+│  ├─ android-icon-background.png
+│  ├─ android-icon-foreground.png
+│  ├─ android-icon-monochrome.png
+│  ├─ favicon.png
+│  ├─ icon.png
+│  └─ splash-icon.png
+├─ components/
+│  ├─ a/
+│  │  ├─ billAdd.tsx
+│  │  ├─ budgetAdd.tsx
+│  │  ├─ categoryAdd.tsx
+│  │  ├─ categoryModal.tsx
+│  │  ├─ claimAdd.tsx
+│  │  ├─ goalAdd.tsx
+│  │  ├─ groupAdd.tsx
+│  │  ├─ header.tsx
+│  │  ├─ mainRow.tsx
+│  │  ├─ payAdd.tsx
+│  │  ├─ quickAction.tsx
+│  │  ├─ recentCard.tsx
+│  │  ├─ spendAdd.tsx
+│  │  ├─ splitAdd.tsx
+│  │  ├─ subscriptionAdd.tsx
+│  │  ├─ toolModal.tsx
+│  │  └─ wishlistAdd.tsx
+│  ├─ b/
+│  │  └─ header.tsx
+│  ├─ alert.tsx
+│  ├─ confirm.tsx
+│  ├─ endScreen.tsx
+│  ├─ header.tsx
+│  ├─ keyboardLayout.tsx
+│  ├─ loader.tsx
+│  ├─ modal.tsx
+│  ├─ navBar.tsx
+│  ├─ noData.tsx
+│  ├─ scrollTop.tsx
+│  ├─ secHeader.tsx
+│  └─ toast.tsx
+├─ constants/
+│  ├─ design.ts
+│  └─ theme.ts
+├─ contexts/
+│  ├─ authContext.tsx
+│  ├─ designContext.tsx
+│  ├─ globalContext.tsx
+│  ├─ loaderContext.tsx
+│  ├─ overlayContext.tsx
+│  ├─ tabContext.tsx
+│  ├─ themeContext.tsx
+│  └─ tokenContext.tsx
+├─ hooks/
+│  ├─ useBills.tsx
+│  ├─ useBudget.tsx
+│  ├─ useCategory.tsx
+│  ├─ useClaim.tsx
+│  ├─ useGlobal.tsx
+│  ├─ useGoals.tsx
+│  ├─ useNotification.tsx
+│  ├─ usePay.tsx
+│  ├─ useSpend.tsx
+│  ├─ useSplit.tsx
+│  ├─ useSubscription.tsx
+│  ├─ useTools.tsx
+│  └─ useWishlist.tsx
+├─ .gitignore
+├─ app.json
+├─ babel.config.js
+├─ metro.config.js
+├─ package-lock.json
+├─ package.json
+├─ readme.md
+└─ tsconfig.json

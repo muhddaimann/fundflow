@@ -7,7 +7,7 @@ import {
 
 const make = (
   family: string,
-  weight: "400" | "700",
+  weight: "400" | "500" | "700",
   fontSize: number,
   lineHeight: number,
   letterSpacing = 0,
@@ -20,25 +20,25 @@ const make = (
 });
 
 const fontConfig = {
-  displayLarge: make("ComicNeue_700Bold", "700", 57, 64),
-  displayMedium: make("ComicNeue_700Bold", "700", 45, 52),
-  displaySmall: make("ComicNeue_700Bold", "700", 36, 44),
+  displayLarge: make("SpaceGrotesk_700Bold", "700", 57, 64),
+  displayMedium: make("SpaceGrotesk_700Bold", "700", 45, 52),
+  displaySmall: make("SpaceGrotesk_700Bold", "700", 36, 44),
 
-  headlineLarge: make("ComicNeue_700Bold", "700", 32, 40),
-  headlineMedium: make("ComicNeue_700Bold", "700", 28, 36),
-  headlineSmall: make("ComicNeue_700Bold", "700", 24, 32),
+  headlineLarge: make("SpaceGrotesk_700Bold", "700", 32, 40),
+  headlineMedium: make("SpaceGrotesk_700Bold", "700", 28, 36),
+  headlineSmall: make("SpaceGrotesk_700Bold", "700", 24, 32),
 
-  titleLarge: make("ComicNeue_700Bold", "700", 22, 28),
-  titleMedium: make("ComicNeue_700Bold", "700", 16, 24, 0.1),
-  titleSmall: make("ComicNeue_700Bold", "700", 14, 20, 0.1),
+  titleLarge: make("SpaceGrotesk_700Bold", "700", 22, 28),
+  titleMedium: make("SpaceGrotesk_500Medium", "500", 16, 24, 0.1),
+  titleSmall: make("SpaceGrotesk_500Medium", "500", 14, 20, 0.1),
 
-  labelLarge: make("ComicNeue_700Bold", "700", 14, 20, 0.1),
-  labelMedium: make("ComicNeue_400Regular", "400", 12, 16, 0.5),
-  labelSmall: make("ComicNeue_400Regular", "400", 11, 16, 0.5),
+  labelLarge: make("SpaceGrotesk_500Medium", "500", 14, 20, 0.1),
+  labelMedium: make("SpaceGrotesk_400Regular", "400", 12, 16, 0.5),
+  labelSmall: make("SpaceGrotesk_400Regular", "400", 11, 16, 0.5),
 
-  bodyLarge: make("ComicNeue_400Regular", "400", 16, 24),
-  bodyMedium: make("ComicNeue_400Regular", "400", 14, 20),
-  bodySmall: make("ComicNeue_400Regular", "400", 12, 16),
+  bodyLarge: make("SpaceGrotesk_400Regular", "400", 16, 24),
+  bodyMedium: make("SpaceGrotesk_400Regular", "400", 14, 20),
+  bodySmall: make("SpaceGrotesk_400Regular", "400", 12, 16),
 };
 
 const fonts = configureFonts({ config: fontConfig });

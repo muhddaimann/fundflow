@@ -29,8 +29,8 @@ export default function Header({ name = "User" }: HeaderProps) {
     >
       <View style={{ flex: 1, gap: tokens.spacing.xs }}>
         <Text
+          variant="bodyMedium"
           style={{
-            fontSize: tokens.typography.sizes.md,
             color: colors.onSurfaceVariant,
             opacity: tokens.typography.opacities.muted,
           }}
@@ -39,9 +39,9 @@ export default function Header({ name = "User" }: HeaderProps) {
         </Text>
 
         <Text
+          variant="headlineMedium"
           style={{
-            fontSize: tokens.typography.sizes["2xl"],
-            fontWeight: tokens.typography.weights.bold,
+            fontWeight: "700",
             lineHeight: tokens.typography.sizes["2xl"] + 4,
             letterSpacing: -0.5,
           }}
@@ -112,10 +112,10 @@ export default function Header({ name = "User" }: HeaderProps) {
             })}
           >
             <Text
+              variant="titleLarge"
               style={{
                 color: isEmpty ? colors.onSurfaceVariant : colors.onPrimary,
-                fontSize: tokens.typography.sizes.lg,
-                fontWeight: tokens.typography.weights.bold,
+                fontWeight: "700",
               }}
             >
               {initials}
@@ -124,8 +124,8 @@ export default function Header({ name = "User" }: HeaderProps) {
         </View>
 
         <Text
+          variant="bodySmall"
           style={{
-            fontSize: tokens.typography.sizes.sm,
             color: colors.onSurfaceVariant,
             opacity: tokens.typography.opacities.muted,
           }}

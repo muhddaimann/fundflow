@@ -71,6 +71,11 @@ export type Typography = {
     "3xl": number;
   };
   weights: { reg: "400"; med: "500"; semibold: "600"; bold: "700" };
+  families: {
+    regular: string;
+    medium: string;
+    bold: string;
+  };
   opacities: { muted: number; normal: number };
 };
 
@@ -103,6 +108,11 @@ export function createDesignTokens(scale = 1): DesignTokens {
   const typography: Typography = {
     sizes: { xs: 12, sm: 14, md: 16, lg: 20, xl: 24, "2xl": 28, "3xl": 32 },
     weights: { reg: "400", med: "500", semibold: "600", bold: "700" },
+    families: {
+      regular: "SpaceGrotesk_400Regular",
+      medium: "SpaceGrotesk_500Medium",
+      bold: "SpaceGrotesk_700Bold",
+    },
     opacities: { muted: 0.6, normal: 1 },
   };
 
