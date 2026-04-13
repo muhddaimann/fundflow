@@ -132,7 +132,7 @@ export default function FinancialTools() {
               borderWidth: 1,
               borderColor: colors.primary
             }} 
-            mode="flat"
+            mode="contained"
           >
             <Card.Content style={{ alignItems: "center", gap: tokens.spacing.xs, paddingVertical: tokens.spacing.xl }}>
               <MaterialCommunityIcons name="lightbulb-on-outline" size={28} color={colors.onPrimaryContainer} />
