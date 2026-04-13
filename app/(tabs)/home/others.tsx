@@ -1,101 +1,155 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { ScrollView, View, Pressable } from "react-native";
 import { useTheme, Text } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import SectionHeader from "../../../components/secHeader";
-import useOthers from "../../../hooks/useOthers";
+import Header from "../../../components/header";
+import useOthers, { OtherRoute } from "../../../hooks/useOthers";
+
+type Section = {
+  title: string;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  items: OtherRoute[];
+};
 
 export default function Others() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { routes, navigateTo } = useOthers();
 
+  const sections = useMemo<Section[]>(() => {
+    const find = (id: string) => routes.find((r) => r.id === id)!;
+
+    return [
+      {
+        title: "Planning & Goals",
+        icon: "bullseye-arrow",
+        items: [find("budget"), find("goals"), find("wishlist")],
+      },
+      {
+        title: "Payments & Sharing",
+        icon: "credit-card-sync-outline",
+        items: [find("subscription"), find("bills"), find("split")],
+      },
+      {
+        title: "Activity & Setup",
+        icon: "cog-outline",
+        items: [find("transaction"), find("category")],
+      },
+      {
+        title: "Utilities",
+        icon: "toolbox-outline",
+        items: [find("tools")],
+      },
+    ];
+  }, [routes]);
+
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: colors.background }}
       contentContainerStyle={{
-        paddingTop: tokens.spacing.lg,
         paddingBottom: tokens.spacing["3xl"],
         gap: tokens.spacing.md,
       }}
       showsVerticalScrollIndicator={false}
     >
-      <SectionHeader
-        icon={
-          <MaterialCommunityIcons
-            name="dots-horizontal"
-            size={tokens.sizes.icon.md}
-            color={colors.onSurfaceVariant}
-          />
-        }
-        head="Other Actions"
-        subHeader="Explore all features of FundFlow"
-      />
+      <Header title="Others" subtitle="Explore all features of FundFlow" />
 
-      <View style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.md }}>
-        {routes.map((route) => (
-          <Pressable
-            key={route.id}
-            onPress={() => navigateTo(route.path)}
-            style={({ pressed }) => ({
+      {sections.map((section, idx) => (
+        <View key={idx} style={{ gap: tokens.spacing.md }}>
+          <View
+            style={{
               flexDirection: "row",
               alignItems: "center",
-              gap: tokens.spacing.md,
-              padding: tokens.spacing.md,
-              borderRadius: tokens.radii.lg,
-              borderWidth: 1,
-              borderColor: colors.outlineVariant,
-              backgroundColor: pressed ? colors.surfaceVariant : colors.surface,
-              transform: [{ scale: pressed ? 0.98 : 1 }],
-            })}
+              gap: tokens.spacing.sm,
+              paddingHorizontal: tokens.spacing.lg,
+              marginBottom: -tokens.spacing.xs,
+            }}
           >
-            <View
+            <MaterialCommunityIcons
+              name={section.icon}
+              size={tokens.sizes.icon.sm}
+              color={colors.primary}
+            />
+            <Text
+              variant="labelLarge"
               style={{
-                width: 48,
-                height: 48,
-                borderRadius: tokens.radii.md,
-                backgroundColor: colors.surfaceVariant,
-                alignItems: "center",
-                justifyContent: "center",
+                fontFamily: tokens.typography.families.bold,
+                fontWeight: "700",
+                color: colors.primary,
+                letterSpacing: 0.5,
+                textTransform: "uppercase",
               }}
             >
-              <MaterialCommunityIcons
-                name={route.icon}
-                size={tokens.sizes.icon.lg}
-                color={colors.primary}
-              />
-            </View>
+              {section.title}
+            </Text>
+          </View>
 
-            <View style={{ flex: 1, gap: 2 }}>
-              <Text
-                variant="titleMedium"
-                style={{
-                  fontFamily: tokens.typography.families.bold,
-                  fontWeight: "700",
-                }}
+          <View style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.sm }}>
+            {section.items.map((route) => (
+              <Pressable
+                key={route.id}
+                onPress={() => navigateTo(route.path)}
+                style={({ pressed }) => ({
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: tokens.spacing.md,
+                  padding: tokens.spacing.md,
+                  borderRadius: tokens.radii.lg,
+                  borderWidth: 1,
+                  borderColor: colors.outlineVariant,
+                  backgroundColor: pressed ? colors.surfaceVariant : colors.surface,
+                  transform: [{ scale: pressed ? 0.98 : 1 }],
+                })}
               >
-                {route.label}
-              </Text>
-              <Text
-                variant="bodySmall"
-                style={{
-                  color: colors.onSurfaceVariant,
-                  opacity: 0.7,
-                }}
-              >
-                {route.description}
-              </Text>
-            </View>
+                <View
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: tokens.radii.md,
+                    backgroundColor: colors.surfaceVariant,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name={route.icon}
+                    size={tokens.sizes.icon.md}
+                    color={colors.onSurfaceVariant}
+                  />
+                </View>
 
-            <MaterialCommunityIcons
-              name="chevron-right"
-              size={tokens.sizes.icon.md}
-              color={colors.outline}
-            />
-          </Pressable>
-        ))}
-      </View>
+                <View style={{ flex: 1, gap: 0 }}>
+                  <Text
+                    variant="titleMedium"
+                    style={{
+                      fontFamily: tokens.typography.families.bold,
+                      fontWeight: "700",
+                    }}
+                  >
+                    {route.label}
+                  </Text>
+                  <Text
+                    variant="bodySmall"
+                    style={{
+                      color: colors.onSurfaceVariant,
+                      opacity: 0.6,
+                    }}
+                  >
+                    {route.description}
+                  </Text>
+                </View>
+
+                <MaterialCommunityIcons
+                  name="chevron-right"
+                  size={tokens.sizes.icon.sm}
+                  color={colors.outline}
+                />
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      ))}
     </ScrollView>
   );
 }
