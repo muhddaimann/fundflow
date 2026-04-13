@@ -1,27 +1,50 @@
 import React, { useState } from "react";
-import { View, TouchableOpacity, ScrollView } from "react-native";
-import { Text, Button, TextInput, Divider, SegmentedButtons } from "react-native-paper";
+import { View } from "react-native";
+import {
+  Text,
+  Button,
+  TextInput,
+  Divider,
+  SegmentedButtons,
+} from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 type Props = {
-  onSubmit: (data: { name: string; amount: number; frequency: "monthly" | "yearly"; nextBilling: string }) => void;
+  onSubmit: (data: {
+    name: string;
+    amount: number;
+    frequency: "monthly" | "yearly";
+    nextBilling: string;
+  }) => void;
   onClose: () => void;
-  initialData?: { name: string; amount: number; frequency: "monthly" | "yearly"; nextBilling: string };
+  initialData?: {
+    name: string;
+    amount: number;
+    frequency: "monthly" | "yearly";
+    nextBilling: string;
+  };
 };
 
-export function SubscriptionAddModal({ onSubmit, onClose, initialData }: Props) {
+export function SubscriptionAddModal({
+  onSubmit,
+  onClose,
+  initialData,
+}: Props) {
   const tokens = useDesign();
 
   const [name, setName] = useState(initialData?.name || "");
   const [amount, setAmount] = useState(initialData?.amount.toString() || "");
-  const [frequency, setFrequency] = useState<"monthly" | "yearly">(initialData?.frequency || "monthly");
-  const [date, setDate] = useState(initialData?.nextBilling || new Date().toISOString().split('T')[0]);
+  const [frequency, setFrequency] = useState<"monthly" | "yearly">(
+    initialData?.frequency || "monthly",
+  );
+  const [date, setDate] = useState(
+    initialData?.nextBilling || new Date().toISOString().split("T")[0],
+  );
 
   const handleSave = () => {
     const numericAmount = parseFloat(amount);
     if (!name.trim() || isNaN(numericAmount) || numericAmount <= 0) return;
-    
+
     onSubmit({
       name: name.trim(),
       amount: numericAmount,
@@ -33,7 +56,7 @@ export function SubscriptionAddModal({ onSubmit, onClose, initialData }: Props) 
   const isComplete = name.trim() && amount && parseFloat(amount) > 0;
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
+    <View style={{ gap: tokens.spacing.sm }}>
       <View>
         <Text variant="headlineSmall" style={{ fontWeight: "800" }}>
           {initialData ? "Edit Subscription" : "Add Subscription"}
@@ -70,7 +93,7 @@ export function SubscriptionAddModal({ onSubmit, onClose, initialData }: Props) 
           <View style={{ flex: 1, justifyContent: "center" }}>
             <SegmentedButtons
               value={frequency}
-              onValueChange={v => setFrequency(v as any)}
+              onValueChange={(v) => setFrequency(v as any)}
               buttons={[
                 { value: "monthly", label: "Mo" },
                 { value: "yearly", label: "Yr" },

@@ -20,7 +20,7 @@ export function ToolModal({ initialType = "loan", onClose }: Props) {
   const renderLoan = () => {
     const res = loan.result || { monthly: "RM0.00", total: "RM0.00", interest: "RM0.00" };
     return (
-      <View style={{ gap: tokens.spacing.md }}>
+      <View style={{ gap: tokens.spacing.sm }}>
         <TextInput
           label="Loan Amount (RM)"
           value={loan.amount}

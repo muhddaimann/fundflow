@@ -31,7 +31,7 @@ export function GroupAddModal({ onSubmit, onClose }: Props) {
   };
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
+    <View style={{ gap: tokens.spacing.sm }}>
       <View>
         <Text variant="headlineSmall" style={{ fontWeight: "800" }}>
           Create New Team

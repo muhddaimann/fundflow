@@ -1,12 +1,28 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Text, Button, TextInput, Divider, SegmentedButtons } from "react-native-paper";
+import {
+  Text,
+  Button,
+  TextInput,
+  Divider,
+  SegmentedButtons,
+} from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 
 type Props = {
-  onSubmit: (data: { name: string; amount: number; dueDate: string; status: "paid" | "pending" | "overdue" }) => void;
+  onSubmit: (data: {
+    name: string;
+    amount: number;
+    dueDate: string;
+    status: "paid" | "pending" | "overdue";
+  }) => void;
   onClose: () => void;
-  initialData?: { name: string; amount: number; dueDate: string; status: "paid" | "pending" | "overdue" };
+  initialData?: {
+    name: string;
+    amount: number;
+    dueDate: string;
+    status: "paid" | "pending" | "overdue";
+  };
 };
 
 export function BillAddModal({ onSubmit, onClose, initialData }: Props) {
@@ -14,13 +30,17 @@ export function BillAddModal({ onSubmit, onClose, initialData }: Props) {
 
   const [name, setName] = useState(initialData?.name || "");
   const [amount, setAmount] = useState(initialData?.amount.toString() || "");
-  const [date, setDate] = useState(initialData?.dueDate || new Date().toISOString().split('T')[0]);
-  const [status, setStatus] = useState<"paid" | "pending" | "overdue">(initialData?.status || "pending");
+  const [date, setDate] = useState(
+    initialData?.dueDate || new Date().toISOString().split("T")[0],
+  );
+  const [status, setStatus] = useState<"paid" | "pending" | "overdue">(
+    initialData?.status || "pending",
+  );
 
   const handleSave = () => {
     const numericAmount = parseFloat(amount);
     if (!name.trim() || isNaN(numericAmount) || numericAmount <= 0) return;
-    
+
     onSubmit({
       name: name.trim(),
       amount: numericAmount,
@@ -32,7 +52,7 @@ export function BillAddModal({ onSubmit, onClose, initialData }: Props) {
   const isComplete = name.trim() && amount && parseFloat(amount) > 0;
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
+    <View style={{ gap: tokens.spacing.sm }}>
       <View>
         <Text variant="headlineSmall" style={{ fontWeight: "800" }}>
           {initialData ? "Edit Bill" : "New Bill"}
@@ -79,12 +99,15 @@ export function BillAddModal({ onSubmit, onClose, initialData }: Props) {
         />
 
         <View style={{ gap: tokens.spacing.sm }}>
-          <Text variant="labelLarge" style={{ fontWeight: "700", opacity: 0.7, marginLeft: 4 }}>
+          <Text
+            variant="labelLarge"
+            style={{ fontWeight: "700", opacity: 0.7, marginLeft: 4 }}
+          >
             Payment Status
           </Text>
           <SegmentedButtons
             value={status}
-            onValueChange={v => setStatus(v as any)}
+            onValueChange={(v) => setStatus(v as any)}
             buttons={[
               { value: "pending", label: "Pending" },
               { value: "paid", label: "Paid" },

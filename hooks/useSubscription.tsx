@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useCallback } from "react";
 import { useOverlay } from "../contexts/overlayContext";
-import { SubscriptionAddModal } from "../components/a/subscriptionAdd";
+import { SubscriptionAddModal } from "../components/a/subsAdd";
 
 export type Subscription = {
   id: string;

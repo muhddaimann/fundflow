@@ -25,7 +25,7 @@ export function SplitAddModal({ members, onSubmit, onClose }: Props) {
   const isComplete = title.trim() && amount && parseFloat(amount) > 0;
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
+    <View style={{ gap: tokens.spacing.md }}>
       <View>
         <Text variant="headlineSmall" style={{ fontWeight: "800" }}>
           Add Group Expense

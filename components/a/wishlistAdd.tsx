@@ -31,7 +31,7 @@ export function WishlistAddModal({ onSubmit, onClose, initialData }: Props) {
   const isComplete = name.trim() && price && parseFloat(price) > 0;
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
+    <View style={{ gap: tokens.spacing.sm }}>
       <View>
         <Text variant="headlineSmall" style={{ fontWeight: "800" }}>
           {initialData ? "Edit Goal" : "New Wishlist Item"}

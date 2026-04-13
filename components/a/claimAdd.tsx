@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Text, Button, TextInput, Divider, SegmentedButtons } from "react-native-paper";
+import {
+  Text,
+  Button,
+  TextInput,
+  Divider,
+  SegmentedButtons,
+} from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import { Claimable } from "../../hooks/useClaim";
 
@@ -12,20 +18,32 @@ type Props = {
   initialData?: Claimable;
 };
 
-export function ClaimAddModal({ onSubmit, onClose, onDelete, onMarkReceived, initialData }: Props) {
+export function ClaimAddModal({
+  onSubmit,
+  onClose,
+  onDelete,
+  onMarkReceived,
+  initialData,
+}: Props) {
   const tokens = useDesign();
 
   const [title, setTitle] = useState(initialData?.title || "");
   const [amount, setAmount] = useState(initialData?.amount.toString() || "");
-  const [date, setDate] = useState(initialData?.date || new Date().toISOString().split('T')[0]);
-  const [type, setType] = useState<Claimable["type"]>(initialData?.type || "reimbursement");
+  const [date, setDate] = useState(
+    initialData?.date || new Date().toISOString().split("T")[0],
+  );
+  const [type, setType] = useState<Claimable["type"]>(
+    initialData?.type || "reimbursement",
+  );
   const [fromWhom, setFromWhom] = useState(initialData?.fromWhom || "");
-  const [status, setStatus] = useState<Claimable["status"]>(initialData?.status || "pending");
+  const [status, setStatus] = useState<Claimable["status"]>(
+    initialData?.status || "pending",
+  );
 
   const handleSave = () => {
     const numericAmount = parseFloat(amount);
     if (!title.trim() || isNaN(numericAmount) || numericAmount <= 0) return;
-    
+
     onSubmit({
       title: title.trim(),
       amount: numericAmount,
@@ -39,8 +57,14 @@ export function ClaimAddModal({ onSubmit, onClose, onDelete, onMarkReceived, ini
   const isComplete = title.trim() && amount && parseFloat(amount) > 0;
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+    <View style={{ gap: tokens.spacing.md }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
         <View style={{ flex: 1 }}>
           <Text variant="headlineSmall" style={{ fontWeight: "800" }}>
             {initialData ? "Edit Claim" : "New Claim"}
@@ -50,8 +74,8 @@ export function ClaimAddModal({ onSubmit, onClose, onDelete, onMarkReceived, ini
           </Text>
         </View>
         {initialData && initialData.status === "pending" && onMarkReceived && (
-          <Button 
-            mode="contained-tonal" 
+          <Button
+            mode="contained-tonal"
             onPress={() => onMarkReceived(initialData.id)}
             style={{ borderRadius: tokens.radii.pill }}
             labelStyle={{ fontSize: 12 }}
@@ -95,14 +119,21 @@ export function ClaimAddModal({ onSubmit, onClose, onDelete, onMarkReceived, ini
         />
 
         <View style={{ gap: tokens.spacing.sm }}>
-          <Text variant="labelLarge" style={{ fontWeight: "700", opacity: 0.7, marginLeft: 4 }}>
+          <Text
+            variant="labelLarge"
+            style={{ fontWeight: "700", opacity: 0.7, marginLeft: 4 }}
+          >
             Type
           </Text>
           <SegmentedButtons
             value={type}
-            onValueChange={v => setType(v as any)}
+            onValueChange={(v) => setType(v as any)}
             buttons={[
-              { value: "reimbursement", label: "Reimbursement", icon: "file-document-outline" },
+              {
+                value: "reimbursement",
+                label: "Reimbursement",
+                icon: "file-document-outline",
+              },
               { value: "friend", label: "Friend", icon: "account-outline" },
               { value: "other", label: "Other", icon: "dots-horizontal" },
             ]}

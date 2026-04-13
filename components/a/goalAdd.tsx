@@ -33,7 +33,7 @@ export function GoalAddModal({ onSubmit, onClose, initialData }: Props) {
   const isComplete = title.trim() && target && parseFloat(target) > 0;
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
+    <View style={{ gap: tokens.spacing.sm }}>
       <View>
         <Text variant="headlineSmall" style={{ fontWeight: "800" }}>
           {initialData ? "Edit Milestone" : "New Financial Goal"}

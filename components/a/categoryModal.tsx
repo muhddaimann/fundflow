@@ -17,7 +17,7 @@ export function CategoryModal({ category, onDelete, onEdit, onClose }: Props) {
   const tokens = useDesign();
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
+    <View style={{ gap: tokens.spacing.sm }}>
       {/* Header Section */}
       <View style={{ gap: tokens.spacing.md }}>
         <View style={{ 

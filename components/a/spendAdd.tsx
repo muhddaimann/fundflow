@@ -45,7 +45,7 @@ export default function SpendModal({ onSubmit, onClose }: Props) {
   };
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
+    <View style={{ gap: tokens.spacing.sm }}>
       <View style={{ gap: 4 }}>
         <Text variant="headlineSmall" style={{ fontWeight: "800" }}>
           Add Spend

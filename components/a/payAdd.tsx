@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Text, Button, TextInput, Divider, SegmentedButtons } from "react-native-paper";
+import {
+  Text,
+  Button,
+  TextInput,
+  Divider,
+  SegmentedButtons,
+} from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import { Payable } from "../../hooks/usePay";
 
@@ -12,35 +18,53 @@ type Props = {
   initialData?: Payable;
 };
 
-export function PayAddModal({ onSubmit, onClose, onDelete, onMarkPaid, initialData }: Props) {
+export function PayAddModal({
+  onSubmit,
+  onClose,
+  onDelete,
+  onMarkPaid,
+  initialData,
+}: Props) {
   const tokens = useDesign();
 
   const [title, setTitle] = useState(initialData?.title || "");
   const [amount, setAmount] = useState(initialData?.amount.toString() || "");
-  const [date, setDate] = useState(initialData?.dueDate || new Date().toISOString().split('T')[0]);
-  const [type, setType] = useState<Payable["type"]>(initialData?.type || "bill");
+  const [date, setDate] = useState(
+    initialData?.dueDate || new Date().toISOString().split("T")[0],
+  );
+  const [type, setType] = useState<Payable["type"]>(
+    initialData?.type || "bill",
+  );
   const [toWhom, setToWhom] = useState(initialData?.toWhom || "");
-  const [status, setStatus] = useState<Payable["status"]>(initialData?.status || "pending");
+  const [status, setStatus] = useState<Payable["status"]>(
+    initialData?.status || "pending",
+  );
 
   const handleSave = () => {
     const numericAmount = parseFloat(amount);
     if (!title.trim() || isNaN(numericAmount) || numericAmount <= 0) return;
-    
+
     onSubmit({
       title: title.trim(),
       amount: numericAmount,
       dueDate: date,
       type,
       status,
-      toWhom: (type === "friend" || type === "debt") ? toWhom.trim() : undefined,
+      toWhom: type === "friend" || type === "debt" ? toWhom.trim() : undefined,
     });
   };
 
   const isComplete = title.trim() && amount && parseFloat(amount) > 0;
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+    <View style={{ gap: tokens.spacing.sm }}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
         <View style={{ flex: 1 }}>
           <Text variant="headlineSmall" style={{ fontWeight: "800" }}>
             {initialData ? "Edit Payment" : "New Payment"}
@@ -50,8 +74,8 @@ export function PayAddModal({ onSubmit, onClose, onDelete, onMarkPaid, initialDa
           </Text>
         </View>
         {initialData && initialData.status === "pending" && onMarkPaid && (
-          <Button 
-            mode="contained-tonal" 
+          <Button
+            mode="contained-tonal"
             onPress={() => onMarkPaid(initialData.id)}
             style={{ borderRadius: tokens.radii.pill }}
             labelStyle={{ fontSize: 12 }}
@@ -95,12 +119,15 @@ export function PayAddModal({ onSubmit, onClose, onDelete, onMarkPaid, initialDa
         />
 
         <View style={{ gap: tokens.spacing.sm }}>
-          <Text variant="labelLarge" style={{ fontWeight: "700", opacity: 0.7, marginLeft: 4 }}>
+          <Text
+            variant="labelLarge"
+            style={{ fontWeight: "700", opacity: 0.7, marginLeft: 4 }}
+          >
             Type
           </Text>
           <SegmentedButtons
             value={type}
-            onValueChange={v => setType(v as any)}
+            onValueChange={(v) => setType(v as any)}
             buttons={[
               { value: "bill", label: "Bill", icon: "file-document-outline" },
               { value: "friend", label: "Friend", icon: "account-outline" },

@@ -34,7 +34,7 @@ export function BudgetAddModal({ onSubmit, onClose, initialData }: Props) {
   const isComplete = selectedCategory && limit && parseFloat(limit) > 0;
 
   return (
-    <View style={{ gap: tokens.spacing.lg }}>
+    <View style={{ gap: tokens.spacing.sm }}>
       <View>
         <Text variant="headlineSmall" style={{ fontWeight: "800", color: theme.colors.onSurface }}>
           {initialData ? "Edit Budget" : "Set Budget"}

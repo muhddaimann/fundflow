@@ -118,15 +118,6 @@ export default function Category() {
 
         {/* Custom Section */}
         <View style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.md }}>
-          <View>
-            <Text variant="titleMedium" style={{ fontWeight: "800", letterSpacing: 0.5 }}>
-              YOUR CATEGORIES
-            </Text>
-            <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant }}>
-              Personalized categories for your tracking
-            </Text>
-          </View>
-
           <Pressable 
             onPress={() => openAddCategoryModal((data) => console.log('Create', data))}
             style={({ pressed }) => ({
