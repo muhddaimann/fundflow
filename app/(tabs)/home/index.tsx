@@ -5,7 +5,8 @@ import {
   NativeScrollEvent,
   View,
 } from "react-native";
-import { useTheme, Text, Switch } from "react-native-paper";
+import { useRouter } from "expo-router";
+import { useTheme, Text } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import ScrollTop from "../../../components/scrollTop";
 import { useTabs } from "../../../contexts/tabContext";
@@ -22,14 +23,8 @@ export default function Home() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { onScroll } = useTabs();
-  const { 
-    isEmpty, 
-    setIsEmpty, 
-    totals, 
-    recentTransactions, 
-    formatCurrency 
-  } = useGlobal("User");
-  
+  const { totals, recentTransactions, formatCurrency } = useGlobal("User");
+  const router = useRouter();
   const scrollViewRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -107,7 +102,6 @@ export default function Home() {
           }}
         />
         <QuickAction />
-
         <SectionHeader
           icon={
             <MaterialCommunityIcons
@@ -120,6 +114,7 @@ export default function Home() {
           subHeader="Your latest spending activity"
           rightSlot={
             <Text
+              onPress={() => router.push("home/transaction")}
               style={{
                 color: colors.primary,
                 fontWeight: tokens.typography.weights.semibold,
