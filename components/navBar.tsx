@@ -10,12 +10,6 @@ import { useOverlay } from "../contexts/overlayContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { PickerModal, PickerItem } from "./pickerModal";
 import useSpend from "../hooks/useSpend";
-import useBudget from "../hooks/useBudget";
-import useSubscription from "../hooks/useSubscription";
-import useBills from "../hooks/useBills";
-import useGoals from "../hooks/useGoals";
-import useSplit from "../hooks/useSplit";
-import useWishlist from "../hooks/useWishlist";
 import usePay from "../hooks/usePay";
 import useClaim from "../hooks/useClaim";
 
@@ -27,15 +21,7 @@ export function NavBar() {
   const { signOut } = useAuth();
   const { hideTabBar } = useTabs();
   const { showModal, hideModal } = useOverlay();
-
-  // Quick Action Hooks
   const { openAddSpendModal } = useSpend();
-  const { openAddBudgetModal } = useBudget();
-  const { openAddSubscriptionModal } = useSubscription();
-  const { openAddBillModal } = useBills();
-  const { openAddGoalModal } = useGoals();
-  const { openCreateGroupModal } = useSplit();
-  const { openAddWishlistModal } = useWishlist();
   const { openAddPayableModal } = usePay();
   const { openAddClaimModal } = useClaim();
 
@@ -95,12 +81,7 @@ export function NavBar() {
 
       showModal({
         content: (
-          <PickerModal
-            title=""
-            subtitle=""
-            items={items}
-            onClose={hideModal}
-          />
+          <PickerModal title="" subtitle="" items={items} onClose={hideModal} />
         ),
       });
     } else {

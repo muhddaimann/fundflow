@@ -143,7 +143,7 @@ export function OverlayModal({
                   overScrollMode="never"
                   showsVerticalScrollIndicator={false}
                   contentContainerStyle={{
-                    paddingHorizontal: tokens.spacing.lg,
+                    paddingHorizontal: tokens.spacing.md,
                     paddingVertical: tokens.spacing.lg,
                     gap: tokens.spacing.md,
                   }}

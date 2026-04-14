@@ -28,13 +28,7 @@ export function PickerModal({
   const tokens = useDesign();
 
   return (
-    <View
-      style={{
-        paddingTop: tokens.spacing.md,
-        paddingBottom: tokens.spacing.lg,
-        gap: tokens.spacing.lg,
-      }}
-    >
+    <View>
       {(title || subtitle) && (
         <View style={{ gap: 6 }}>
           {title && (

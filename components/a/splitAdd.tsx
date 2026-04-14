@@ -64,7 +64,7 @@ export function SplitAddModal({ members, onSubmit, onClose }: Props) {
           </Text>
           <View style={{ maxHeight: 120 }}>
             <ScrollView 
-              scrollEnabled={false}
+              bounces={false}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{ 
                 flexDirection: "row", 

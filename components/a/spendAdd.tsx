@@ -89,7 +89,7 @@ export default function SpendModal({ onSubmit, onClose }: Props) {
 
         <ScrollView
           horizontal
-          scrollEnabled={false}
+          bounces={false}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ gap: 8 }}
         >
