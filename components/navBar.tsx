@@ -8,7 +8,16 @@ import { useAuth } from "../contexts/authContext";
 import { useTabs } from "../contexts/tabContext";
 import { useOverlay } from "../contexts/overlayContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { PickerModal } from "./pickerModal";
+import { PickerModal, PickerItem } from "./pickerModal";
+import useSpend from "../hooks/useSpend";
+import useBudget from "../hooks/useBudget";
+import useSubscription from "../hooks/useSubscription";
+import useBills from "../hooks/useBills";
+import useGoals from "../hooks/useGoals";
+import useSplit from "../hooks/useSplit";
+import useWishlist from "../hooks/useWishlist";
+import usePay from "../hooks/usePay";
+import useClaim from "../hooks/useClaim";
 
 export function NavBar() {
   const theme = useTheme();
@@ -18,6 +27,17 @@ export function NavBar() {
   const { signOut } = useAuth();
   const { hideTabBar } = useTabs();
   const { showModal, hideModal } = useOverlay();
+
+  // Quick Action Hooks
+  const { openAddSpendModal } = useSpend();
+  const { openAddBudgetModal } = useBudget();
+  const { openAddSubscriptionModal } = useSubscription();
+  const { openAddBillModal } = useBills();
+  const { openAddGoalModal } = useGoals();
+  const { openCreateGroupModal } = useSplit();
+  const { openAddWishlistModal } = useWishlist();
+  const { openAddPayableModal } = usePay();
+  const { openAddClaimModal } = useClaim();
 
   const isHome = pathname === "/home" || pathname === "/(tabs)/home";
   const isSettings =
@@ -40,8 +60,72 @@ export function NavBar() {
 
   const handleActionButton = async () => {
     if (isHome) {
+      const items: PickerItem[] = [
+        {
+          label: "Spend",
+          icon: "plus-circle-outline",
+          color: theme.colors.primary,
+          onPress: () => openAddSpendModal(),
+        },
+        {
+          label: "To Pay",
+          icon: "arrow-up-circle-outline",
+          color: theme.colors.error,
+          onPress: openAddPayableModal,
+        },
+        {
+          label: "To Claim",
+          icon: "arrow-down-circle-outline",
+          color: theme.colors.tertiary,
+          onPress: openAddClaimModal,
+        },
+        {
+          label: "Budget",
+          icon: "chart-donut",
+          color: "#FF9F43",
+          onPress: openAddBudgetModal,
+        },
+        {
+          label: "Bills",
+          icon: "file-document-outline",
+          color: "#00CFE8",
+          onPress: openAddBillModal,
+        },
+        {
+          label: "Subscription",
+          icon: "repeat",
+          color: theme.colors.secondary,
+          onPress: openAddSubscriptionModal,
+        },
+        {
+          label: "Goals",
+          icon: "flag-outline",
+          color: "#EA5455",
+          onPress: openAddGoalModal,
+        },
+        {
+          label: "Team",
+          icon: "account-multiple-plus-outline",
+          color: "#7367F0",
+          onPress: openCreateGroupModal,
+        },
+        {
+          label: "Wishlist",
+          icon: "heart-outline",
+          color: "#FF6B6B",
+          onPress: openAddWishlistModal,
+        },
+      ];
+
       showModal({
-        content: <PickerModal onClose={hideModal} />,
+        content: (
+          <PickerModal
+            title=""
+            subtitle=""
+            items={items}
+            onClose={hideModal}
+          />
+        ),
       });
     } else {
       await signOut();

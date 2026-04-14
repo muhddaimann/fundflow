@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, ScrollView, Animated, Easing } from 'react-native';
-import { Surface, useTheme, Portal } from 'react-native-paper';
-import { useDesign } from '../contexts/designContext';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  ScrollView,
+  Animated,
+  Easing,
+} from "react-native";
+import { Surface, useTheme, Portal } from "react-native-paper";
+import { useDesign } from "../contexts/designContext";
 
 type Props = {
   visible: boolean;
@@ -10,12 +17,17 @@ type Props = {
   dismissable?: boolean;
 };
 
-export function OverlayModal({ visible, content, onDismiss, dismissable = true }: Props) {
+export function OverlayModal({
+  visible,
+  content,
+  onDismiss,
+  dismissable = true,
+}: Props) {
   const theme = useTheme();
   const tokens = useDesign();
-  
+
   const [shouldRender, setShouldRender] = useState(visible);
-  
+
   const backdropOpacity = React.useRef(new Animated.Value(0)).current;
   const contentOpacity = React.useRef(new Animated.Value(0)).current;
   const scale = React.useRef(new Animated.Value(0.92)).current;
@@ -24,59 +36,58 @@ export function OverlayModal({ visible, content, onDismiss, dismissable = true }
   useEffect(() => {
     if (visible) {
       setShouldRender(true);
-      
-      // Sequence: Backdrop first, then content pops in
+
       Animated.parallel([
         Animated.timing(backdropOpacity, {
           toValue: 1,
-          duration: 300,
+          duration: tokens.motion.duration.slow,
           useNativeDriver: true,
         }),
         Animated.parallel([
           Animated.timing(contentOpacity, {
             toValue: 1,
-            duration: 400,
+            duration: tokens.motion.duration.normal,
             easing: Easing.out(Easing.back(1.5)),
             useNativeDriver: true,
           }),
           Animated.timing(scale, {
             toValue: 1,
-            duration: 400,
+            duration: tokens.motion.duration.normal,
             easing: Easing.out(Easing.back(1.5)),
             useNativeDriver: true,
           }),
           Animated.timing(translateY, {
             toValue: 0,
-            duration: 400,
+            duration: tokens.motion.duration.normal,
             easing: Easing.out(Easing.cubic),
             useNativeDriver: true,
-          })
-        ])
+          }),
+        ]),
       ]).start();
     } else {
       Animated.parallel([
         Animated.timing(backdropOpacity, {
           toValue: 0,
-          duration: 250,
+          duration: tokens.motion.duration.fast,
           useNativeDriver: true,
         }),
         Animated.timing(contentOpacity, {
           toValue: 0,
-          duration: 200,
+          duration: tokens.motion.duration.fast,
           easing: Easing.in(Easing.cubic),
           useNativeDriver: true,
         }),
         Animated.timing(scale, {
           toValue: 0.95,
-          duration: 200,
+          duration: tokens.motion.duration.fast,
           easing: Easing.in(Easing.cubic),
           useNativeDriver: true,
         }),
         Animated.timing(translateY, {
-          toValue: 10,
-          duration: 200,
+          toValue: tokens.spacing.xs,
+          duration: tokens.motion.duration.fast,
           useNativeDriver: true,
-        })
+        }),
       ]).start(({ finished }) => {
         if (finished) {
           setShouldRender(false);
@@ -89,46 +100,53 @@ export function OverlayModal({ visible, content, onDismiss, dismissable = true }
 
   return (
     <Portal>
-      <View style={styles.fullscreen} pointerEvents={visible ? 'auto' : 'none'}>
+      <View style={styles.fullscreen} pointerEvents={visible ? "auto" : "none"}>
         <TouchableWithoutFeedback onPress={dismissable ? onDismiss : undefined}>
-          <Animated.View 
-            style={[
-              styles.backdrop, 
-              { opacity: backdropOpacity }
-            ]} 
+          <Animated.View
+            style={[styles.backdrop, { opacity: backdropOpacity }]}
           />
         </TouchableWithoutFeedback>
 
-        <View style={styles.container} pointerEvents="box-none">
-          <Animated.View 
+        <View
+          style={[styles.container, { padding: tokens.spacing.lg }]}
+          pointerEvents="box-none"
+        >
+          <Animated.View
             style={[
               styles.contentWrapper,
-              { 
+              {
                 opacity: contentOpacity,
-                transform: [
-                  { scale },
-                  { translateY }
-                ]
-              }
+                transform: [{ scale }, { translateY }],
+              },
             ]}
           >
             <Surface
               style={[
                 styles.surface,
-                { 
+                {
                   backgroundColor: theme.colors.surface,
                   borderRadius: tokens.radii["2xl"],
                   borderWidth: 1,
                   borderColor: theme.colors.outlineVariant,
-                }
+                },
               ]}
               elevation={2}
             >
-              <View style={{ borderRadius: tokens.radii["2xl"], overflow: 'hidden' }}>
-                <ScrollView 
-                  scrollEnabled={false}
+              <View
+                style={{
+                  borderRadius: tokens.radii["2xl"],
+                  overflow: "hidden",
+                }}
+              >
+                <ScrollView
+                  bounces={false}
+                  overScrollMode="never"
                   showsVerticalScrollIndicator={false}
-                  contentContainerStyle={{ padding: tokens.spacing.xl }}
+                  contentContainerStyle={{
+                    paddingHorizontal: tokens.spacing.lg,
+                    paddingVertical: tokens.spacing.lg,
+                    gap: tokens.spacing.md,
+                  }}
                 >
                   {content}
                 </ScrollView>
@@ -148,22 +166,21 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    justifyContent: "center",
+    alignItems: "center",
   },
   contentWrapper: {
-    width: '95%',
+    width: "95%",
     maxWidth: 420,
-    maxHeight: '80%',
+    maxHeight: "80%",
   },
   surface: {
-    width: '100%',
-    shadowColor: '#000',
+    width: "100%",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
