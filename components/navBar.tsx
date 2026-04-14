@@ -6,7 +6,9 @@ import { usePathname, router } from "expo-router";
 import { useDesign } from "../contexts/designContext";
 import { useAuth } from "../contexts/authContext";
 import { useTabs } from "../contexts/tabContext";
+import { useOverlay } from "../contexts/overlayContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { PickerModal } from "./pickerModal";
 
 export function NavBar() {
   const theme = useTheme();
@@ -15,9 +17,11 @@ export function NavBar() {
   const pathname = usePathname();
   const { signOut } = useAuth();
   const { hideTabBar } = useTabs();
+  const { showModal, hideModal } = useOverlay();
 
   const isHome = pathname === "/home" || pathname === "/(tabs)/home";
-  const isSettings = pathname === "/settings" || pathname === "/(tabs)/settings";
+  const isSettings =
+    pathname === "/settings" || pathname === "/(tabs)/settings";
   const isTabRoot = isHome || isSettings;
 
   const translateY = useRef(new Animated.Value(0)).current;
@@ -36,7 +40,9 @@ export function NavBar() {
 
   const handleActionButton = async () => {
     if (isHome) {
-      router.push("/(tabs)/home/main");
+      showModal({
+        content: <PickerModal onClose={hideModal} />,
+      });
     } else {
       await signOut();
       router.replace("/goodbye");
