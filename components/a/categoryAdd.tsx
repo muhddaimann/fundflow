@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 type Props = {
   onSave: (data: { name: string; icon: string; color: string }) => void;
   onClose: () => void;
+  initialData?: { name: string; icon: string; color: string };
 };
 
 const COLORS = [
@@ -55,17 +56,23 @@ const ICONS = [
   "palette",
 ];
 
-export function CategoryAddModal({ onSave, onClose }: Props) {
+export function CategoryAddModal({ onSave, onClose, initialData }: Props) {
   const theme = useTheme();
   const tokens = useDesign();
-  const [name, setName] = useState("");
-  const [selectedColor, setSelectedColor] = useState(COLORS[0]);
-  const [selectedIcon, setSelectedIcon] = useState(ICONS[0]);
+  const [name, setName] = useState(initialData?.name || "");
+  const [selectedColor, setSelectedColor] = useState(
+    initialData?.color || COLORS[0],
+  );
+  const [selectedIcon, setSelectedIcon] = useState(
+    initialData?.icon || ICONS[0],
+  );
 
   const handleSave = () => {
     if (!name.trim()) return;
     onSave({ name: name.trim(), icon: selectedIcon, color: selectedColor });
   };
+
+  const isEditing = !!initialData;
 
   return (
     <View style={{ gap: tokens.spacing.sm }}>
@@ -74,13 +81,15 @@ export function CategoryAddModal({ onSave, onClose }: Props) {
           variant="headlineSmall"
           style={{ fontWeight: "800", color: theme.colors.onSurface }}
         >
-          New Category
+          {isEditing ? "Edit Category" : "New Category"}
         </Text>
         <Text
           variant="bodySmall"
           style={{ color: theme.colors.onSurfaceVariant, fontWeight: "500" }}
         >
-          Create a personalized label for your transactions
+          {isEditing
+            ? "Change the name of your category"
+            : "Create a personalized label for your transactions"}
         </Text>
       </View>
 
@@ -99,107 +108,117 @@ export function CategoryAddModal({ onSave, onClose }: Props) {
           outlineStyle={{ borderRadius: tokens.radii.lg }}
         />
 
-        <View style={{ gap: tokens.spacing.sm }}>
-          <Text
-            variant="labelLarge"
-            style={{ fontWeight: "700", color: theme.colors.onSurfaceVariant }}
-          >
-            Select Color
-          </Text>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-            {COLORS.map((color) => (
-              <TouchableOpacity
-                key={color}
-                onPress={() => setSelectedColor(color)}
+        {!isEditing && (
+          <>
+            <View style={{ gap: tokens.spacing.sm }}>
+              <Text
+                variant="labelLarge"
                 style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 16,
-                  backgroundColor: color,
-                  borderWidth: 2,
-                  borderColor:
-                    selectedColor === color
-                      ? theme.colors.primary
-                      : "transparent",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  fontWeight: "700",
+                  color: theme.colors.onSurfaceVariant,
                 }}
               >
-                {selectedColor === color && (
-                  <MaterialCommunityIcons
-                    name="check"
-                    size={16}
-                    color="white"
-                  />
-                )}
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
+                Select Color
+              </Text>
+              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
+                {COLORS.map((color) => (
+                  <TouchableOpacity
+                    key={color}
+                    onPress={() => setSelectedColor(color)}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      backgroundColor: color,
+                      borderWidth: 2,
+                      borderColor:
+                        selectedColor === color
+                          ? theme.colors.primary
+                          : "transparent",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {selectedColor === color && (
+                      <MaterialCommunityIcons
+                        name="check"
+                        size={16}
+                        color="white"
+                      />
+                    )}
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
 
-        <View style={{ gap: tokens.spacing.sm }}>
-          <Text
-            variant="labelLarge"
-            style={{ fontWeight: "700", color: theme.colors.onSurfaceVariant }}
-          >
-            Select Icon
-          </Text>
-          <View style={{ maxHeight: 180 }}>
-            <ScrollView
-              scrollEnabled={false}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                flexDirection: "row",
-                flexWrap: "wrap",
-                gap: 10,
-                paddingBottom: tokens.spacing.sm,
-              }}
-            >
-              {ICONS.map((icon) => (
-                <TouchableOpacity
-                  key={icon}
-                  onPress={() => setSelectedIcon(icon)}
-                  style={{
-                    width: 42,
-                    height: 42,
-                    borderRadius: 10,
-                    backgroundColor:
-                      selectedIcon === icon
-                        ? selectedColor + "20"
-                        : theme.colors.surfaceVariant + "40",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderWidth: 1,
-                    borderColor:
-                      selectedIcon === icon ? selectedColor : "transparent",
+            <View style={{ gap: tokens.spacing.sm }}>
+              <Text
+                variant="labelLarge"
+                style={{
+                  fontWeight: "700",
+                  color: theme.colors.onSurfaceVariant,
+                }}
+              >
+                Select Icon
+              </Text>
+              <View style={{ maxHeight: 180 }}>
+                <ScrollView
+                  scrollEnabled={false}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    gap: 10,
+                    paddingBottom: tokens.spacing.sm,
                   }}
                 >
-                  <MaterialCommunityIcons
-                    name={icon as any}
-                    size={22}
-                    color={
-                      selectedIcon === icon
-                        ? selectedColor
-                        : theme.colors.onSurfaceVariant
-                    }
-                  />
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        </View>
+                  {ICONS.map((icon) => (
+                    <TouchableOpacity
+                      key={icon}
+                      onPress={() => setSelectedIcon(icon)}
+                      style={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: 10,
+                        backgroundColor:
+                          selectedIcon === icon
+                            ? selectedColor + "20"
+                            : theme.colors.surfaceVariant + "40",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        borderWidth: 1,
+                        borderColor:
+                          selectedIcon === icon ? selectedColor : "transparent",
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name={icon as any}
+                        size={22}
+                        color={
+                          selectedIcon === icon
+                            ? selectedColor
+                            : theme.colors.onSurfaceVariant
+                        }
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+          </>
+        )}
       </View>
 
       <View style={{ marginTop: tokens.spacing.sm }}>
         <Button
           mode="contained"
           onPress={handleSave}
-          disabled={!name.trim()}
+          disabled={!name.trim() || (isEditing && name === initialData.name)}
           style={{ borderRadius: tokens.radii.lg, elevation: 0 }}
           contentStyle={{ height: 52 }}
           labelStyle={{ fontWeight: "700", fontSize: 16 }}
         >
-          Create Category
+          {isEditing ? "Save Changes" : "Create Category"}
         </Button>
       </View>
     </View>

@@ -62,58 +62,34 @@ export function NavBar() {
     if (isHome) {
       const items: PickerItem[] = [
         {
-          label: "Spend",
+          label: "Add Spend",
           icon: "plus-circle-outline",
           color: theme.colors.primary,
           onPress: () => openAddSpendModal(),
         },
         {
-          label: "To Pay",
+          label: "Add To Pay",
           icon: "arrow-up-circle-outline",
           color: theme.colors.error,
           onPress: openAddPayableModal,
         },
         {
-          label: "To Claim",
+          label: "Add To Claim",
           icon: "arrow-down-circle-outline",
           color: theme.colors.tertiary,
           onPress: openAddClaimModal,
         },
         {
-          label: "Budget",
+          label: "Manage Budget",
           icon: "chart-donut",
           color: "#FF9F43",
-          onPress: openAddBudgetModal,
+          onPress: () => router.push("/home/budget"),
         },
         {
-          label: "Bills",
-          icon: "file-document-outline",
-          color: "#00CFE8",
-          onPress: openAddBillModal,
-        },
-        {
-          label: "Subscription",
-          icon: "repeat",
+          label: "Manage Category",
+          icon: "tag-outline",
           color: theme.colors.secondary,
-          onPress: openAddSubscriptionModal,
-        },
-        {
-          label: "Goals",
-          icon: "flag-outline",
-          color: "#EA5455",
-          onPress: openAddGoalModal,
-        },
-        {
-          label: "Team",
-          icon: "account-multiple-plus-outline",
-          color: "#7367F0",
-          onPress: openCreateGroupModal,
-        },
-        {
-          label: "Wishlist",
-          icon: "heart-outline",
-          color: "#FF6B6B",
-          onPress: openAddWishlistModal,
+          onPress: () => router.push("/home/category"),
         },
       ];
 

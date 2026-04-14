@@ -16,6 +16,7 @@ export default function Category() {
     isEmpty,
     setIsEmpty,
     openCategoryModal,
+    openEditCategoryModal,
     openAddCategoryModal,
   } = useCategory();
   
@@ -37,8 +38,7 @@ export default function Category() {
     <Pressable 
       key={cat.id} 
       onPress={() => openCategoryModal(cat, {
-        onDelete: (id) => console.log('Delete', id),
-        onEdit: (c) => console.log('Edit', c)
+        onEdit: (c) => openEditCategoryModal(c)
       })}
       style={({ pressed }) => ({
         width: '100%',

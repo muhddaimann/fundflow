@@ -33,6 +33,30 @@ export default function useCategory() {
     return [...customCategories, ...SYSTEM_CATEGORIES];
   }, [isEmpty, customCategories]);
 
+  const openEditCategoryModal = (category: Category, onSave?: (data: any) => void) => {
+    showModal({
+      content: (
+        <CategoryAddModal
+          initialData={category}
+          onClose={hideModal}
+          onSave={(data) => {
+            if (category.isDefault) {
+              toast("System categories cannot be renamed");
+              hideModal();
+              return;
+            }
+            setCustomCategories(prev => prev.map(c => 
+              c.id === category.id ? { ...c, name: data.name } : c
+            ));
+            onSave?.(data);
+            toast(`Category renamed to "${data.name}"`);
+            hideModal();
+          }}
+        />
+      ),
+    });
+  };
+
   const openCategoryModal = (
     category: Category,
     options?: {
@@ -60,7 +84,10 @@ export default function useCategory() {
         <CategoryModal
           category={category}
           onDelete={handleDelete}
-          onEdit={options?.onEdit}
+          onEdit={(cat) => {
+            hideModal();
+            setTimeout(() => openEditCategoryModal(cat, options?.onEdit), 100);
+          }}
           onClose={hideModal}
         />
       ),
@@ -93,6 +120,7 @@ export default function useCategory() {
     isEmpty,
     setIsEmpty,
     openCategoryModal,
+    openEditCategoryModal,
     openAddCategoryModal,
     closeCategoryModal: hideModal,
   };
