@@ -4,6 +4,7 @@ import {
   NativeSyntheticEvent,
   NativeScrollEvent,
   Pressable,
+  View,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useTheme, Text } from "react-native-paper";
@@ -160,7 +161,9 @@ export default function Home() {
             <Pressable
               onPress={() =>
                 router.push(
-                  viewMode === "activity" ? "home/activity" : "home/transaction",
+                  viewMode === "activity"
+                    ? "home/activity"
+                    : "home/transaction",
                 )
               }
             >
@@ -176,11 +179,13 @@ export default function Home() {
           }
         />
 
-        {viewMode === "activity" ? (
-          <ActivityCard data={recentActivities} />
-        ) : (
-          <RecentCard data={recentTransactions} />
-        )}
+        <View style={{ marginTop: -tokens.spacing.sm }}>
+          {viewMode === "activity" ? (
+            <ActivityCard data={recentActivities} />
+          ) : (
+            <RecentCard data={recentTransactions} />
+          )}
+        </View>
 
         <EndScreen />
       </ScrollView>
