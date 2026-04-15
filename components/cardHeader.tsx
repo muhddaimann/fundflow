@@ -64,7 +64,13 @@ export default function CardHeader({
         </View>
 
         <View style={{ flexShrink: 1 }}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: tokens.spacing.lg,
+            }}
+          >
             <Text
               variant="titleMedium"
               style={{
@@ -75,12 +81,14 @@ export default function CardHeader({
             >
               {head}
             </Text>
+
             {onPress && (
               <View
                 style={{
                   backgroundColor: colors.primary + "15",
                   borderRadius: 4,
                   padding: 1,
+                  marginLeft: 4,
                 }}
               >
                 <MaterialCommunityIcons

@@ -17,11 +17,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CardHeader from "../../../components/cardHeader";
 import ActivityCard from "../../../components/a/activityCard";
 import RecentCard from "../../../components/a/recentCard";
+import PayCard from "../../../components/a/payCard";
+import ClaimCard from "../../../components/a/claimCard";
 import QuickAction from "../../../components/a/quickAction";
 import EndScreen from "../../../components/endScreen";
 import useGlobal from "../../../hooks/useGlobal";
 import { useOverlay } from "../../../contexts/overlayContext";
 import { PickerModal } from "../../../components/pickerModal";
+import CardCarousel from "../../../components/a/cardCarousel";
 
 export default function Home() {
   const { colors } = useTheme();
@@ -53,8 +56,8 @@ export default function Home() {
     showModal({
       content: (
         <PickerModal
-          title=""
-          subtitle=""
+          title="Switch View"
+          subtitle="Choose what to display on your home screen"
           onClose={hideModal}
           items={[
             {
@@ -139,6 +142,10 @@ export default function Home() {
           }}
         />
         <QuickAction />
+
+        <CardCarousel
+          items={[<PayCard key="pay" />, <ClaimCard key="claim" />]}
+        />
 
         <CardHeader
           onPress={openViewPicker}
