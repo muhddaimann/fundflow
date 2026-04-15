@@ -19,6 +19,11 @@ import ActivityCard from "../../../components/a/activityCard";
 import RecentCard from "../../../components/a/recentCard";
 import PayCard from "../../../components/a/payCard";
 import ClaimCard from "../../../components/a/claimCard";
+import BillsCard from "../../../components/a/billsCard";
+import SubsCard from "../../../components/a/subsCard";
+import BudgetCard from "../../../components/a/budgetCard";
+import GoalCard from "../../../components/a/goalCard";
+import WishlistCard from "../../../components/a/wishlistCard";
 import QuickAction from "../../../components/a/quickAction";
 import EndScreen from "../../../components/endScreen";
 import useGlobal from "../../../hooks/useGlobal";
@@ -144,7 +149,15 @@ export default function Home() {
         <QuickAction />
 
         <CardCarousel
-          items={[<PayCard key="pay" />, <ClaimCard key="claim" />]}
+          items={[
+            <BudgetCard key="budget" />,
+            <GoalCard key="goal" />,
+            <PayCard key="pay" />,
+            <ClaimCard key="claim" />,
+            <BillsCard key="bills" />,
+            <SubsCard key="subs" />,
+            <WishlistCard key="wish" />,
+          ]}
         />
 
         <CardHeader

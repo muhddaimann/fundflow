@@ -64,7 +64,7 @@ export default function QuickAction() {
       label: "Others",
       icon: "dots-horizontal",
       onPress: () => router.push("/home/others"),
-      color: colors.onSurface,
+      color: colors.onSurfaceVariant,
     },
   ];
 
