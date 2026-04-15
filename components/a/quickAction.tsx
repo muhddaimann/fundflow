@@ -3,104 +3,136 @@ import { View, Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 
 type ActionItem = {
   label: string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   onPress: () => void;
+  color: string;
 };
 
 export default function QuickAction() {
   const { colors } = useTheme();
   const tokens = useDesign();
+  const router = useRouter();
 
   const actions: ActionItem[] = [
     {
       label: "Budget",
       icon: "chart-donut",
       onPress: () => router.push("/home/budget"),
-    },
-    {
-      label: "Subs",
-      icon: "repeat",
-      onPress: () => router.push("/home/subscription"),
-    },
-    {
-      label: "Wishlist",
-      icon: "heart-outline",
-      onPress: () => router.push("/home/wishlist"),
-    },
-    {
-      label: "Bills",
-      icon: "file-document-outline",
-      onPress: () => router.push("/home/bills"),
+      color: colors.primary,
     },
     {
       label: "Goals",
       icon: "flag-outline",
       onPress: () => router.push("/home/goals"),
+      color: colors.primary,
+    },
+    {
+      label: "Wishlist",
+      icon: "heart-outline",
+      onPress: () => router.push("/home/wishlist"),
+      color: colors.primary,
+    },
+    {
+      label: "Subs",
+      icon: "repeat",
+      onPress: () => router.push("/home/subscription"),
+      color: colors.secondary,
+    },
+    {
+      label: "Bills",
+      icon: "file-document-outline",
+      onPress: () => router.push("/home/bills"),
+      color: colors.secondary,
     },
     {
       label: "Split",
       icon: "account-multiple-outline",
       onPress: () => router.push("/home/split"),
+      color: colors.secondary,
     },
     {
       label: "Tools",
       icon: "calculator-variant-outline",
       onPress: () => router.push("/home/tools"),
+      color: colors.onSecondaryContainer,
     },
     {
       label: "Others",
       icon: "dots-horizontal",
       onPress: () => router.push("/home/others"),
+      color: colors.onSurface,
     },
   ];
 
-  const renderRow = (items: ActionItem[]) => (
-    <View style={{ flexDirection: "row", gap: tokens.spacing.sm }}>
-      {items.map((item, idx) => (
-        <Pressable
-          key={idx}
-          onPress={item.onPress}
-          style={({ pressed }) => ({
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            gap: tokens.spacing.xs,
-            paddingVertical: tokens.spacing.sm,
-            borderRadius: tokens.radii.lg,
-            borderWidth: 1,
-            borderColor: colors.outlineVariant,
-            backgroundColor: pressed ? colors.surfaceVariant : "transparent",
-            transform: [{ scale: pressed ? 0.96 : 1 }],
-          })}
-        >
-          <MaterialCommunityIcons
-            name={item.icon}
-            size={tokens.sizes.icon.md}
-            color={colors.onSurfaceVariant}
-          />
-          <Text
-            style={{
-              fontSize: tokens.typography.sizes.xs,
-              color: colors.onSurfaceVariant,
-            }}
-          >
-            {item.label}
-          </Text>
-        </Pressable>
-      ))}
-    </View>
-  );
-
   return (
     <View
-      style={{ paddingHorizontal: tokens.spacing.md, gap: tokens.spacing.sm }}
+      style={{
+        paddingHorizontal: tokens.spacing.lg,
+        paddingTop: tokens.spacing.sm,
+      }}
     >
-      {renderRow(actions.slice(0, 4))}
-      {renderRow(actions.slice(4, 8))}
+      <View
+        style={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          rowGap: tokens.spacing.md,
+        }}
+      >
+        {actions.map((item, idx) => {
+          const shades = ["12", "18", "1F", "26", "2E", "36"];
+          const shade = shades[idx % shades.length];
+
+          return (
+            <Pressable
+              key={idx}
+              onPress={item.onPress}
+              style={({ pressed }) => ({
+                width: "22%",
+                alignItems: "center",
+                gap: 6,
+                transform: [{ scale: pressed ? 0.94 : 1 }],
+              })}
+            >
+              <View
+                style={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: tokens.radii.lg,
+                  backgroundColor: item.color + shade,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderWidth: 1,
+                  borderColor: item.color + "30",
+                }}
+              >
+                <MaterialCommunityIcons
+                  name={item.icon}
+                  size={26}
+                  color={item.color}
+                />
+              </View>
+              <Text
+                variant="labelSmall"
+                numberOfLines={1}
+                style={{
+                  textAlign: "center",
+                  fontFamily: tokens.typography.families.medium,
+                  fontWeight: "600",
+                  color: colors.onSurface,
+                  opacity: 0.9,
+                }}
+              >
+                {item.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }

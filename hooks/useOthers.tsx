@@ -14,6 +14,34 @@ export default function useOthers() {
 
   const routes: OtherRoute[] = [
     {
+      id: "activity",
+      label: "Activity",
+      icon: "history",
+      path: "/home/activity",
+      description: "Full history of app updates",
+    },
+    {
+      id: "spend",
+      label: "Spend",
+      icon: "credit-card-outline",
+      path: "/home/spend",
+      description: "Detailed spending analysis",
+    },
+    {
+      id: "pay",
+      label: "Pay",
+      icon: "arrow-up-circle-outline",
+      path: "/home/pay",
+      description: "Manage money you owe",
+    },
+    {
+      id: "claim",
+      label: "Claim",
+      icon: "arrow-down-circle-outline",
+      path: "/home/claim",
+      description: "Track money owed to you",
+    },
+    {
       id: "budget",
       label: "Budget",
       icon: "chart-donut",

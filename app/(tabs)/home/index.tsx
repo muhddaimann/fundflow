@@ -56,8 +56,8 @@ export default function Home() {
     showModal({
       content: (
         <PickerModal
-          title="Switch View"
-          subtitle="Choose what to display on your home screen"
+          title=""
+          subtitle=""
           onClose={hideModal}
           items={[
             {
@@ -101,12 +101,12 @@ export default function Home() {
               <MaterialCommunityIcons
                 name="credit-card-outline"
                 size={20}
-                color={colors.onPrimary}
+                color={colors.secondary}
               />
             ),
-            bgColor: colors.primary,
-            textColor: colors.onPrimary,
-            labelColor: colors.onPrimary,
+            bgColor: colors.secondary + "12",
+            textColor: colors.secondary,
+            labelColor: colors.secondary + "B3",
             route: "home/spend",
             params: { type: "totalSpend" },
           }}
@@ -116,12 +116,12 @@ export default function Home() {
               <MaterialCommunityIcons
                 name="arrow-up-bold"
                 size={20}
-                color={colors.onError}
+                color={colors.secondary}
               />
             ),
-            bgColor: colors.errorContainer,
-            textColor: colors.onErrorContainer,
-            labelColor: colors.onErrorContainer,
+            bgColor: colors.secondary + "18",
+            textColor: colors.secondary,
+            labelColor: colors.secondary + "99",
             route: "home/pay",
             params: { type: "toPay" },
           }}
@@ -131,12 +131,12 @@ export default function Home() {
               <MaterialCommunityIcons
                 name="arrow-down-bold"
                 size={20}
-                color={colors.onTertiary}
+                color={colors.secondary}
               />
             ),
-            bgColor: colors.tertiaryContainer,
-            textColor: colors.onTertiaryContainer,
-            labelColor: colors.onTertiaryContainer,
+            bgColor: colors.secondary + "1F",
+            textColor: colors.secondary,
+            labelColor: colors.secondary + "80",
             route: "home/claim",
             params: { type: "toClaim" },
           }}

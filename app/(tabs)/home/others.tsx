@@ -9,6 +9,7 @@ import useOthers, { OtherRoute } from "../../../hooks/useOthers";
 type Section = {
   title: string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
+  color: string;
   items: OtherRoute[];
 };
 
@@ -24,25 +25,36 @@ export default function Others() {
       {
         title: "Planning & Goals",
         icon: "bullseye-arrow",
+        color: colors.primary,
         items: [find("budget"), find("goals"), find("wishlist")],
       },
       {
         title: "Payments & Sharing",
         icon: "credit-card-sync-outline",
-        items: [find("subscription"), find("bills"), find("split")],
+        color: colors.secondary,
+        items: [
+          find("spend"),
+          find("pay"),
+          find("claim"),
+          find("subscription"),
+          find("bills"),
+          find("split"),
+        ],
       },
       {
         title: "Activity & Setup",
         icon: "cog-outline",
-        items: [find("transaction"), find("category")],
+        color: colors.onPrimaryContainer,
+        items: [find("activity"), find("transaction"), find("category")],
       },
       {
         title: "Utilities",
         icon: "toolbox-outline",
+        color: colors.onSecondaryContainer,
         items: [find("tools")],
       },
     ];
-  }, [routes]);
+  }, [routes, colors]);
 
   return (
     <ScrollView
@@ -69,14 +81,14 @@ export default function Others() {
             <MaterialCommunityIcons
               name={section.icon}
               size={tokens.sizes.icon.sm}
-              color={colors.primary}
+              color={section.color}
             />
             <Text
               variant="labelLarge"
               style={{
                 fontFamily: tokens.typography.families.bold,
                 fontWeight: "700",
-                color: colors.primary,
+                color: section.color,
                 letterSpacing: 0.5,
                 textTransform: "uppercase",
               }}
@@ -85,68 +97,82 @@ export default function Others() {
             </Text>
           </View>
 
-          <View style={{ paddingHorizontal: tokens.spacing.lg, gap: tokens.spacing.sm }}>
-            {section.items.map((route) => (
-              <Pressable
-                key={route.id}
-                onPress={() => navigateTo(route.path)}
-                style={({ pressed }) => ({
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: tokens.spacing.md,
-                  padding: tokens.spacing.md,
-                  borderRadius: tokens.radii.lg,
-                  borderWidth: 1,
-                  borderColor: colors.outlineVariant,
-                  backgroundColor: pressed ? colors.surfaceVariant : colors.surface,
-                  transform: [{ scale: pressed ? 0.98 : 1 }],
-                })}
-              >
-                <View
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: tokens.radii.md,
-                    backgroundColor: colors.surfaceVariant,
+          <View
+            style={{
+              paddingHorizontal: tokens.spacing.lg,
+              gap: tokens.spacing.sm,
+            }}
+          >
+            {section.items.map((route, i) => {
+              const shades = ["12", "18", "1F", "26", "2E", "36"];
+              const shade = shades[i % shades.length];
+
+              return (
+                <Pressable
+                  key={route.id}
+                  onPress={() => navigateTo(route.path)}
+                  style={({ pressed }) => ({
+                    flexDirection: "row",
                     alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                    gap: tokens.spacing.md,
+                    padding: tokens.spacing.md,
+                    borderRadius: tokens.radii.lg,
+                    borderWidth: 1,
+                    borderColor: section.color + "30",
+                    backgroundColor: pressed
+                      ? section.color + "22"
+                      : section.color + shade,
+                    transform: [{ scale: pressed ? 0.98 : 1 }],
+                  })}
                 >
+                  <View
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: tokens.radii.md,
+                      backgroundColor: colors.surface,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderWidth: 1,
+                      borderColor: section.color + "15",
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name={route.icon}
+                      size={tokens.sizes.icon.md}
+                      color={section.color}
+                    />
+                  </View>
+
+                  <View style={{ flex: 1, gap: 0 }}>
+                    <Text
+                      variant="titleMedium"
+                      style={{
+                        fontFamily: tokens.typography.families.bold,
+                        fontWeight: "700",
+                      }}
+                    >
+                      {route.label}
+                    </Text>
+                    <Text
+                      variant="bodySmall"
+                      style={{
+                        color: colors.onSurfaceVariant,
+                        opacity: 0.6,
+                      }}
+                    >
+                      {route.description}
+                    </Text>
+                  </View>
+
                   <MaterialCommunityIcons
-                    name={route.icon}
-                    size={tokens.sizes.icon.md}
-                    color={colors.onSurfaceVariant}
+                    name="chevron-right"
+                    size={tokens.sizes.icon.sm}
+                    color={colors.outline}
                   />
-                </View>
-
-                <View style={{ flex: 1, gap: 0 }}>
-                  <Text
-                    variant="titleMedium"
-                    style={{
-                      fontFamily: tokens.typography.families.bold,
-                      fontWeight: "700",
-                    }}
-                  >
-                    {route.label}
-                  </Text>
-                  <Text
-                    variant="bodySmall"
-                    style={{
-                      color: colors.onSurfaceVariant,
-                      opacity: 0.6,
-                    }}
-                  >
-                    {route.description}
-                  </Text>
-                </View>
-
-                <MaterialCommunityIcons
-                  name="chevron-right"
-                  size={tokens.sizes.icon.sm}
-                  color={colors.outline}
-                />
-              </Pressable>
-            ))}
+                </Pressable>
+              );
+            })}
           </View>
         </View>
       ))}

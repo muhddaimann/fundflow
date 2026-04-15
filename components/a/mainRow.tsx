@@ -25,7 +25,13 @@ export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
   const tokens = useDesign();
   const router = useRouter();
 
-  const Card = (item: CardItem, label: string, key: string, flex = 1) => {
+  const Card = (
+    item: CardItem,
+    label: string,
+    key: string,
+    flex = 1,
+    isPrimary = false,
+  ) => {
     const Wrapper = (item.route ? Pressable : View) as any;
 
     return (
@@ -52,7 +58,9 @@ export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
         <View style={{ gap: tokens.spacing.xxs }}>
           <Text
             style={{
-              fontSize: tokens.typography.sizes.md,
+              fontSize: isPrimary
+                ? tokens.typography.sizes.xl
+                : tokens.typography.sizes.md,
               fontWeight: tokens.typography.weights.bold,
               color: item.textColor ?? colors.onSurface,
             }}
@@ -81,7 +89,7 @@ export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
         gap: tokens.spacing.sm,
       }}
     >
-      {Card(totalSpend, "Total Spend", "left", 1)}
+      {Card(totalSpend, "Total Spend", "left", 1, true)}
 
       <View style={{ flex: 1, gap: tokens.spacing.sm }}>
         {Card(toPay, "To Pay", "top")}
