@@ -4,7 +4,8 @@ import { Text, useTheme } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import { useRouter } from "expo-router";
 
-type CardItem = {
+export type CardItem = {
+  label: string;
   amount: string | number;
   icon: React.ReactNode;
   bgColor?: string;
@@ -12,31 +13,30 @@ type CardItem = {
   labelColor?: string;
   route?: string;
   params?: Record<string, any>;
+  isPrimary?: boolean;
 };
 
 type MainRowProps = {
-  totalSpend: CardItem;
-  toPay: CardItem;
-  toClaim: CardItem;
+  items: CardItem[];
 };
 
-export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
+export default function MainRow({ items }: MainRowProps) {
   const { colors } = useTheme();
   const tokens = useDesign();
   const router = useRouter();
 
-  const Card = (
+  const renderCard = (
     item: CardItem,
-    label: string,
-    key: string,
+    index: number,
     flex = 1,
     isPrimary = false,
   ) => {
     const Wrapper = (item.route ? Pressable : View) as any;
+    const baseColor = item.textColor ?? colors.primary;
 
     return (
       <Wrapper
-        key={key}
+        key={index}
         onPress={() =>
           item.route &&
           router.push({
@@ -48,8 +48,11 @@ export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
           flex,
           backgroundColor: item.bgColor ?? colors.surfaceVariant,
           borderRadius: tokens.radii.xl,
-          padding: tokens.spacing.sm,
+          padding: tokens.spacing.md,
           justifyContent: "space-between",
+          borderWidth: isPrimary ? 0 : 1.5,
+          borderStyle: isPrimary ? "solid" : "dashed",
+          borderColor: isPrimary ? "transparent" : baseColor + "30",
           transform: [{ scale: pressed ? 0.97 : 1 }],
         })}
       >
@@ -61,7 +64,8 @@ export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
               fontSize: isPrimary
                 ? tokens.typography.sizes.xl
                 : tokens.typography.sizes.md,
-              fontWeight: tokens.typography.weights.bold,
+              fontFamily: tokens.typography.families.bold,
+              fontWeight: "700",
               color: item.textColor ?? colors.onSurface,
             }}
           >
@@ -71,15 +75,19 @@ export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
           <Text
             style={{
               fontSize: tokens.typography.sizes.xs,
+              fontFamily: tokens.typography.families.medium,
               color: item.labelColor ?? colors.onSurfaceVariant,
+              opacity: isPrimary ? 1 : 0.8,
             }}
           >
-            {label}
+            {item.label}
           </Text>
         </View>
       </Wrapper>
     );
   };
+
+  if (items.length === 0) return null;
 
   return (
     <View
@@ -89,12 +97,15 @@ export default function MainRow({ totalSpend, toPay, toClaim }: MainRowProps) {
         gap: tokens.spacing.sm,
       }}
     >
-      {Card(totalSpend, "Total Spend", "left", 1, true)}
+      {/* First item is always the large primary card */}
+      {renderCard(items[0], 0, 1, true)}
 
-      <View style={{ flex: 1, gap: tokens.spacing.sm }}>
-        {Card(toPay, "To Pay", "top")}
-        {Card(toClaim, "To Claim", "bottom")}
-      </View>
+      {/* Remaining items are stacked in the right column */}
+      {items.length > 1 && (
+        <View style={{ flex: 1, gap: tokens.spacing.sm }}>
+          {items.slice(1).map((item, idx) => renderCard(item, idx + 1))}
+        </View>
+      )}
     </View>
   );
 }

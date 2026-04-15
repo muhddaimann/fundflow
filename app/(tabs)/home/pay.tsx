@@ -6,7 +6,7 @@ import {
   View,
   Pressable,
 } from "react-native";
-import { useTheme, Text, Card, Switch, IconButton, Chip, Button } from "react-native-paper";
+import { useTheme, Text, Card, Switch, Chip } from "react-native-paper";
 import { useDesign } from "../../../contexts/designContext";
 import ScrollTop from "../../../components/scrollTop";
 import Header from "../../../components/header";

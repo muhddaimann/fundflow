@@ -100,51 +100,57 @@ export default function Home() {
         <Header name="User" />
 
         <MainRow
-          totalSpend={{
-            amount: formatCurrency(totals.spend),
-            icon: (
-              <MaterialCommunityIcons
-                name="credit-card-outline"
-                size={20}
-                color={colors.secondary}
-              />
-            ),
-            bgColor: colors.secondary + "12",
-            textColor: colors.secondary,
-            labelColor: colors.secondary + "B3",
-            route: "home/spend",
-            params: { type: "totalSpend" },
-          }}
-          toPay={{
-            amount: formatCurrency(totals.pay),
-            icon: (
-              <MaterialCommunityIcons
-                name="arrow-up-bold"
-                size={20}
-                color={colors.secondary}
-              />
-            ),
-            bgColor: colors.secondary + "18",
-            textColor: colors.secondary,
-            labelColor: colors.secondary + "99",
-            route: "home/pay",
-            params: { type: "toPay" },
-          }}
-          toClaim={{
-            amount: formatCurrency(totals.claim),
-            icon: (
-              <MaterialCommunityIcons
-                name="arrow-down-bold"
-                size={20}
-                color={colors.secondary}
-              />
-            ),
-            bgColor: colors.secondary + "1F",
-            textColor: colors.secondary,
-            labelColor: colors.secondary + "80",
-            route: "home/claim",
-            params: { type: "toClaim" },
-          }}
+          items={[
+            {
+              label: "Total Spend",
+              amount: formatCurrency(totals.spend),
+              icon: (
+                <MaterialCommunityIcons
+                  name="wallet-outline"
+                  size={20}
+                  color={colors.secondary}
+                />
+              ),
+              bgColor: colors.secondary + "12",
+              textColor: colors.secondary,
+              labelColor: colors.secondary + "B3",
+              route: "home/spend",
+              params: { type: "totalSpend" },
+              isPrimary: true,
+            },
+            {
+              label: "To Pay",
+              amount: formatCurrency(totals.pay),
+              icon: (
+                <MaterialCommunityIcons
+                  name="arrow-top-right"
+                  size={20}
+                  color={colors.secondary}
+                />
+              ),
+              bgColor: colors.secondary + "18",
+              textColor: colors.secondary,
+              labelColor: colors.secondary + "99",
+              route: "home/pay",
+              params: { type: "toPay" },
+            },
+            {
+              label: "To Claim",
+              amount: formatCurrency(totals.claim),
+              icon: (
+                <MaterialCommunityIcons
+                  name="arrow-bottom-left"
+                  size={20}
+                  color={colors.secondary}
+                />
+              ),
+              bgColor: colors.secondary + "1F",
+              textColor: colors.secondary,
+              labelColor: colors.secondary + "80",
+              route: "home/claim",
+              params: { type: "toClaim" },
+            },
+          ]}
         />
         <QuickAction />
 
