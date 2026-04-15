@@ -3,6 +3,7 @@ import {
   ScrollView,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useTheme, Text } from "react-native-paper";
@@ -12,18 +13,28 @@ import { useTabs } from "../../../contexts/tabContext";
 import Header from "../../../components/a/header";
 import MainRow from "../../../components/a/mainRow";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import SectionHeader from "../../../components/secHeader";
-import RecentCard from "../../../components/a/activityCard";
+import CardHeader from "../../../components/cardHeader";
+import ActivityCard from "../../../components/a/activityCard";
+import RecentCard from "../../../components/a/recentCard";
 import QuickAction from "../../../components/a/quickAction";
 import EndScreen from "../../../components/endScreen";
 import useGlobal from "../../../hooks/useGlobal";
+import { useOverlay } from "../../../contexts/overlayContext";
+import { PickerModal } from "../../../components/pickerModal";
 
 export default function Home() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { onScroll } = useTabs();
-  const { totals, recentActivities, formatCurrency } = useGlobal("User");
+  const { totals, recentActivities, recentTransactions, formatCurrency } =
+    useGlobal("User");
+  const { showModal, hideModal } = useOverlay();
   const router = useRouter();
+
+  const [viewMode, setViewMode] = useState<"activity" | "transaction">(
+    "activity",
+  );
+
   const scrollViewRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -35,6 +46,32 @@ export default function Home() {
 
   const scrollToTop = () => {
     scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  };
+
+  const openViewPicker = () => {
+    showModal({
+      content: (
+        <PickerModal
+          title=""
+          subtitle=""
+          onClose={hideModal}
+          items={[
+            {
+              label: "Recent Activity",
+              icon: "history",
+              color: colors.primary,
+              onPress: () => setViewMode("activity"),
+            },
+            {
+              label: "Recent Transactions",
+              icon: "cash-multiple",
+              color: colors.secondary,
+              onPress: () => setViewMode("transaction"),
+            },
+          ]}
+        />
+      ),
+    });
   };
 
   return (
@@ -101,29 +138,50 @@ export default function Home() {
           }}
         />
         <QuickAction />
-        <SectionHeader
+
+        <CardHeader
+          onPress={openViewPicker}
           icon={
             <MaterialCommunityIcons
-              name="history"
+              name={viewMode === "activity" ? "history" : "cash-multiple"}
               size={tokens.sizes.icon.md}
               color={colors.onSurfaceVariant}
             />
           }
-          head="Recent Activity"
-          subHeader="Your latest FundFlow activity"
+          head={
+            viewMode === "activity" ? "Recent Activity" : "Recent Transactions"
+          }
+          subHeader={
+            viewMode === "activity"
+              ? "Your latest FundFlow activity"
+              : "Your latest money movement"
+          }
           rightSlot={
-            <Text
-              onPress={() => router.push("home/activity")}
-              style={{
-                color: colors.primary,
-                fontWeight: tokens.typography.weights.semibold,
-              }}
+            <Pressable
+              onPress={() =>
+                router.push(
+                  viewMode === "activity" ? "home/activity" : "home/transaction",
+                )
+              }
             >
-              See all
-            </Text>
+              <Text
+                style={{
+                  color: colors.primary,
+                  fontWeight: tokens.typography.weights.semibold,
+                }}
+              >
+                See all
+              </Text>
+            </Pressable>
           }
         />
-        <RecentCard data={recentActivities} />
+
+        {viewMode === "activity" ? (
+          <ActivityCard data={recentActivities} />
+        ) : (
+          <RecentCard data={recentTransactions} />
+        )}
+
         <EndScreen />
       </ScrollView>
 

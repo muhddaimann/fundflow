@@ -4,49 +4,23 @@ import { Text, useTheme } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NoData from "../noData";
-import { ActivityType, RecentActivity } from "../../hooks/useGlobal";
+import { Transaction } from "../../hooks/useGlobal";
 
 type Props = {
-  data?: RecentActivity[];
+  data?: Transaction[];
 };
 
-export default function ActivityCard({ data = [] }: Props) {
+export default function RecentCard({ data = [] }: Props) {
   const { colors } = useTheme();
   const tokens = useDesign();
 
   if (!data.length) {
     return (
       <View style={{ marginHorizontal: tokens.spacing.lg }}>
-        <NoData message="No recent activity yet." icon="history" />
+        <NoData message="No recent transactions yet." icon="cash-remove" />
       </View>
     );
   }
-
-  const getTypeStyles = (type: ActivityType, customColor?: string) => {
-    switch (type) {
-      case "spend":
-        return { bg: colors.errorContainer, icon: colors.error };
-      case "income":
-        return { bg: colors.tertiaryContainer, icon: colors.tertiary };
-      case "budget":
-        return {
-          bg: (customColor || colors.secondary) + "15",
-          icon: customColor || colors.secondary,
-        };
-      case "bill":
-        return {
-          bg: (customColor || colors.primary) + "15",
-          icon: customColor || colors.primary,
-        };
-      case "goal":
-        return {
-          bg: (customColor || "#FF9F43") + "15",
-          icon: customColor || "#FF9F43",
-        };
-      default:
-        return { bg: colors.surfaceVariant, icon: colors.onSurfaceVariant };
-    }
-  };
 
   return (
     <View
@@ -61,8 +35,7 @@ export default function ActivityCard({ data = [] }: Props) {
       }}
     >
       {data.map((item) => {
-        const styles = getTypeStyles(item.type, item.color);
-        const hasAmount = item.amount !== undefined;
+        const isIncome = item.type === "income";
 
         return (
           <View
@@ -86,7 +59,9 @@ export default function ActivityCard({ data = [] }: Props) {
                   width: 44,
                   height: 44,
                   borderRadius: tokens.radii.md,
-                  backgroundColor: styles.bg,
+                  backgroundColor: isIncome
+                    ? colors.tertiaryContainer
+                    : colors.surfaceVariant,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -94,7 +69,7 @@ export default function ActivityCard({ data = [] }: Props) {
                 <MaterialCommunityIcons
                   name={item.icon as any}
                   size={22}
-                  color={styles.icon}
+                  color={isIncome ? colors.tertiary : colors.onSurfaceVariant}
                 />
               </View>
 
@@ -117,25 +92,21 @@ export default function ActivityCard({ data = [] }: Props) {
                     opacity: 0.7,
                   }}
                 >
-                  {item.subtitle} • {item.time}
+                  {item.category} • {item.time}
                 </Text>
               </View>
             </View>
 
-            {hasAmount && (
-              <Text
-                variant="titleMedium"
-                style={{
-                  fontFamily: tokens.typography.families.bold,
-                  fontWeight: "700",
-                  color:
-                    item.type === "income" ? colors.tertiary : colors.error,
-                }}
-              >
-                {item.type === "income" ? "+" : "-"}RM{" "}
-                {Math.abs(item.amount!).toFixed(2)}
-              </Text>
-            )}
+            <Text
+              variant="titleMedium"
+              style={{
+                fontFamily: tokens.typography.families.bold,
+                fontWeight: "700",
+                color: isIncome ? colors.tertiary : colors.error,
+              }}
+            >
+              {isIncome ? "+" : "-"}RM {Math.abs(item.amount).toFixed(2)}
+            </Text>
           </View>
         );
       })}

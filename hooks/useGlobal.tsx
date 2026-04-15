@@ -14,6 +14,16 @@ export type RecentActivity = {
   color?: string;
 };
 
+export type Transaction = {
+  id: string;
+  title: string;
+  category: string;
+  amount: number;
+  type: "income" | "expense";
+  time: string;
+  icon: string;
+};
+
 export default function useGlobal(name?: string) {
   const { isEmpty, setIsEmpty } = useGlobalContext();
   const now = new Date();
@@ -110,6 +120,39 @@ export default function useGlobal(name?: string) {
     ];
   }, [isEmpty]);
 
+  const recentTransactions = useMemo<Transaction[]>(() => {
+    if (isEmpty) return [];
+    return [
+      {
+        id: "t1",
+        title: "Grocery Store",
+        category: "Food",
+        amount: 85.5,
+        type: "expense",
+        time: "10:30 AM",
+        icon: "cart-outline",
+      },
+      {
+        id: "t2",
+        title: "Freelance Work",
+        category: "Income",
+        amount: 500.0,
+        type: "income",
+        time: "Yesterday",
+        icon: "cash-plus",
+      },
+      {
+        id: "t3",
+        title: "Starbucks Coffee",
+        category: "Drinks",
+        amount: 18.0,
+        type: "expense",
+        time: "Yesterday",
+        icon: "coffee",
+      },
+    ];
+  }, [isEmpty]);
+
   return {
     greeting,
     today,
@@ -118,6 +161,7 @@ export default function useGlobal(name?: string) {
     setIsEmpty,
     totals,
     recentActivities,
+    recentTransactions,
     formatCurrency,
   };
 }
