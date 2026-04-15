@@ -3,7 +3,6 @@ import {
   ScrollView,
   NativeSyntheticEvent,
   NativeScrollEvent,
-  View,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useTheme, Text } from "react-native-paper";
@@ -14,7 +13,7 @@ import Header from "../../../components/a/header";
 import MainRow from "../../../components/a/mainRow";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import SectionHeader from "../../../components/secHeader";
-import RecentCard from "../../../components/a/recentCard";
+import RecentCard from "../../../components/a/activityCard";
 import QuickAction from "../../../components/a/quickAction";
 import EndScreen from "../../../components/endScreen";
 import useGlobal from "../../../hooks/useGlobal";
@@ -23,7 +22,7 @@ export default function Home() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { onScroll } = useTabs();
-  const { totals, recentTransactions, formatCurrency } = useGlobal("User");
+  const { totals, recentActivities, formatCurrency } = useGlobal("User");
   const router = useRouter();
   const scrollViewRef = useRef<ScrollView | null>(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -110,11 +109,11 @@ export default function Home() {
               color={colors.onSurfaceVariant}
             />
           }
-          head="Recent Transactions"
-          subHeader="Your latest spending activity"
+          head="Recent Activity"
+          subHeader="Your latest FundFlow activity"
           rightSlot={
             <Text
-              onPress={() => router.push("home/transaction")}
+              onPress={() => router.push("home/activity")}
               style={{
                 color: colors.primary,
                 fontWeight: tokens.typography.weights.semibold,
@@ -124,7 +123,7 @@ export default function Home() {
             </Text>
           }
         />
-        <RecentCard data={recentTransactions} />
+        <RecentCard data={recentActivities} />
         <EndScreen />
       </ScrollView>
 

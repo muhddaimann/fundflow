@@ -1,13 +1,17 @@
 import { useMemo } from "react";
 import { useGlobalContext } from "../contexts/globalContext";
 
-export type Transaction = {
+export type ActivityType = "spend" | "income" | "budget" | "bill" | "goal";
+
+export type RecentActivity = {
   id: string;
   title: string;
-  category: string;
-  amount: number;
-  type: "income" | "expense";
+  subtitle: string;
+  amount?: number;
+  type: ActivityType;
   time: string;
+  icon: string;
+  color?: string;
 };
 
 export default function useGlobal(name?: string) {
@@ -55,32 +59,53 @@ export default function useGlobal(name?: string) {
     };
   }, [isEmpty]);
 
-  const recentTransactions = useMemo<Transaction[]>(() => {
+  const recentActivities = useMemo<RecentActivity[]>(() => {
     if (isEmpty) return [];
     return [
       {
         id: "1",
-        title: "Grocery Store",
-        category: "Food",
-        amount: 85.5,
-        type: "expense",
+        title: "Starbucks Coffee",
+        subtitle: "Drinks",
+        amount: 18.5,
+        type: "spend",
         time: "10:30 AM",
+        icon: "coffee",
       },
       {
         id: "2",
-        title: "Freelance Work",
-        category: "Income",
-        amount: 500.0,
-        type: "income",
-        time: "Yesterday",
+        title: "Grocery Budget Set",
+        subtitle: "Target: RM 500.00",
+        type: "budget",
+        time: "9:15 AM",
+        icon: "chart-donut",
+        color: "#FF9F43",
       },
       {
         id: "3",
-        title: "Starbucks Coffee",
-        category: "Drinks",
-        amount: 18.0,
-        type: "expense",
+        title: "Freelance Work",
+        subtitle: "Income",
+        amount: 500.0,
+        type: "income",
         time: "Yesterday",
+        icon: "briefcase-outline",
+      },
+      {
+        id: "4",
+        title: "New Laptop",
+        subtitle: "Goal reached 50%",
+        type: "goal",
+        time: "Yesterday",
+        icon: "flag-checkered",
+        color: "#EA5455",
+      },
+      {
+        id: "5",
+        title: "Electricity Bill",
+        subtitle: "Due in 3 days",
+        type: "bill",
+        time: "2 days ago",
+        icon: "lightning-bolt-outline",
+        color: "#00CFE8",
       },
     ];
   }, [isEmpty]);
@@ -92,7 +117,7 @@ export default function useGlobal(name?: string) {
     isEmpty,
     setIsEmpty,
     totals,
-    recentTransactions,
+    recentActivities,
     formatCurrency,
   };
 }
