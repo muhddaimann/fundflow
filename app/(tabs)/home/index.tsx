@@ -35,7 +35,7 @@ export default function Home() {
   const { colors } = useTheme();
   const tokens = useDesign();
   const { onScroll } = useTabs();
-  const { totals, recentActivities, recentTransactions, formatCurrency } =
+  const { totals, recentActivities, recentTransactions, formatCurrency, carouselState } =
     useGlobal("User");
   const { showModal, hideModal } = useOverlay();
   const router = useRouter();
@@ -82,6 +82,18 @@ export default function Home() {
       ),
     });
   };
+
+  const CAROUSEL_ITEMS = [
+    { key: "budget", Component: BudgetCard, hasData: carouselState.budget.hasData },
+    { key: "goal", Component: GoalCard, hasData: carouselState.goal.hasData },
+    { key: "pay", Component: PayCard, hasData: carouselState.pay.hasData },
+    { key: "claim", Component: ClaimCard, hasData: carouselState.claim.hasData },
+    { key: "bills", Component: BillsCard, hasData: carouselState.bills.hasData },
+    { key: "subs", Component: SubsCard, hasData: carouselState.subs.hasData },
+    { key: "wish", Component: WishlistCard, hasData: carouselState.wishlist.hasData },
+  ]
+    .sort((a, b) => (b.hasData ? 1 : 0) - (a.hasData ? 1 : 0))
+    .map(({ key, Component }) => <Component key={key} />);
 
   return (
     <>
@@ -154,17 +166,7 @@ export default function Home() {
         />
         <QuickAction />
 
-        <CardCarousel
-          items={[
-            <BudgetCard key="budget" />,
-            <GoalCard key="goal" />,
-            <PayCard key="pay" />,
-            <ClaimCard key="claim" />,
-            <BillsCard key="bills" />,
-            <SubsCard key="subs" />,
-            <WishlistCard key="wish" />,
-          ]}
-        />
+        <CardCarousel items={CAROUSEL_ITEMS} />
 
         <CardHeader
           onPress={openViewPicker}

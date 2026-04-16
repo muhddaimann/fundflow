@@ -24,6 +24,17 @@ export type Transaction = {
   icon: string;
 };
 
+export type CarouselItemState = {
+  isEmpty: boolean;
+  hasData: boolean;
+};
+
+export type CarouselDummy = {
+  title: string;
+  subtitle: string;
+  icon: string;
+};
+
 export default function useGlobal(name?: string) {
   const { isEmpty, setIsEmpty } = useGlobalContext();
   const now = new Date();
@@ -81,42 +92,6 @@ export default function useGlobal(name?: string) {
         time: "10:30 AM",
         icon: "coffee",
       },
-      {
-        id: "2",
-        title: "Grocery Budget Set",
-        subtitle: "Target: RM 500.00",
-        type: "budget",
-        time: "9:15 AM",
-        icon: "chart-donut",
-        color: "#FF9F43",
-      },
-      {
-        id: "3",
-        title: "Freelance Work",
-        subtitle: "Income",
-        amount: 500.0,
-        type: "income",
-        time: "Yesterday",
-        icon: "briefcase-outline",
-      },
-      {
-        id: "4",
-        title: "New Laptop",
-        subtitle: "Goal reached 50%",
-        type: "goal",
-        time: "Yesterday",
-        icon: "flag-checkered",
-        color: "#EA5455",
-      },
-      {
-        id: "5",
-        title: "Electricity Bill",
-        subtitle: "Due in 3 days",
-        type: "bill",
-        time: "2 days ago",
-        icon: "lightning-bolt-outline",
-        color: "#00CFE8",
-      },
     ];
   }, [isEmpty]);
 
@@ -132,26 +107,60 @@ export default function useGlobal(name?: string) {
         time: "10:30 AM",
         icon: "cart-outline",
       },
-      {
-        id: "t2",
-        title: "Freelance Work",
-        category: "Income",
-        amount: 500.0,
-        type: "income",
-        time: "Yesterday",
-        icon: "cash-plus",
-      },
-      {
-        id: "t3",
-        title: "Starbucks Coffee",
-        category: "Drinks",
-        amount: 18.0,
-        type: "expense",
-        time: "Yesterday",
-        icon: "coffee",
-      },
     ];
   }, [isEmpty]);
+
+  const carouselState = useMemo(() => {
+    return {
+      budget: { isEmpty, hasData: !isEmpty },
+      goal: { isEmpty, hasData: !isEmpty },
+      pay: { isEmpty, hasData: totals.pay > 0 },
+      claim: { isEmpty, hasData: totals.claim > 0 },
+      bills: { isEmpty, hasData: !isEmpty },
+      subs: { isEmpty, hasData: !isEmpty },
+      wishlist: { isEmpty, hasData: !isEmpty },
+    };
+  }, [isEmpty, totals]);
+
+  const carouselDummy = useMemo<Record<string, CarouselDummy>>(() => {
+    return {
+      budget: {
+        title: "No Budget Yet",
+        subtitle: "Set a monthly budget to track spending",
+        icon: "chart-donut",
+      },
+      goal: {
+        title: "No Goals Yet",
+        subtitle: "Start saving for something meaningful",
+        icon: "flag-outline",
+      },
+      pay: {
+        title: "Nothing to Pay",
+        subtitle: "You're all clear 🎉",
+        icon: "arrow-top-right",
+      },
+      claim: {
+        title: "No Claims",
+        subtitle: "No pending incoming payments",
+        icon: "arrow-bottom-left",
+      },
+      bills: {
+        title: "No Bills",
+        subtitle: "Add recurring expenses",
+        icon: "file-document-outline",
+      },
+      subs: {
+        title: "No Subscriptions",
+        subtitle: "Track your recurring services",
+        icon: "repeat",
+      },
+      wishlist: {
+        title: "Wishlist Empty",
+        subtitle: "Add things you want to save for",
+        icon: "heart-outline",
+      },
+    };
+  }, []);
 
   return {
     greeting,
@@ -162,6 +171,8 @@ export default function useGlobal(name?: string) {
     totals,
     recentActivities,
     recentTransactions,
+    carouselState,
+    carouselDummy,
     formatCurrency,
   };
 }

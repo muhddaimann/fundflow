@@ -1,17 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  View,
-  ScrollView,
-  Dimensions,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  Animated,
-  Pressable,
-} from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { ScrollView, View, Dimensions, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import { useTheme } from "react-native-paper";
 import { useDesign } from "../../contexts/designContext";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 type Props = {
   items: React.ReactNode[];
@@ -19,135 +11,129 @@ type Props = {
   interval?: number;
 };
 
-export default function CardCarousel({
-  items,
-  autoPlay = true,
-  interval = 5000,
-}: Props) {
+export default function CardCarousel({ items, autoPlay = true, interval = 5000 }: Props) {
+  if (items.length === 0) return null;
+
   const { colors } = useTheme();
   const tokens = useDesign();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const scrollX = useRef(new Animated.Value(0)).current;
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
+  
+  // For infinite loop, we prepend the last item and append the first item
+  const extendedItems = [items[items.length - 1], ...items, items[0]];
+  
+  // Real index starts at 1 (because 0 is the prepended last item)
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(autoPlay);
 
-  const cardWidth = SCREEN_WIDTH * 0.86;
-  const spacerWidth = (SCREEN_WIDTH - cardWidth) / 2;
-  const gap = tokens.spacing.md;
-  const snapInterval = cardWidth + gap;
+  const cardWidth = width - tokens.spacing.lg * 2;
+  const snapInterval = cardWidth + tokens.spacing.md;
+
+  // Initial scroll to the first real item
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      scrollViewRef.current?.scrollTo({
+        x: snapInterval,
+        animated: false,
+      });
+    }, 10);
+    return () => clearTimeout(timer);
+  }, [snapInterval]);
 
   useEffect(() => {
-    if (!autoPlay || items.length <= 1) return;
+    let timer: NodeJS.Timeout;
 
-    const timer = setInterval(() => {
-      const nextIndex = (activeIndex + 1) % items.length;
-      scrollRef.current?.scrollTo({
-        x: nextIndex * snapInterval,
-        animated: true,
-      });
-    }, interval);
+    if (isAutoPlaying && items.length > 1) {
+      timer = setInterval(() => {
+        scrollViewRef.current?.scrollTo({
+          x: (currentIndex + 1) * snapInterval,
+          animated: true,
+        });
+      }, interval);
+    }
 
     return () => clearInterval(timer);
-  }, [activeIndex, autoPlay, items.length, snapInterval, interval]);
+  }, [currentIndex, isAutoPlaying, items.length, snapInterval, interval]);
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const scrollOffset = event.nativeEvent.contentOffset.x;
-    const index = Math.round(scrollOffset / snapInterval);
-    if (index !== activeIndex) setActiveIndex(index);
+  const handleScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const contentOffset = event.nativeEvent.contentOffset.x;
+    let index = Math.round(contentOffset / snapInterval);
+
+    // Silent Jump Logic
+    if (index === 0) {
+      // We are at the prepended last item, jump to the real last item
+      index = items.length;
+      scrollViewRef.current?.scrollTo({
+        x: index * snapInterval,
+        animated: false,
+      });
+    } else if (index === extendedItems.length - 1) {
+      // We are at the appended first item, jump to the real first item
+      index = 1;
+      scrollViewRef.current?.scrollTo({
+        x: index * snapInterval,
+        animated: false,
+      });
+    }
+
+    setCurrentIndex(index);
   };
 
+  const handleTouchStart = () => setIsAutoPlaying(false);
+  const handleTouchEnd = () => {
+    setTimeout(() => setIsAutoPlaying(autoPlay), 2000);
+  };
+
+  // Convert internal index (1 to length) to dot index (0 to length-1)
+  const dotIndex = (currentIndex - 1 + items.length) % items.length;
+
   return (
-    <View style={{ width: "100%", gap: tokens.spacing.sm }}>
-      <Animated.ScrollView
-        ref={scrollRef}
+    <View>
+      <ScrollView
+        ref={scrollViewRef}
         horizontal
-        showsHorizontalScrollIndicator={false}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: true, listener: handleScroll },
-        )}
-        scrollEventThrottle={16}
+        pagingEnabled={false}
         snapToInterval={snapInterval}
         decelerationRate="fast"
+        showsHorizontalScrollIndicator={false}
+        onMomentumScrollEnd={handleScrollEnd}
+        onScrollAnimationEnd={handleScrollEnd}
+        scrollEventThrottle={16}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         contentContainerStyle={{
-          paddingHorizontal: spacerWidth,
-          gap,
+          paddingHorizontal: tokens.spacing.lg,
+          gap: tokens.spacing.md,
         }}
       >
-        {items.map((item, index) => {
-          const inputRange = [
-            (index - 1) * snapInterval,
-            index * snapInterval,
-            (index + 1) * snapInterval,
-          ];
+        {extendedItems.map((item, index) => (
+          <View key={index} style={{ width: cardWidth }}>
+            {item}
+          </View>
+        ))}
+      </ScrollView>
 
-          const opacity = scrollX.interpolate({
-            inputRange,
-            outputRange: [0.5, 1, 0.5],
-            extrapolate: "clamp",
-          });
-
-          const scale = scrollX.interpolate({
-            inputRange,
-            outputRange: [0.94, 1, 0.94],
-            extrapolate: "clamp",
-          });
-
-          const translateY = scrollX.interpolate({
-            inputRange,
-            outputRange: [8, 0, 8],
-            extrapolate: "clamp",
-          });
-
-          return (
-            <Animated.View
-              key={index}
-              style={{
-                width: cardWidth,
-                opacity,
-                transform: [{ scale }, { translateY }],
-              }}
-            >
-              {item}
-            </Animated.View>
-          );
-        })}
-      </Animated.ScrollView>
-
-      {items.length > 1 && (
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          {items.map((_, index) => {
-            const isActive = index === activeIndex;
-
-            return (
-              <Pressable
-                key={index}
-                onPress={() =>
-                  scrollRef.current?.scrollTo({
-                    x: index * snapInterval,
-                    animated: true,
-                  })
-                }
-                style={{
-                  height: 6,
-                  borderRadius: 999,
-                  width: isActive ? 18 : 6,
-                  backgroundColor: isActive
-                    ? colors.primary
-                    : colors.outlineVariant,
-                  opacity: isActive ? 1 : 0.5,
-                }}
-              />
-            );
-          })}
-        </View>
-      )}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          marginTop: tokens.spacing.sm,
+          gap: 6,
+        }}
+      >
+        {items.map((_, index) => (
+          <View
+            key={index}
+            style={{
+              width: dotIndex === index ? 16 : 6,
+              height: 6,
+              borderRadius: 3,
+              backgroundColor: dotIndex === index 
+                ? colors.primary
+                : colors.surfaceVariant,
+            }}
+          />
+        ))}
+      </View>
     </View>
   );
 }
