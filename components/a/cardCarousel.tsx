@@ -40,7 +40,7 @@ export default function CardCarousel({ items, autoPlay = true, interval = 5000 }
   }, [snapInterval]);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: ReturnType<typeof setInterval>;
 
     if (isAutoPlaying && items.length > 1) {
       timer = setInterval(() => {
@@ -54,20 +54,20 @@ export default function CardCarousel({ items, autoPlay = true, interval = 5000 }
     return () => clearInterval(timer);
   }, [currentIndex, isAutoPlaying, items.length, snapInterval, interval]);
 
-  const handleScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const contentOffset = event.nativeEvent.contentOffset.x;
+  const scrollX = useRef(0);
+
+  const handleScrollEnd = () => {
+    const contentOffset = scrollX.current;
     let index = Math.round(contentOffset / snapInterval);
 
     // Silent Jump Logic
     if (index === 0) {
-      // We are at the prepended last item, jump to the real last item
       index = items.length;
       scrollViewRef.current?.scrollTo({
         x: index * snapInterval,
         animated: false,
       });
     } else if (index === extendedItems.length - 1) {
-      // We are at the appended first item, jump to the real first item
       index = 1;
       scrollViewRef.current?.scrollTo({
         x: index * snapInterval,
@@ -95,6 +95,9 @@ export default function CardCarousel({ items, autoPlay = true, interval = 5000 }
         snapToInterval={snapInterval}
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
+        onScroll={(e) => {
+          scrollX.current = e.nativeEvent.contentOffset.x;
+        }}
         onMomentumScrollEnd={handleScrollEnd}
         onScrollAnimationEnd={handleScrollEnd}
         scrollEventThrottle={16}
