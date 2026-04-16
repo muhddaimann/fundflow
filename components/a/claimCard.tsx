@@ -17,7 +17,7 @@ export default function ClaimCard() {
   return (
     <BaseCard
       icon={dummy.icon}
-      color={colors.tertiary}
+      color={state.color}
       route="home/claim"
     >
       <View>
@@ -42,7 +42,7 @@ export default function ClaimCard() {
 
         {state.hasData && (
            <View style={{ marginTop: 12, height: 4, backgroundColor: colors.surfaceVariant, borderRadius: 2 }}>
-              <View style={{ width: '40%', height: '100%', backgroundColor: colors.tertiary, borderRadius: 2 }} />
+              <View style={{ width: '40%', height: '100%', backgroundColor: state.color, borderRadius: 2 }} />
            </View>
         )}
       </View>

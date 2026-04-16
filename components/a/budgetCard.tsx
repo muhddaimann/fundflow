@@ -18,7 +18,7 @@ export default function BudgetCard() {
   return (
     <BaseCard
       icon={dummy.icon}
-      color={colors.primary}
+      color={state.color}
       route="home/budget"
     >
       <View>
@@ -40,7 +40,7 @@ export default function BudgetCard() {
         {state.hasData ? (
           <View style={{ marginTop: 8 }}>
             <View style={{ height: 6, backgroundColor: colors.surfaceVariant, borderRadius: 3, overflow: 'hidden' }}>
-              <View style={{ width: `${details.percent * 100}%`, height: '100%', backgroundColor: colors.primary }} />
+              <View style={{ width: `${details.percent * 100}%`, height: '100%', backgroundColor: state.color }} />
             </View>
             <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: 6 }}>
               Spent {formatCurrency(details.spent)} of {formatCurrency(details.total)}

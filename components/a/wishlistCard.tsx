@@ -17,7 +17,7 @@ export default function WishlistCard() {
   return (
     <BaseCard
       icon={dummy.icon}
-      color={colors.secondary}
+      color={state.color}
       route="home/wishlist"
     >
       <View>
@@ -44,7 +44,7 @@ export default function WishlistCard() {
           {state.hasData && (
              <View style={{ flexDirection: 'row', gap: 4 }}>
                 {[...Array(Math.min(details.count, 5))].map((_, i) => (
-                   <View key={i} style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: colors.secondary + '40' }} />
+                   <View key={i} style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: state.color + '40' }} />
                 ))}
              </View>
           )}

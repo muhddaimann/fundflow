@@ -17,7 +17,7 @@ export default function BillsCard() {
   return (
     <BaseCard
       icon={dummy.icon}
-      color={colors.error}
+      color={state.color}
       route="home/bills"
     >
       <View>
@@ -36,14 +36,14 @@ export default function BillsCard() {
           {state.hasData ? formatCurrency(details.total) : "RM 0.00"}
         </Text>
         
-        <Text variant="bodySmall" style={{ color: colors.error, fontWeight: '700' }}>
+        <Text variant="bodySmall" style={{ color: state.color, fontWeight: '700' }}>
           {state.hasData ? `${details.pending} bills due soon` : dummy.subtitle}
         </Text>
         
         {state.hasData && (
           <View style={{ flexDirection: 'row', gap: 4, marginTop: 12 }}>
              {[...Array(details.count)].map((_, i) => (
-               <View key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i < details.pending ? colors.error : colors.surfaceVariant }} />
+               <View key={i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i < details.pending ? state.color : colors.surfaceVariant }} />
              ))}
           </View>
         )}

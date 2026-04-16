@@ -17,7 +17,7 @@ export default function PayCard() {
   return (
     <BaseCard
       icon={dummy.icon}
-      color={colors.secondary}
+      color={state.color}
       route="home/pay"
     >
       <View>
@@ -42,7 +42,7 @@ export default function PayCard() {
         
         {state.hasData && (
            <View style={{ marginTop: 12, height: 4, backgroundColor: colors.surfaceVariant, borderRadius: 2 }}>
-              <View style={{ width: '60%', height: '100%', backgroundColor: colors.secondary, borderRadius: 2 }} />
+              <View style={{ width: '60%', height: '100%', backgroundColor: state.color, borderRadius: 2 }} />
            </View>
         )}
       </View>

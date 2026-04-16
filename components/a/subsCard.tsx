@@ -18,7 +18,7 @@ export default function SubsCard() {
   return (
     <BaseCard
       icon={dummy.icon}
-      color={colors.primary}
+      color={state.color}
       route="home/subscription"
     >
       <View>
@@ -47,12 +47,12 @@ export default function SubsCard() {
              <View style={{ flexDirection: 'row', gap: -8 }}>
                 {[...Array(3)].map((_, i) => (
                   <View key={i} style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: colors.surfaceVariant, borderWidth: 2, borderColor: colors.surface, alignItems: 'center', justifyContent: 'center' }}>
-                     <MaterialCommunityIcons name="play-circle-outline" size={12} color={colors.primary} />
+                     <MaterialCommunityIcons name="play-circle-outline" size={12} color={state.color} />
                   </View>
                 ))}
                 {details.count > 3 && (
-                   <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: colors.primaryContainer, borderWidth: 2, borderColor: colors.surface, alignItems: 'center', justifyContent: 'center' }}>
-                      <Text style={{ fontSize: 8, fontWeight: '700', color: colors.primary }}>+{details.count - 3}</Text>
+                   <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: state.color + '20', borderWidth: 2, borderColor: colors.surface, alignItems: 'center', justifyContent: 'center' }}>
+                      <Text style={{ fontSize: 8, fontWeight: '700', color: state.color }}>+{details.count - 3}</Text>
                    </View>
                 )}
              </View>

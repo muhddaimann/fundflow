@@ -18,7 +18,7 @@ export default function GoalCard() {
   return (
     <BaseCard
       icon={dummy.icon}
-      color="#FF9F43"
+      color={state.color}
       route="home/goals"
     >
       <View>
@@ -43,7 +43,7 @@ export default function GoalCard() {
         {state.hasData ? (
           <View style={{ marginTop: 8 }}>
             <View style={{ height: 6, backgroundColor: colors.surfaceVariant, borderRadius: 3, overflow: 'hidden' }}>
-              <View style={{ width: `${details.percent * 100}%`, height: '100%', backgroundColor: "#FF9F43" }} />
+              <View style={{ width: `${details.percent * 100}%`, height: '100%', backgroundColor: state.color }} />
             </View>
             <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant, marginTop: 6 }}>
               Saved {formatCurrency(details.saved)} of {formatCurrency(details.total)}
