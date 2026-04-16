@@ -111,14 +111,54 @@ export default function useGlobal(name?: string) {
   }, [isEmpty]);
 
   const carouselState = useMemo(() => {
+    if (isEmpty) {
+      return {
+        budget: { isEmpty, hasData: false, details: { total: 0, spent: 0, percent: 0 } },
+        goal: { isEmpty, hasData: false, details: { total: 0, saved: 0, percent: 0 } },
+        pay: { isEmpty, hasData: false, details: { count: 0 } },
+        claim: { isEmpty, hasData: false, details: { count: 0 } },
+        bills: { isEmpty, hasData: false, details: { count: 0 } },
+        subs: { isEmpty, hasData: false, details: { count: 0 } },
+        wishlist: { isEmpty, hasData: false, details: { count: 0 } },
+      };
+    }
+
     return {
-      budget: { isEmpty, hasData: !isEmpty },
-      goal: { isEmpty, hasData: !isEmpty },
-      pay: { isEmpty, hasData: totals.pay > 0 },
-      claim: { isEmpty, hasData: totals.claim > 0 },
-      bills: { isEmpty, hasData: !isEmpty },
-      subs: { isEmpty, hasData: !isEmpty },
-      wishlist: { isEmpty, hasData: !isEmpty },
+      budget: { 
+        isEmpty, 
+        hasData: true, 
+        details: { total: 3500, spent: totals.spend, percent: (totals.spend / 3500) } 
+      },
+      goal: { 
+        isEmpty, 
+        hasData: true, 
+        details: { title: "New House Fund", total: 50000, saved: 12000, percent: 0.24 } 
+      },
+      pay: { 
+        isEmpty, 
+        hasData: totals.pay > 0, 
+        details: { count: 3, total: totals.pay } 
+      },
+      claim: { 
+        isEmpty, 
+        hasData: totals.claim > 0, 
+        details: { count: 2, total: totals.claim } 
+      },
+      bills: { 
+        isEmpty, 
+        hasData: true, 
+        details: { count: 5, total: 850, pending: 3 } 
+      },
+      subs: { 
+        isEmpty, 
+        hasData: true, 
+        details: { count: 4, total: 120, active: 4 } 
+      },
+      wishlist: { 
+        isEmpty, 
+        hasData: true, 
+        details: { count: 8, total: 2500 } 
+      },
     };
   }, [isEmpty, totals]);
 

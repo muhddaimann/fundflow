@@ -78,8 +78,9 @@ export default function CardCarousel({ items, autoPlay = true, interval = 5000 }
     setCurrentIndex(index);
   };
 
-  const handleTouchStart = () => setIsAutoPlaying(false);
-  const handleTouchEnd = () => {
+  const handleInteractionStart = () => setIsAutoPlaying(false);
+  const handleInteractionEnd = () => {
+    // Resume auto-play after a short delay
     setTimeout(() => setIsAutoPlaying(autoPlay), 2000);
   };
 
@@ -100,12 +101,13 @@ export default function CardCarousel({ items, autoPlay = true, interval = 5000 }
         }}
         onMomentumScrollEnd={handleScrollEnd}
         onScrollAnimationEnd={handleScrollEnd}
+        onScrollBeginDrag={handleInteractionStart}
+        onScrollEndDrag={handleInteractionEnd}
         scrollEventThrottle={16}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
         contentContainerStyle={{
           paddingHorizontal: tokens.spacing.lg,
           gap: tokens.spacing.md,
+          alignItems: "center", // Vertically center items
         }}
       >
         {extendedItems.map((item, index) => (
