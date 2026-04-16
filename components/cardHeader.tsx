@@ -55,7 +55,7 @@ export default function CardHeader({
             width: 44,
             height: 44,
             borderRadius: tokens.radii.md,
-            backgroundColor: onPress ? colors.surface : "transparent",
+            backgroundColor: "transparent",
             alignItems: "center",
             justifyContent: "center",
           }}

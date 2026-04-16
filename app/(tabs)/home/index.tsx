@@ -68,13 +68,13 @@ export default function Home() {
             {
               label: "Recent Activity",
               icon: "history",
-              color: colors.primary,
+              color: colors.onPrimaryContainer,
               onPress: () => setViewMode("activity"),
             },
             {
               label: "Recent Transactions",
               icon: "cash-multiple",
-              color: colors.secondary,
+              color: colors.onPrimaryContainer,
               onPress: () => setViewMode("transaction"),
             },
           ]}
